@@ -9,6 +9,10 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Layout({ children, title, description }) {
   return (
     <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Header title={title} description={description} />
       <main className={inter.className + " " + styles.main}>{children}</main>
     </>
@@ -44,8 +48,6 @@ export function Page({
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       {children}
     </>
