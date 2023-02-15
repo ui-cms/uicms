@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  images: {
-    unoptimized: true, // need this, otherwise "next export" script won't work
-  },
+
+  // When need to run "next export" script, uncomment the below configuration
+  // images: {
+  //   unoptimized: true,
+  // },
 };
 
 module.exports = nextConfig;
