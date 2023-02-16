@@ -6,6 +6,7 @@ import Link from "next/link";
 import styles from "@/styles/Layout.module.scss";
 import { MdAddCircle } from "react-icons/md";
 import { FaGithub } from "react-icons/fa";
+import SigninWithGitHubButton from "./signinWithGitHubButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,7 +45,7 @@ export function Page({
 
 function Header() {
   const [burgerMenuIsActive, setBurgerMenuIsActive] = useState(false);
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   return (
     <header className={inter.className}>
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -185,12 +186,7 @@ function Header() {
 
             {!isAuthenticated ? (
               <div className="navbar-item">
-                <button className="button is-dark">
-                  <span className="icon">
-                    <FaGithub />
-                  </span>
-                  <strong>Sign in with GitHub</strong>
-                </button>
+                <SigninWithGitHubButton boldText={true} />
               </div>
             ) : (
               <div className="navbar-item has-dropdown is-hoverable">
