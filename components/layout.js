@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
 import styles from "@/styles/Layout.module.scss";
-import { MdAddCircle } from "react-icons/md";
-import { FaGithub } from "react-icons/fa";
 import SigninWithGitHubButton from "./signinWithGitHubButton";
+import { useRouter } from "next/router";
+import useStateManagement from "@/services/stateManagement/stateManagement";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +45,10 @@ export function Page({
 
 function Header() {
   const [burgerMenuIsActive, setBurgerMenuIsActive] = useState(false);
-  const isAuthenticated = false;
+  const router = useRouter();
+  const { state, dispatchAction } = useStateManagement();
+  const { currentUser } = state;
+
   return (
     <header className={inter.className}>
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -184,31 +187,45 @@ function Header() {
               </div>
             </div>
 
-            {!isAuthenticated ? (
-              <div className="navbar-item">
-                <SigninWithGitHubButton boldText={true} />
-              </div>
-            ) : (
+            {currentUser ? (
               <div className="navbar-item has-dropdown is-hoverable">
                 <a className="navbar-link is-arrowless">
                   <div className="is-flex is-flex-direction-column">
                     <figure className="image is-24x24 is-align-self-center">
                       <Image
                         className="is-rounded"
-                        src="/user.png"
+                        src={currentUser.avatar_url}
                         width="32"
                         height="32"
                         alt="username"
                       />
                     </figure>
-                    <span className="is-size-7">username</span>
+                    <span className="is-size-7">{currentUser.login}</span>
                   </div>
                 </a>
                 <div className="navbar-dropdown is-right">
-                  <a className="navbar-item">GitHub account</a>
+                  <Link
+                    href={currentUser.html_url}
+                    target="_blank"
+                    className="navbar-item"
+                  >
+                    GitHub account
+                  </Link>
                   <a className="navbar-item">Settings</a>
-                  <a className="navbar-item">Log out</a>
+                  <a
+                    onClick={() => {
+                      // router.push("/");
+                      dispatchAction.reset();
+                    }}
+                    className="navbar-item"
+                  >
+                    Sign out
+                  </a>
                 </div>
+              </div>
+            ) : (
+              <div className="navbar-item">
+                <SigninWithGitHubButton boldText={true} />
               </div>
             )}
           </div>

@@ -1,56 +1,94 @@
-// Once user signs in, GitHub will redirect to call back url with code parameter, which then will be used to fetch auth token.
-// https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+/**
+ * Once user signs in, GitHub will redirect to callback url with "code" parameter.
+ * That code will be passed to our api (api/auth) which will get an auth token from GitHub's API.
+ * That token will be used to authenticate user to GitHub's API.
+ * https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+ */
 
+import { displayError } from "@/helpers/utilities";
+import useGitHubApi from "@/hooks/useGitHubApi";
+import useStateManagement from "@/services/stateManagement/stateManagement";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 
+const STATUS = {
+  notStarted: "notStarted",
+  loading: "loading",
+  success: "success",
+  fail: "fail",
+};
+
+/**
+ * Do not have more than one instance of this component at the same page
+ */
 export default function SigninWithGitHubButton({
   className,
   boldText = false,
 }) {
   const { query } = useRouter();
-  const code = query.code;
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(code && code.length > 0);   // && !isAuthenticated
+  const { code } = query;
+  const [status, setStatus] = useState(STATUS.notStarted);
+  const { state, dispatchAction } = useStateManagement();
+  const githubApi = useGitHubApi();
 
   useEffect(() => {
-    // if (code && !isAuthenticated) {
-    if (code) {
-      fetch(`/api/auth?code=${code}`)
-        .then((response) => response.json())
-        .then((data) => {
+    if (code && !state.authToken && status === STATUS.notStarted) {
+      setStatus(STATUS.loading);
+
+      (async () => {
+        try {
+          const res = await fetch(`/api/auth?code=${code}`);
+          const data = await res.json();
+
           if (data.error) {
-            setError(data.error);
+            setStatus(STATUS.fail);
+            displayError("Error signing in to GitHub!", data.error);
           } else {
-            // persist auth token
-            // do octakit call here to fetch user
+            dispatchAction.setAuthToken(data.access_token);
           }
-        })
-        .catch((error) => setError(error))
-        .finally(() => setLoading(false));
+        } catch (error) {
+          setStatus(STATUS.fail);
+          displayError(error);
+        }
+      })();
     }
-  }, [code]);
+  }, [code, dispatchAction, state.authToken, status]);
 
   useEffect(() => {
-    if (error) {
-      alert(error);
+    if (state.authToken && !state.currentUser && status === STATUS.loading) {
+      (async () => {
+        try {
+          const res = await githubApi.rest.users.getAuthenticated();
+          dispatchAction.setCurrentUser(res.data);
+          setStatus(STATUS.success);
+        } catch (e) {
+          setStatus(STATUS.fail);
+          displayError("Error fetching authenticated user!", e);
+        }
+      })();
     }
-  }, [error]);
+  }, [
+    dispatchAction,
+    githubApi.rest.users,
+    state.authToken,
+    state.currentUser,
+    status,
+  ]);
 
   return (
     <Link
-      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`}
-      className={`button ${className || ""}  ${
-        error ? "is-danger" : "is-dark"
-      } ${loading ? "is-loading" : ""}`}
+      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`} //&scope=user
+      className={`button ${className || ""} ${
+        status === STATUS.loading ? "is-loading" : ""
+      } ${status === STATUS.fail ? "is-danger" : "is-dark"}`}
     >
       <span className="icon">
         <FaGithub />
       </span>
       <span className={boldText ? "has-text-weight-bold" : ""}>
-        {error ? "Error, try again" : "Sign in with GitHub"}
+        {status === STATUS.fail ? "Error, try again" : "Sign in with GitHub"}
       </span>
     </Link>
   );

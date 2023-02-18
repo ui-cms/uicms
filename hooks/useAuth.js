@@ -1,6 +1,0 @@
-
-// {
-//     isAuthenticated
-//     logout,
-//     currentUser
-// }
