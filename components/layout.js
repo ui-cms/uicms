@@ -125,8 +125,8 @@ function Header() {
             </Link>
 
             <div className="navbar-item has-dropdown is-hoverable">
-              <Link className="navbar-link" href="/">
-                Articles
+              <Link className="navbar-link" href="/repos">
+                Repos
               </Link>
               <div className="navbar-dropdown">
                 <Link className="navbar-item" href="/editor">

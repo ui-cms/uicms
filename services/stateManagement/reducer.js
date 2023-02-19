@@ -11,6 +11,9 @@ export default function reducer(state, { type, payload }) {
     case "setAuthToken": {
       return { ...state, authToken: payload };
     }
+    case "setRepos": {
+      return { ...state, repos: payload };
+    }
     default:
       return state;
   }

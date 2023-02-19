@@ -6,12 +6,13 @@ export default class Actions {
   reset() {
     this.dispatch({ type: "reset" });
   }
-
-  // Auth and current user
   setAuthToken(authToken) {
     this.dispatch({ type: "setAuthToken", payload: authToken });
   }
   setCurrentUser(currentUser) {
     this.dispatch({ type: "setCurrentUser", payload: currentUser });
+  }
+  setRepos(repos) {
+    this.dispatch({ type: "setRepos", payload: repos });
   }
 }

@@ -6,9 +6,21 @@ export default function useGitHubApi() {
   const { state } = useStateManagement();
   const { authToken } = state;
 
-  const octokit = useMemo(() => {
-    return new Octokit({ auth: authToken });
+  const result = useMemo(() => {
+    const octokit = new Octokit({ auth: authToken });
+    const customRest = new CustomRest(octokit);
+    return { rest: octokit.rest, customRest };
   }, [authToken]);
 
-  return octokit;
+  return result;
+}
+
+class CustomRest {
+  constructor(octokit) {
+    this.octokit = octokit;
+  }
+
+  listAuthenticatedUsersRepos() {
+    return this.octokit.request("GET /user/repos", {});
+  }
 }

@@ -35,9 +35,8 @@ export default function SigninWithGitHubButton({
 
   useEffect(() => {
     if (code && !state.authToken && status === STATUS.notStarted) {
-      setStatus(STATUS.loading);
-
       (async () => {
+        setStatus(STATUS.loading);
         try {
           const res = await fetch(`/api/auth?code=${code}`);
           const data = await res.json();
@@ -69,17 +68,11 @@ export default function SigninWithGitHubButton({
         }
       })();
     }
-  }, [
-    dispatchAction,
-    githubApi.rest.users,
-    state.authToken,
-    state.currentUser,
-    status,
-  ]);
+  }, [dispatchAction, githubApi.rest.users, state.authToken, state.currentUser, status]);
 
   return (
     <Link
-      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`} //&scope=user
+      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo`} //&scope=user
       className={`button ${className || ""} ${
         status === STATUS.loading ? "is-loading" : ""
       } ${status === STATUS.fail ? "is-danger" : "is-dark"}`}

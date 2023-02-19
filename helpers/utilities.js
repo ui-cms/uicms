@@ -11,3 +11,24 @@ export function displayError(message, errorDetails = null) {
   }
   alert(message);
 }
+
+/**
+ * Sorts the given array by its property and returns itself (without creating new one)
+ */
+export function orderBy(list, propertyName = null, asc = true) {
+  if (!propertyName) return list.sort();
+
+  return list.sort(function (a, b) {
+    let valA = a[propertyName];
+    let valB = b[propertyName];
+    let result;
+    if (typeof valA === "string" && typeof valB === "string") { // string
+      valA = valA.toLocaleLowerCase();
+      valB = valB.toLocaleLowerCase();
+      result = valA < valB ? -1 : valA > valB ? 1 : 0;
+    } else {
+      result = valA - valB; // numeric
+    }
+    return result * (asc ? 1 : -1);
+  });
+}
