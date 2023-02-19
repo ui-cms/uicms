@@ -1,4 +1,4 @@
-import { Page } from "@/components/layout";
+import Page from "@/components/page";
 import Script from "next/script";
 
 export default function Editor() {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
@@ -23,29 +23,9 @@ export default function Layout({ children, title, description }) {
   );
 }
 
-export function Page({
-  children,
-  title = "UI CMS",
-  description = "Simple yet powerfull gitbased CMS",
-}) {
-  return (
-    <>
-      <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-      </Head>
-      <main
-        className={`container is-fluid py-5 has-background-light ${inter.className} ${styles.main}`}
-      >
-        {children}
-      </main>
-    </>
-  );
-}
-
 function Header() {
-  const [burgerMenuIsActive, setBurgerMenuIsActive] = useState(false);
   const router = useRouter();
+  const [burgerMenuIsActive, setBurgerMenuIsActive] = useState(false);
   const { state, dispatchAction } = useStateManagement();
   const { currentUser } = state;
 
@@ -214,8 +194,8 @@ function Header() {
                   <a className="navbar-item">Settings</a>
                   <a
                     onClick={() => {
-                      // router.push("/");
                       dispatchAction.reset();
+                      router.push("/");
                     }}
                     className="navbar-item"
                   >

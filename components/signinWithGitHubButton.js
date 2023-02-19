@@ -16,8 +16,8 @@ import { FaGithub } from "react-icons/fa";
 const STATUS = {
   notStarted: "notStarted",
   loading: "loading",
-  success: "success",
   fail: "fail",
+  success: "success",
 };
 
 /**
