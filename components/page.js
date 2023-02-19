@@ -1,9 +1,6 @@
 import Head from "next/head";
-import { Inter } from "@next/font/google";
 import styles from "@/styles/Layout.module.scss";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Page({
   children,
@@ -20,7 +17,7 @@ export default function Page({
         <meta name="description" content={description} />
       </Head>
       <main
-        className={`container is-fluid py-5 has-background-light ${inter.className} ${styles.main}`}
+        className={`container is-fluid py-5 has-background-light ${styles.main}`}
       >
         {authProtected && !state.currentUser ? (
           <section className="hero is-halfheight">

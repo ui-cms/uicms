@@ -1,14 +1,11 @@
 import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { Inter } from "@next/font/google";
 import Link from "next/link";
 import styles from "@/styles/Layout.module.scss";
 import SigninWithGitHubButton from "./signinWithGitHubButton";
 import { useRouter } from "next/router";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Layout({ children, title, description }) {
   return (
@@ -30,7 +27,7 @@ function Header() {
   const { currentUser } = state;
 
   return (
-    <header className={inter.className}>
+    <header>
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <div className="navbar-item">
