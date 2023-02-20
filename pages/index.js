@@ -11,7 +11,7 @@ export default function Home() {
   const { state } = useStateManagement();
   const { currentUser } = state;
   const router = useRouter();
-  const [testVal, setTestVal] = useStorage("test");
+  const [testVal, setTestVal] = useStorage("test", "localStorage");
   
   if (currentUser) {
     router.push("/repos"); // redirect to repos page when authorized user

@@ -19,10 +19,11 @@ export default function useStorage(key, type = "sessionStorage") {
 
   // Persist to storage
   useEffect(() => {
-    // first render, don't override/destroy existing item value
+    // first render, don't override (i.e lose) existing item value
     if (value !== undefined) {
       const storage = type === "sessionStorage" ? sessionStorage : localStorage;
-      storage.setItem(key, value);
+      if (value === null) storage.removeItem(key);
+      else storage.setItem(key, value);
     }
   }, [key, value, type]);
 
