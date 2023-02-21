@@ -1,6 +1,6 @@
 import Page from "@/components/page";
 import Tabs from "@/components/tabs";
-import { displayError, orderBy } from "@/helpers/utilities";
+import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Link from "next/link";
@@ -19,7 +19,6 @@ export default function Repos() {
         loading.current = true;
         try {
           const res = await githubApi.customRest.listAuthenticatedUsersRepos();
-          orderBy(res.data, "pushed_at", false);
           dispatchAction.setRepos(res.data);
         } catch (e) {
           displayError("Error fetching authenticated user's repos!", e);
@@ -57,7 +56,7 @@ function MarkedRepos({ repos }) {
     <div className="columns is-multiline">
       {markedRepos.map((repo) => (
         <div key={repo.id} className="column is-one-quarter tile">
-          <a className="tile is-child notification is-primary is-light">
+          <Link href={`repos/${repo.id}`} className="tile is-child notification is-primary is-light">
             <p className="title is-5">{repo.name}</p>
             <p className="subtitle is-6">{repo.description || "-"}</p>
             <ul>
@@ -90,7 +89,7 @@ function MarkedRepos({ repos }) {
                 </li>
               )}
             </ul>
-          </a>
+          </Link>
         </div>
       ))}
     </div>
