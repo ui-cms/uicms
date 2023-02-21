@@ -1,13 +1,13 @@
 import Page from "@/components/page";
+import Tabs from "@/components/tabs";
 import { displayError, orderBy } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { FaGithub, FaGlobe } from "react-icons/fa";
 
 export default function Repos() {
-  const [displayAll, setDisplayAll] = useState(false);
   const loading = useRef(false);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -41,70 +41,56 @@ export default function Repos() {
       <h1 className="title is-3">Select a repo</h1>
       <h1 className="subtitle">Your repos from GitHub are display below</h1>
 
-      <div className="tabs">
-        <ul>
-          <li className={!displayAll ? "is-active" : ""}>
-            <a onClick={() => setDisplayAll(false)}>Recently updated</a>
-          </li>
-          <li className={displayAll ? "is-active" : ""}>
-            <a onClick={() => setDisplayAll(true)}>All</a>
-          </li>
-        </ul>
-      </div>
-
-      {displayAll ? (
-        <AllRepos repos={repos} />
-      ) : (
-        <RecentlyUpdated repos={repos} />
-      )}
+      <Tabs
+        items={[
+          { title: "Repos with UICMS topic", content: <MarkedRepos repos={repos} /> },
+          { title: "All", content: <AllRepos repos={repos} /> },
+        ]}
+      />
     </Page>
   );
 }
 
-function RecentlyUpdated({ repos }) {
-  const recentPosts = repos.slice(0, 4);
+function MarkedRepos({ repos }) {
+  const markedRepos = repos.filter((r) => hasUICMSTopic(r));
   return (
-    <div className="tile is-ancestor">
-      {recentPosts.map((repo) => (
-        <div key={repo.id} className="tile is-3">
-          <div className="tile">
-            <div className="tile is-parent">
-              <a className="tile is-child notification is-primary is-light">
-                <p className="title is-4">{repo.name}</p>
-                <p className="subtitle is-5">{repo.description || ""}</p>
-                <ul>
-                  <li>
-                    <a
-                      href={repo.html_url}
-                      target="_blank"
-                      className="icon-text mr-2"
-                      rel="noreferrer"
-                    >
-                      <span class="icon">
-                        <FaGithub size={20} />
-                      </span>
-                      <span>{repo.full_name}</span>
-                    </a>
-                  </li>
-                  {repo.homepage && (
-                    <li>
-                      <a
-                        href={repo.homepage}
-                        target="_blank"
-                        className="icon-text"
-                        rel="noreferrer"
-                      >
-                        <span class="icon">
-                          <FaGlobe size={20} />
-                        </span>
-                        <span>{repo.homepage}</span>
-                      </a>
-                    </li>
-                  )}
-                </ul>
-              </a>
-            </div>
-          </div>
+    <div className="columns is-multiline">
+      {markedRepos.map((repo) => (
+        <div key={repo.id} className="column is-one-quarter tile">
+          <a className="tile is-child notification is-primary is-light">
+            <p className="title is-5">{repo.name}</p>
+            <p className="subtitle is-6">{repo.description || "-"}</p>
+            <ul>
+              <li>
+                <a
+                  href={repo.html_url}
+                  target="_blank"
+                  className="icon-text mr-2"
+                  rel="noreferrer"
+                >
+                  <span class="icon">
+                    <FaGithub size={20} />
+                  </span>
+                  <span>{repo.full_name}</span>
+                </a>
+              </li>
+              {repo.homepage && (
+                <li>
+                  <a
+                    href={repo.homepage}
+                    target="_blank"
+                    className="icon-text"
+                    rel="noreferrer"
+                  >
+                    <span class="icon">
+                      <FaGlobe size={20} />
+                    </span>
+                    <span>{repo.homepage}</span>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </a>
         </div>
       ))}
     </div>
@@ -126,9 +112,16 @@ function AllRepos({ repos }) {
               {repo.private && (
                 <span className="ml-4 tag is-dark">Private</span>
               )}
+              {hasUICMSTopic(repo) && (
+                <span className="ml-4 tag is-primary">UICMS</span>
+              )}
             </Link>
           );
         })}
     </div>
   );
+}
+
+function hasUICMSTopic(repo) {
+  return repo.topics.includes("uicms");
 }

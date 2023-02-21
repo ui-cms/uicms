@@ -1,14 +1,17 @@
 /*
 ***** GLOBAL STYLE *****
 */
-body {
-  min-height: 100vh;
-  // background-color: hsl(0, 0%, 96%);
-}
 
 /* 
 ***** CUSTOMIZING BULMA *****
 */
+
+@media screen and (max-width: 1024px) {
+  .container.is-fluid {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
 
 // Overridding Bulma variables. For more variables see this url: https://bulma.io/documentation/customize/variables/#derived-variables
 // $primary: #fa7203;
