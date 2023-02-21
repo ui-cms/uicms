@@ -37,8 +37,8 @@ export default function Repos() {
   ]);
 
   return (
-    <Page title="My sites">
-      <h1 className="title is-3">Select a site</h1>
+    <Page title="My repos">
+      <h1 className="title is-3">Select a repo</h1>
       <h1 className="subtitle">Your repos from GitHub are display below</h1>
 
       <div className="tabs">
@@ -118,7 +118,7 @@ function AllRepos({ repos }) {
         repos.map((repo) => {
           return (
             <Link
-              href={`sites/${repo.id}`}
+              href={`repos/${repo.id}`}
               key={repo.id}
               className="panel-block"
             >

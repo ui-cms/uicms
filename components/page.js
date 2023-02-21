@@ -41,5 +41,5 @@ export default function Page({
 }
 
 function Loading() {
-  return <h1>Loading...</h1>;
+  return <span>Loading...</span>;
 }
