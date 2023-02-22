@@ -13,7 +13,7 @@ export default function Repo() {
   const { id } = query;
   const [repo, setRepo] = useState(null);
   const [content, setContent] = useState(null);
-  const loading = useRef(false);
+  const [loading, setLoading] = useState(false);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { repos } = state;
@@ -28,16 +28,17 @@ export default function Repo() {
   }, [id, repo, repos]);
 
   useEffect(() => {
-    if (repo && !content && !loading.current) {
+    if (repo && !content && !loading) {
       (async () => {
-        loading.current = true;
+        setLoading(true);
         try {
           const res = await githubApi.rest.repos.getContent({
             owner: repo.owner.login,
             repo: repo.name,
-            path: "uicms.config.json",    mediaType: {
-              format: "raw"
-          }
+            path: "uicms.config.json",
+            mediaType: {
+              format: "raw", // otherwise content will be returned in base64
+            },
           });
           setContent(res.data);
         } catch (e) {
@@ -45,11 +46,11 @@ export default function Repo() {
             setContent("NotFound");
           } else displayError("Error fetching config file!", e);
         } finally {
-          loading.current = false;
+          setLoading(false);
         }
       })();
     }
-  }, [dispatchAction, githubApi.rest.repos, repo]);
+  }, [content, githubApi.rest.repos, loading, repo]);
 
   return (
     repo && (
@@ -57,13 +58,30 @@ export default function Repo() {
         <h1 className="title is-3">{repo.name}</h1>
         <h1 className="subtitle">{repo.description}</h1>
 
-        {content === "NotFound" && (
-          <p>
-            This repo is missing <code>uicms.config.json</code> file. Meaning
-            this repo hasn&apos;t been set to work with UICMS.
-          </p>
+        {loading ? (
+          <h1>Loading</h1>
+        ) : !content ? null : content === "NotFound" ? (
+          <article className="message is-warning">
+            <div className="message-header">
+              <p>Incompatible repo</p>
+            </div>
+            <div className="message-body">
+              This repo is missing <code>uicms.config.json</code> file in the
+              root directory. That means this repo hasn&apos;t been configured
+              to work with UICMS.
+              <div className="block mt-5">
+                <p className="">
+                  Would you like to set <strong>UICMS</strong> up in this repo ?
+                </p>
+                <button className="button is-primary is-small mt-2">
+                  Let&apos;s do it
+                </button>
+              </div>
+            </div>
+          </article>
+        ) : (
+          <pre>{content}</pre>
         )}
-        {content && <pre>{JSON.stringify(content, null, 4)}</pre>}
       </Page>
     )
   );
