@@ -60,38 +60,37 @@ function MarkedRepos({ repos }) {
       {markedRepos.map((repo) => (
         <div key={repo.id} className="column is-one-quarter tile">
           <Link
-            href={`repos/${repo.id}`}
+            href={`repos/${repo.owner.login}/${repo.name}`}
+            // href={`repos/${repo.name}?owner=${repo.owner.login}`}
             className="tile is-child notification is-primary is-light"
           >
             <p className="title is-5">{repo.name}</p>
             <p className="subtitle is-6">{repo.description || "-"}</p>
             <ul>
-              <li>
-                <a
+              <li className="mb-2">
+                <Link
                   href={repo.html_url}
                   target="_blank"
                   className="icon-text mr-2"
-                  rel="noreferrer"
                 >
                   <span className="icon">
                     <FaGithub size={20} />
                   </span>
                   <span>{repo.full_name}</span>
-                </a>
+                </Link>
               </li>
               {repo.homepage && (
                 <li>
-                  <a
+                  <Link
                     href={repo.homepage}
                     target="_blank"
                     className="icon-text"
-                    rel="noreferrer"
                   >
                     <span className="icon">
                       <FaGlobe size={20} />
                     </span>
                     <span>{repo.homepage}</span>
-                  </a>
+                  </Link>
                 </li>
               )}
             </ul>
