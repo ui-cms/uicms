@@ -7,7 +7,7 @@ export default function Page({
   children,
   authProtected = true,
   title = "UI CMS",
-  description = "Simple yet powerfull gitbased CMS",
+  description = "Simple yet powerful gitbased CMS",
 }) {
   const { state } = useStateManagement();
 

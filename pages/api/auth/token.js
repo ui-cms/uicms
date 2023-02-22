@@ -1,7 +1,10 @@
 // After user signs in, he needs to sent the code along with (OAuth app's) client secret to GitHub to obtain access token which will be used to access GitHub API.
 // See more at https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
 
-export default async function handler(req, res) {
+import { ironSessionOptions } from "@/helpers/constants";
+import { withIronSessionApiRoute } from "iron-session/next";
+
+async function getGitHubAuthToken(req, res) {
   const { code } = req.query;
 
   let result;
@@ -27,11 +30,17 @@ export default async function handler(req, res) {
     if (data.error) {
       result = res.status(400).json({ error: data });
     } else {
-      const { access_token, token_type } = data;
-      result = res.status(200).json({ access_token, token_type });
+      // additionally store in iron-session cookie
+      req.session.token = data;
+      await req.session.save();
+
+      // data = access_token, token_type, scope
+      result = res.status(200).json(data);
     }
   } catch (error) {
     result = res.status(500).json({ error });
   }
   return result;
 }
+
+export default withIronSessionApiRoute(getGitHubAuthToken, ironSessionOptions);

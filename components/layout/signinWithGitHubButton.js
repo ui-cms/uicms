@@ -1,6 +1,6 @@
 /**
  * Once user signs in, GitHub will redirect to callback url with "code" parameter.
- * That code will be passed to our api (api/auth) which will get an auth token from GitHub's API.
+ * That code will be passed to our api (api/auth/token) which will get an auth token from GitHub's API.
  * That token will be used to authenticate user to GitHub's API.
  * https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
  */
@@ -17,7 +17,7 @@ const STATUS = {
   notStarted: "notStarted",
   loading: "loading",
   fail: "fail",
-  success: "success",
+  done: "done",
 };
 
 /**
@@ -27,18 +27,20 @@ export default function SigninWithGitHubButton({
   className,
   boldText = false,
 }) {
+  const [status, setStatus] = useState(STATUS.notStarted);
+  const githubApi = useGitHubApi();
   const { query } = useRouter();
   const { code } = query;
-  const [status, setStatus] = useState(STATUS.notStarted);
   const { state, dispatchAction } = useStateManagement();
-  const githubApi = useGitHubApi();
+  const { authToken } = state;
 
+  // After GitHub sign in button clicked, redirected back with code. Use code to fetch auth token from GitHub Api.
   useEffect(() => {
-    if (code && !state.authToken && status === STATUS.notStarted) {
+    if (code && !authToken && status === STATUS.notStarted) {
       (async () => {
         setStatus(STATUS.loading);
         try {
-          const res = await fetch(`/api/auth?code=${code}`);
+          const res = await fetch(`/api/auth/token?code=${code}`);
           const data = await res.json();
 
           if (data.error) {
@@ -47,28 +49,39 @@ export default function SigninWithGitHubButton({
           } else {
             dispatchAction.setAuthToken(data.access_token);
           }
-        } catch (error) {
+        } catch (e) {
           setStatus(STATUS.fail);
-          displayError(error);
+          displayError("Error fetching auth token from GitHub!", e);
         }
       })();
     }
-  }, [code, dispatchAction, state.authToken, status]);
+  }, [code, dispatchAction, authToken, status]);
 
+  // If there is a token (fetched from GitHub Api), use it to fetch current user.
   useEffect(() => {
-    if (state.authToken && !state.currentUser && status === STATUS.loading) {
+    if (
+      authToken &&
+      !state.currentUser &&
+      (status !== STATUS.done || status !== STATUS.fail)
+    ) {
       (async () => {
         try {
           const res = await githubApi.rest.users.getAuthenticated();
           dispatchAction.setCurrentUser(res.data);
-          setStatus(STATUS.success);
+          setStatus(STATUS.done);
         } catch (e) {
           setStatus(STATUS.fail);
           displayError("Error fetching authenticated user!", e);
         }
       })();
     }
-  }, [dispatchAction, githubApi.rest.users, state.authToken, state.currentUser, status]);
+  }, [
+    dispatchAction,
+    githubApi.rest.users,
+    authToken,
+    state.currentUser,
+    status,
+  ]);
 
   return (
     <Link

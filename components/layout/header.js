@@ -1,30 +1,16 @@
 import { useState } from "react";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/Layout.module.scss";
 import SigninWithGitHubButton from "./signinWithGitHubButton";
-import { useRouter } from "next/router";
 import useStateManagement from "@/services/stateManagement/stateManagement";
+import useAuth from "@/hooks/useAuth";
 
-export default function Layout({ children, title, description }) {
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Header title={title} description={description} />
-      {children}
-    </>
-  );
-}
-
-function Header() {
-  const router = useRouter();
+export default function Header() {
   const [burgerMenuIsActive, setBurgerMenuIsActive] = useState(false);
-  const { state, dispatchAction } = useStateManagement();
+  const { state } = useStateManagement();
   const { currentUser } = state;
+  const { signOut } = useAuth();
 
   return (
     <header>
@@ -135,8 +121,8 @@ function Header() {
               </div>
             </div>
             <div className="navbar-item has-dropdown is-hoverable">
-              <Link className="navbar-link" href="/">
-                News
+              <Link className="navbar-link" href="/test">
+                Test
               </Link>
               <div className="navbar-dropdown">
                 <Link className="navbar-item" href="/editor">
@@ -189,13 +175,7 @@ function Header() {
                     GitHub account
                   </Link>
                   <a className="navbar-item">Settings</a>
-                  <a
-                    onClick={() => {
-                      dispatchAction.reset();
-                      router.push("/");
-                    }}
-                    className="navbar-item"
-                  >
+                  <a onClick={signOut} className="navbar-item">
                     Sign out
                   </a>
                 </div>

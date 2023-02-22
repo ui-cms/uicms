@@ -1,4 +1,4 @@
-import Page from "@/components/page";
+import Page from "@/components/layout/page";
 import Tabs from "@/components/tabs";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
@@ -42,7 +42,10 @@ export default function Repos() {
 
       <Tabs
         items={[
-          { title: "Repos with UICMS topic", content: <MarkedRepos repos={repos} /> },
+          {
+            title: "Repos with UICMS topic",
+            content: <MarkedRepos repos={repos} />,
+          },
           { title: "All", content: <AllRepos repos={repos} /> },
         ]}
       />
@@ -56,7 +59,10 @@ function MarkedRepos({ repos }) {
     <div className="columns is-multiline">
       {markedRepos.map((repo) => (
         <div key={repo.id} className="column is-one-quarter tile">
-          <Link href={`repos/${repo.id}`} className="tile is-child notification is-primary is-light">
+          <Link
+            href={`repos/${repo.id}`}
+            className="tile is-child notification is-primary is-light"
+          >
             <p className="title is-5">{repo.name}</p>
             <p className="subtitle is-6">{repo.description || "-"}</p>
             <ul>
@@ -67,7 +73,7 @@ function MarkedRepos({ repos }) {
                   className="icon-text mr-2"
                   rel="noreferrer"
                 >
-                  <span class="icon">
+                  <span className="icon">
                     <FaGithub size={20} />
                   </span>
                   <span>{repo.full_name}</span>
@@ -81,7 +87,7 @@ function MarkedRepos({ repos }) {
                     className="icon-text"
                     rel="noreferrer"
                   >
-                    <span class="icon">
+                    <span className="icon">
                       <FaGlobe size={20} />
                     </span>
                     <span>{repo.homepage}</span>

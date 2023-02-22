@@ -1,4 +1,4 @@
-import Page from "@/components/page";
+import Page from "@/components/layout/page";
 import Tabs from "@/components/tabs";
 import { displayError, orderBy } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
