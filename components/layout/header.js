@@ -14,7 +14,11 @@ export default function Header() {
 
   return (
     <header>
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav
+        className="navbar is-light"
+        role="navigation"
+        aria-label="main navigation"
+      >
         <div className="navbar-brand">
           <div className="navbar-item">
             <div className="dropdown is-hoverable">
@@ -28,7 +32,7 @@ export default function Header() {
                     src="/logo.svg"
                     alt="UI CMS logo"
                     width={84}
-                    height={40}
+                    height={84}
                     priority
                   />
                 </a>

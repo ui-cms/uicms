@@ -61,7 +61,6 @@ function MarkedRepos({ repos }) {
         <div key={repo.id} className="column is-one-quarter tile">
           <Link
             href={`repos/${repo.owner.login}/${repo.name}`}
-            // href={`repos/${repo.name}?owner=${repo.owner.login}`}
             className="tile is-child notification is-primary is-light"
           >
             <p className="title is-5">{repo.name}</p>
