@@ -41,7 +41,7 @@ export default function Repo() {
   }, [config, githubApi.rest.repos, loading, owner, repoName]);
 
   return (
-    <Page title={repoName || "Repo"}>
+    <Page loading={loading} title={repoName || "Repo"}>
       <div className="columns">
         {config?.siteName && (
           <div className="column is-half">

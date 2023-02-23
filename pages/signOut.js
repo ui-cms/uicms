@@ -23,7 +23,7 @@ export default function SignOut() {
             You have been signed out of UICMS now. Note that, this doesn&apos;t
             affect your GitHub authentication.
           </p>
-          <Link href="/" class="button is-primary">
+          <Link href="/" className="button is-primary">
             Home
           </Link>
         </div>

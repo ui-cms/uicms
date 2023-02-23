@@ -109,23 +109,12 @@ export default function Header() {
           <div className="navbar-end">
             {currentUser ? (
               <>
-                <Link className="navbar-item" href="/">
+                <Link className="navbar-item" href="/repos">
                   Home
                 </Link>
                 <Link className="navbar-item" href="/editor">
                   Editor
                 </Link>
-
-                <div className="navbar-item has-dropdown is-hoverable">
-                  <Link className="navbar-link" href="/repos">
-                    Repos
-                  </Link>
-                  <div className="navbar-dropdown">
-                    <Link className="navbar-item" href="/editor">
-                      Add new
-                    </Link>
-                  </div>
-                </div>
                 <div className="navbar-item has-dropdown is-hoverable">
                   <Link className="navbar-link" href="/test">
                     Test
