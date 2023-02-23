@@ -4,13 +4,13 @@ import Link from "next/link";
 import styles from "@/styles/Layout.module.scss";
 import SigninWithGitHubButton from "./signinWithGitHubButton";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/router";
 
 export default function Header() {
+  const router = useRouter();
   const [burgerMenuIsActive, setBurgerMenuIsActive] = useState(false);
   const { state } = useStateManagement();
   const { currentUser } = state;
-  const { signOut } = useAuth();
 
   return (
     <header>
@@ -107,83 +107,88 @@ export default function Header() {
           className={`navbar-menu ${burgerMenuIsActive ? "is-active" : ""}`}
         >
           <div className="navbar-end">
-            <Link className="navbar-item" href="/">
-              Home
-            </Link>
-            <Link className="navbar-item" href="/editor">
-              Editor
-            </Link>
-
-            <div className="navbar-item has-dropdown is-hoverable">
-              <Link className="navbar-link" href="/repos">
-                Repos
-              </Link>
-              <div className="navbar-dropdown">
-                <Link className="navbar-item" href="/editor">
-                  Add new
-                </Link>
-              </div>
-            </div>
-            <div className="navbar-item has-dropdown is-hoverable">
-              <Link className="navbar-link" href="/test">
-                Test
-              </Link>
-              <div className="navbar-dropdown">
-                <Link className="navbar-item" href="/editor">
-                  Add new
-                </Link>
-              </div>
-            </div>
-            <div className="navbar-item has-dropdown is-hoverable">
-              <Link className="navbar-link" href="/">
-                Events
-              </Link>
-              <div className="navbar-dropdown">
-                <Link className="navbar-item" href="/editor">
-                  Add new
-                </Link>
-              </div>
-            </div>
-
-            <div className="navbar-item has-dropdown is-hoverable">
-              <a className="navbar-link">More</a>
-              <div className="navbar-dropdown">
-                <a className="navbar-item">FAQs</a>
-                <a className="navbar-item">Events</a>
-                <a className="navbar-item">Slides</a>
-              </div>
-            </div>
-
             {currentUser ? (
-              <div className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link is-arrowless">
-                  <div className="is-flex is-flex-direction-column">
-                    <figure className="image is-24x24 is-align-self-center">
-                      <Image
-                        className="is-rounded"
-                        src={currentUser.avatar_url}
-                        width="32"
-                        height="32"
-                        alt="username"
-                      />
-                    </figure>
-                    <span className="is-size-7">{currentUser.login}</span>
-                  </div>
-                </a>
-                <div className="navbar-dropdown is-right">
-                  <Link
-                    href={currentUser.html_url}
-                    target="_blank"
-                    className="navbar-item"
-                  >
-                    GitHub account
+              <>
+                <Link className="navbar-item" href="/">
+                  Home
+                </Link>
+                <Link className="navbar-item" href="/editor">
+                  Editor
+                </Link>
+
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <Link className="navbar-link" href="/repos">
+                    Repos
                   </Link>
-                  <a className="navbar-item">Settings</a>
-                  <a onClick={signOut} className="navbar-item">
-                    Sign out
-                  </a>
+                  <div className="navbar-dropdown">
+                    <Link className="navbar-item" href="/editor">
+                      Add new
+                    </Link>
+                  </div>
                 </div>
-              </div>
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <Link className="navbar-link" href="/test">
+                    Test
+                  </Link>
+                  <div className="navbar-dropdown">
+                    <Link className="navbar-item" href="/editor">
+                      Add new
+                    </Link>
+                  </div>
+                </div>
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <Link className="navbar-link" href="/">
+                    Events
+                  </Link>
+                  <div className="navbar-dropdown">
+                    <Link className="navbar-item" href="/editor">
+                      Add new
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">More</a>
+                  <div className="navbar-dropdown">
+                    <a className="navbar-item">FAQs</a>
+                    <a className="navbar-item">Events</a>
+                    <a className="navbar-item">Slides</a>
+                  </div>
+                </div>
+
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link is-arrowless">
+                    <div className="is-flex is-flex-direction-column">
+                      <figure className="image is-24x24 is-align-self-center">
+                        <Image
+                          className="is-rounded"
+                          src={currentUser.avatar_url}
+                          width="32"
+                          height="32"
+                          alt="username"
+                        />
+                      </figure>
+                      <span className="is-size-7">{currentUser.login}</span>
+                    </div>
+                  </a>
+                  <div className="navbar-dropdown is-right">
+                    <Link
+                      href={currentUser.html_url}
+                      target="_blank"
+                      className="navbar-item"
+                    >
+                      GitHub account
+                    </Link>
+                    <a className="navbar-item">Settings</a>
+                    <a
+                      onClick={() => router.push("/signOut")}
+                      className="navbar-item"
+                    >
+                      Sign out
+                    </a>
+                  </div>
+                </div>
+              </>
             ) : (
               <div className="navbar-item">
                 <SigninWithGitHubButton boldText={true} />

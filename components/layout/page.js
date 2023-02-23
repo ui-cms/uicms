@@ -1,15 +1,26 @@
 import Head from "next/head";
 import styles from "@/styles/Layout.module.scss";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Page({
   children,
   authProtected = true,
+  loading = false,
   title = "UI CMS",
   description = "Simple yet powerful gitbased CMS",
 }) {
+  const router = useRouter();
   const { state } = useStateManagement();
+  const { currentUser } = state;
+
+  useEffect(() => {
+    // if current page is protected then redirect to home page along with source page's url path as redirect param
+    if (authProtected && !currentUser && router.isReady) {
+      router.push(`/?redirect=${encodeURIComponent(router.asPath)}`);
+    }
+  }, [authProtected, currentUser, router]);
 
   return (
     <>
@@ -19,21 +30,7 @@ export default function Page({
       </Head>
       <Suspense fallback={<Loading />}>
         <main className={`container is-fluid py-5 ${styles.main}`}>
-          {authProtected && !state.currentUser ? (
-            <section className="hero is-halfheight">
-              <div className="hero-body">
-                <div className="">
-                  <p className="title">Access denied.</p>
-                  <p className="subtitle">
-                    This page is only accessible when you are authenticated.
-                    Please, sign in using your GitHub account.
-                  </p>
-                </div>
-              </div>
-            </section>
-          ) : (
-            children
-          )}
+          {loading ? <Loading /> : children}
         </main>
       </Suspense>
     </>
@@ -41,5 +38,9 @@ export default function Page({
 }
 
 function Loading() {
-  return <span>Loading...</span>;
+  return (
+    <progress className="progress is-small is-primary" max="100">
+      15%
+    </progress>
+  );
 }

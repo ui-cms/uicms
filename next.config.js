@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
 
   images: {
     unoptimized: true, // when need to run "next export" script, uncomment the below configuration
