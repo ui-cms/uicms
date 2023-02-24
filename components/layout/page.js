@@ -40,7 +40,13 @@ export default function Page({
 function Loading() {
   return (
     <div className="columns is-centered is-mobile">
-      <div className="column is-one-third-tablet is-three-fifths-mobile pt-6 mt-6">
+      <div className="column is-one-third-tablet is-three-fifths-mobile pt-6 mt-6 is-relative">
+        <span
+          className="center-absolute position-absolute has-text-grey"
+          style={{ bottom: "4px", fontSize: "10px" }}
+        >
+          L O A D I N G
+        </span>
         <progress className="progress is-small is-primary mt-6" max="100">
           15%
         </progress>

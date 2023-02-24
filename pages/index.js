@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { withIronSessionSsr } from "iron-session/next";
 import Link from "next/link";
-import { ironSessionOptions } from "@/helpers/constants";
+import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Page from "@/components/layout/page";
 import styles from "@/styles/Home.module.css";
@@ -70,5 +70,5 @@ export const getServerSideProps = withIronSessionSsr(
       },
     };
   },
-  ironSessionOptions
+  IRON_SESSION_OPTIONS
 );

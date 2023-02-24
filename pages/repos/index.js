@@ -10,37 +10,32 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 
 export default function Repos() {
-  const loading = useRef(false);
+  const [loading, setLoading] = useState(false);
+  const started = useRef(false); // used to prevent double call
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { repos } = state;
 
   useEffect(() => {
-    if (state.currentUser && repos.length === 0 && !loading.current) {
+    if (state.currentUser && repos.length === 0 && !started.current) {
       (async () => {
-        loading.current = true;
+        setLoading(true);
+        started.current = true;
         try {
           const res = await githubApi.customRest.listAuthenticatedUsersRepos();
           dispatchAction.setRepos(res.data);
         } catch (e) {
           displayError("Error fetching repos!", e);
         } finally {
-          loading.current = false;
+          setLoading(false);
         }
       })();
     }
-  }, [
-    dispatchAction,
-    githubApi.customRest,
-    loading,
-    repos.length,
-    state.currentUser,
-  ]);
+  }, [dispatchAction, githubApi.customRest, repos.length, state.currentUser]);
 
   return (
-    <Page title="My repos">
-      <h1 className="title is-3">Select a repo</h1>
-      <h1 className="subtitle">Your repos from GitHub are display below</h1>
+    <Page loading={loading} title="My repos">
+      <h1 className="title is-4">My repos</h1>
 
       <Tabs
         items={[

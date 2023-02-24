@@ -2,6 +2,17 @@
 ***** GLOBAL STYLE *****
 */
 
+.center-absolute {
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.position-absolute {
+  position: absolute !important;
+}
+.width-100 {
+  width: 100% !important;
+}
+
 /* 
 ***** CUSTOMIZING BULMA *****
 */

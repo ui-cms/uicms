@@ -1,7 +1,7 @@
 // After user signs in, he needs to sent the code along with (OAuth app's) client secret to GitHub to obtain access token which will be used to access GitHub API.
 // See more at https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#2-users-are-redirected-back-to-your-site-by-github
 
-import { ironSessionOptions } from "@/helpers/constants";
+import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import { withIronSessionApiRoute } from "iron-session/next";
 
 async function getGitHubAuthToken(req, res) {
@@ -43,4 +43,4 @@ async function getGitHubAuthToken(req, res) {
   return result;
 }
 
-export default withIronSessionApiRoute(getGitHubAuthToken, ironSessionOptions);
+export default withIronSessionApiRoute(getGitHubAuthToken, IRON_SESSION_OPTIONS);
