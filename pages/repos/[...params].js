@@ -61,37 +61,37 @@ export default function Repo() {
         <div className="width-100 columns">
           {config?.websiteName && (
             <div className="column is-half">
-              {config?.websiteUrl && (
-                <Link
-                  href={config.websiteUrl}
-                  target="_blank"
-                  className="button is-primary is-light"
-                >
-                  <span className="icon is-size-5">
-                    <FaGlobe />
-                  </span>
-                </Link>
-              )}
               <span className="title is-4">{config.websiteName}</span>
             </div>
           )}
           <div className="column is-half">
-            {owner && (
-              <Link
-                href={`https://github.com/${owner}/${repoName}`}
-                target="_blank"
-                className="button is-primary is-light"
-              >
-                <span className="icon is-size-5">
-                  <FaGithub />
-                </span>
-              </Link>
-            )}
             <span className="subtitle">
               {owner}/{repoName}
             </span>
           </div>
         </div>
+        {config?.websiteUrl && (
+          <Link
+            href={config.websiteUrl}
+            target="_blank"
+            className="button is-primary is-light"
+          >
+            <span className="icon is-size-5">
+              <FaGlobe />
+            </span>
+          </Link>
+        )}
+        {owner && (
+          <Link
+            href={`https://github.com/${owner}/${repoName}`}
+            target="_blank"
+            className="button is-primary is-light mx-2"
+          >
+            <span className="icon is-size-5">
+              <FaGithub />
+            </span>
+          </Link>
+        )}
         <button className="button is-primary is-light">
           <span className="icon is-size-4">
             <MdSettings />
