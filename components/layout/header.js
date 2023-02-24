@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <header>
       <nav
-        className="navbar is-light"
+        className="navbar has-background-white-bis"
         role="navigation"
         aria-label="main navigation"
       >

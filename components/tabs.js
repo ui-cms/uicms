@@ -17,7 +17,7 @@ export default function Tabs({ className, items }) {
             })}
           </ul>
         </div>
-        {<div>{items[active].content}</div>}
+        {items[active].content}
       </>
     )
   );

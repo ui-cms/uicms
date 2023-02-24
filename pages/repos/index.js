@@ -1,11 +1,13 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { FaGithub, FaGlobe } from "react-icons/fa";
+import { MdLock, MdLockOpen, MdSearch } from "react-icons/md";
+import { CheckBox, TextInput } from "@/components/form";
 import Page from "@/components/layout/page";
 import Tabs from "@/components/tabs";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import Link from "next/link";
-import { useEffect, useRef } from "react";
-import { FaGithub, FaGlobe } from "react-icons/fa";
 
 export default function Repos() {
   const loading = useRef(false);
@@ -21,7 +23,7 @@ export default function Repos() {
           const res = await githubApi.customRest.listAuthenticatedUsersRepos();
           dispatchAction.setRepos(res.data);
         } catch (e) {
-          displayError("Error fetching authenticated user's repos!", e);
+          displayError("Error fetching repos!", e);
         } finally {
           loading.current = false;
         }
@@ -58,7 +60,10 @@ function MarkedRepos({ repos }) {
   return (
     <div className="columns is-multiline">
       {markedRepos.map((repo) => (
-        <div key={repo.id} className="column is-one-quarter tile">
+        <div
+          key={repo.id}
+          className="column is-one-quarter-desktop is-one-third-tablet tile"
+        >
           <Link
             href={`repos/${repo.owner.login}/${repo.name}`}
             className="tile is-child notification is-primary is-light"
@@ -101,27 +106,105 @@ function MarkedRepos({ repos }) {
 }
 
 function AllRepos({ repos }) {
+  const [filters, setFilters] = useState({
+    search: "",
+    private: true,
+    public: true,
+    uicms: false,
+  });
+
+  function changeFilter({ name, value }) {
+    setFilters({ ...filters, [name]: value });
+  }
+
+  const filteredRepos = useMemo(
+    () =>
+      repos.filter(
+        (r) =>
+          ((filters.private && r.private) || (filters.public && !r.private)) &&
+          (!filters.uicms || (filters.uicms && hasUICMSTopic(r))) &&
+          (!filters.search ||
+            (filters.search.toLowerCase() &&
+              r.name.toLowerCase().includes(filters.search)))
+      ),
+    [filters, repos]
+  );
+
   return (
-    <div className="box p-0 is-shadowless">
-      {repos.length > 0 &&
-        repos.map((repo) => {
+    <section
+      className="panel is-shadowless p-0 box"
+      style={{ marginTop: "-1.5rem" }}
+    >
+      <div className="has-background-white-bis p-3">
+        <div className="columns">
+          <div className="column">
+            <p className="control has-icons-left">
+              <TextInput
+                name="search"
+                value={filters.search}
+                onChange={changeFilter}
+                className="input"
+                placeholder="Search"
+              />
+              <span className="icon is-left">
+                <MdSearch className=" is-size-3" />
+              </span>
+            </p>
+          </div>
+          <div className="column is-flex is-align-self-center">
+            <p className="control has-icons-left">
+              <CheckBox
+                name="public"
+                value={filters.public}
+                onChange={changeFilter}
+                label="Public"
+              />
+            </p>
+            <p className="control has-icons-left ml-4">
+              <CheckBox
+                name="private"
+                value={filters.private}
+                onChange={changeFilter}
+                label="Private"
+              />
+            </p>
+            <p className="control has-icons-left ml-6">
+              <CheckBox
+                name="uicms"
+                value={filters.uicms}
+                onChange={changeFilter}
+                label="UICMS"
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+      {filteredRepos.length === 0 ? (
+        <p className="panel-block">Nothing found</p>
+      ) : (
+        filteredRepos.map((repo) => {
           return (
             <Link
-              href={`repos/${repo.id}`}
+              href={`repos/${repo.owner.login}/${repo.name}`}
               key={repo.id}
               className="panel-block"
             >
+              <span className="panel-icon is-size-5">
+                {repo.private ? (
+                  <MdLock />
+                ) : (
+                  <MdLockOpen className="has-text-grey-light" />
+                )}
+              </span>
               {repo.name}
-              {repo.private && (
-                <span className="ml-4 tag is-dark">Private</span>
-              )}
               {hasUICMSTopic(repo) && (
                 <span className="ml-4 tag is-primary">UICMS</span>
               )}
             </Link>
           );
-        })}
-    </div>
+        })
+      )}
+    </section>
   );
 }
 
