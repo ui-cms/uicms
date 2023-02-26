@@ -29,7 +29,7 @@ export default function Page({
         <meta name="description" content={description} />
       </Head>
       <Suspense fallback={<Loading />}>
-        <main className={`container is-fluid py-5 ${styles.main}`}>
+        <main className={`container is-fluid py-5 ${styles.main || ""}`}>
           {loading ? <Loading /> : children}
         </main>
       </Suspense>

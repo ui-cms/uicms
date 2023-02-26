@@ -1,4 +1,4 @@
-export function TextInput({ name, value, onChange, className, placeholder }) {
+export function TextInput({ name, value, onChange, className="", placeholder }) {
   function change(e) {
     if (!e || !e.target) return null;
     const { name, value } = e.target;
@@ -21,9 +21,9 @@ export function CheckBox({
   name,
   value,
   onChange,
-  className,
+  className="",
   label,
-  labelClassName,
+  labelClassName="",
 }) {
   function change(e) {
     if (!e || !e.target) return null;

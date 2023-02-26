@@ -24,7 +24,7 @@ const STATUS = {
  * Do not have more than one instance of this component at the same page
  */
 export default function SigninWithGitHubButton({
-  className,
+  className="",
   boldText = false,
 }) {
   const loading = useRef(false);

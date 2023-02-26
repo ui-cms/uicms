@@ -6,11 +6,35 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .position-absolute {
   position: absolute !important;
 }
+
 .width-100 {
   width: 100% !important;
+}
+
+.is-text-overflow {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: initial !important;
+}
+
+@media screen and (max-width: 769px) {
+  .flex-dir-col-sm {
+    flex-direction: column;
+  }
+
+  .mt-3-sm {
+    margin-top: 0.75rem !important;
+  }
+
+  .width-100-sm {
+    width: 100% !important;
+  }
 }
 
 /* 

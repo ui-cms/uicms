@@ -1,7 +1,6 @@
 import Page from "@/components/layout/page";
-import Tabs from "@/components/tabs";
 import { UICMS_CONFIGS } from "@/helpers/constants";
-import { displayError, orderBy } from "@/helpers/utilities";
+import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Link from "next/link";
@@ -9,12 +8,16 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { FaGithub, FaGlobe } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
+import TitleWithTab from "@/components/titleWithTabs";
+
+const VIEWS = { configuration: "configuration", collections: "collections" };
 
 export default function Repo() {
   const { query } = useRouter();
   const [owner, repoName] = query.params ? query.params : [];
   // const [repo, setRepo] = useState(null);
   const [config, setConfig] = useState(null);
+  const [view, setView] = useState(VIEWS.configuration);
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -57,70 +60,57 @@ export default function Repo() {
 
   return (
     <Page loading={loading} title={repoName || "Repo"}>
-      <div className="is-flex">
-        <div className="width-100 columns">
-          {config?.websiteName && (
-            <div className="column is-half">
-              <span className="title is-4">{config.websiteName}</span>
-            </div>
-          )}
-          <div className="column is-half">
-            <span className="subtitle">
-              {owner}/{repoName}
-            </span>
-          </div>
-        </div>
-        {config?.websiteUrl && (
-          <Link
-            href={config.websiteUrl}
-            target="_blank"
-            className="button is-primary is-light"
-          >
-            <span className="icon is-size-5">
-              <FaGlobe />
-            </span>
-          </Link>
-        )}
-        {owner && (
-          <Link
-            href={`https://github.com/${owner}/${repoName}`}
-            target="_blank"
-            className="button is-primary is-light mx-2"
-          >
-            <span className="icon is-size-5">
-              <FaGithub />
-            </span>
-          </Link>
-        )}
-        <button className="button is-primary is-light">
-          <span className="icon is-size-4">
-            <MdSettings />
-          </span>
-        </button>
-      </div>
+      <TitleWithTab
+        title={config?.websiteName}
+        subtitle={`${owner}/${repoName}`}
+        tabs={[
+          { text: "GitHub", href: `https://github.com/${owner}/${repoName}` },
+          { text: "Website", href: config?.websiteUrl },
+          { text: "Configuration", onClick: () => setView(VIEWS.configuration) },
+        ]}
+      />
 
-      {!config ? null : config === "NotFound" ? (
-        <article className="message is-warning">
-          <div className="message-header">
-            <p>Incompatible repo</p>
-          </div>
-          <div className="message-body">
-            This repo is missing <code>{UICMS_CONFIGS.fileName}</code> file in
-            the root directory. That means this repo hasn&apos;t been configured
-            to work with UICMS.
-            <div className="block mt-5">
-              <p className="">
-                Would you like to set UICMS up in this repo ?{" "}
-                <button className="button is-primary is-small ml-2">
-                  Let&apos;s do it
-                </button>
-              </p>
-            </div>
-          </div>
-        </article>
+      {config === "NotFound" ? (
+        <NotFound />
       ) : (
-        <pre>{JSON.stringify(config, null, 4)}</pre>
+        config &&
+        (view === VIEWS.collections ? (
+          <pre>{JSON.stringify(config, null, 4)}</pre>
+        ) : (
+          <Config />
+        ))
       )}
     </Page>
+  );
+}
+
+function NotFound() {
+  return (
+    <article className="message is-warning">
+      <div className="message-header">
+        <p>Incompatible repo</p>
+      </div>
+      <div className="message-body">
+        This repo is missing <code>{UICMS_CONFIGS.fileName}</code> file in the
+        root directory. That means this repo hasn&apos;t been configured to work
+        with UICMS.
+        <div className="block mt-5">
+          <p className="">
+            Would you like to set UICMS up in this repo ?
+            <button className="button is-primary is-small ml-2">
+              Let&apos;s do it
+            </button>
+          </p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function Config() {
+  return (
+    <section>
+      <p className="title is-6">Configuration</p>
+    </section>
   );
 }
