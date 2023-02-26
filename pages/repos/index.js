@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { FaGithub, FaGlobe } from "react-icons/fa";
+import { FaDatabase, FaGithub, FaGlobe, FaStar } from "react-icons/fa";
 import { MdLock, MdLockOpen, MdSearch } from "react-icons/md";
 import { CheckBox, TextInput } from "@/components/form";
 import Page from "@/components/layout/page";
@@ -8,6 +8,7 @@ import Tabs from "@/components/tabs";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
+import TitleWithTabs from "@/components/TitleWithTabs";
 
 export default function Repos() {
   const [loading, setLoading] = useState(false);
@@ -35,15 +36,20 @@ export default function Repos() {
 
   return (
     <Page loading={loading} title="My repos">
-      <h1 className="title is-4">My repos</h1>
-
-      <Tabs
-        items={[
+      <TitleWithTabs
+        title="My repos"
+        subtitle="Select one to get started"
+        tabs={[
           {
-            title: "Repos with UICMS topic",
+            text: "Tagged",
             content: <MarkedRepos repos={repos} />,
+            icon: <FaStar />,
           },
-          { title: "All", content: <AllRepos repos={repos} /> },
+          {
+            text: "All",
+            content: <AllRepos repos={repos} />,
+            icon: <FaDatabase />,
+          },
         ]}
       />
     </Page>
@@ -53,7 +59,7 @@ export default function Repos() {
 function MarkedRepos({ repos }) {
   const markedRepos = repos.filter((r) => hasUICMSTopic(r));
   return (
-    <div className="columns is-multiline">
+    <div className="columns is-multiline mt-1">
       {markedRepos.map((repo) => (
         <div
           key={repo.id}
@@ -126,10 +132,7 @@ function AllRepos({ repos }) {
   );
 
   return (
-    <section
-      className="panel is-shadowless p-0 box"
-      style={{ marginTop: "-1.5rem" }}
-    >
+    <section className="panel is-shadowless p-0 box">
       <div className="has-background-white-bis p-3">
         <div className="columns">
           <div className="column">

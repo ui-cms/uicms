@@ -3,12 +3,12 @@ import { UICMS_CONFIGS } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { FaGithub, FaGlobe } from "react-icons/fa";
-import { MdSettings } from "react-icons/md";
-import TitleWithTab from "@/components/titleWithTabs";
+import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
+
+import TitleWithTabs from "@/components/TitleWithTabs";
+import { TextInput } from "@/components/form";
 
 const VIEWS = { configuration: "configuration", collections: "collections" };
 
@@ -17,7 +17,6 @@ export default function Repo() {
   const [owner, repoName] = query.params ? query.params : [];
   // const [repo, setRepo] = useState(null);
   const [config, setConfig] = useState(null);
-  const [view, setView] = useState(VIEWS.configuration);
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -60,26 +59,30 @@ export default function Repo() {
 
   return (
     <Page loading={loading} title={repoName || "Repo"}>
-      <TitleWithTab
+      <TitleWithTabs
         title={config?.websiteName}
         subtitle={`${owner}/${repoName}`}
         tabs={[
-          { text: "GitHub", href: `https://github.com/${owner}/${repoName}` },
-          { text: "Website", href: config?.websiteUrl },
-          { text: "Configuration", onClick: () => setView(VIEWS.configuration) },
+          {
+            text: "Collections",
+            content: <pre>{JSON.stringify(config, null, 4)}</pre>,
+            icon: <FaRegListAlt />,
+          },
+          {
+            text: "Configuration",
+            content: <Config config={config} />,
+            icon: <FaRegSun />,
+          },
+          { text: "Website", href: config?.websiteUrl, icon: <FaGlobe /> },
+          {
+            text: "GitHub",
+            href: `https://github.com/${owner}/${repoName}`,
+            icon: <FaGithub />,
+          },
         ]}
       />
 
-      {config === "NotFound" ? (
-        <NotFound />
-      ) : (
-        config &&
-        (view === VIEWS.collections ? (
-          <pre>{JSON.stringify(config, null, 4)}</pre>
-        ) : (
-          <Config />
-        ))
-      )}
+      {config === "NotFound" && <NotFound />}
     </Page>
   );
 }
@@ -107,10 +110,61 @@ function NotFound() {
   );
 }
 
-function Config() {
+function Config({ config }) {
+  function onChange(e) {}
+
   return (
-    <section>
+    <section className="box is-shadowless has-background-white-bis p-3">
       <p className="title is-6">Configuration</p>
+
+      <div className="field">
+        <label className="label">Website name</label>
+        <div className="control">
+          <TextInput
+            name="websiteName"
+            value={config?.websiteName}
+            onChange={onChange}
+            className="input"
+            placeholder="Bobs personal blog"
+          />
+        </div>
+      </div>
+      <div className="field">
+        <label className="label">Website URL</label>
+        <div className="control">
+          <TextInput
+            name="websiteName"
+            value={config?.websiteUrl}
+            onChange={onChange}
+            className="input"
+            placeholder="https://mycoolblog.com"
+          />
+        </div>
+      </div>
+      <div className="field">
+        <label className="label">Assets directory</label>
+        <div className="control">
+          <TextInput
+            name="websiteName"
+            value={config?.websiteUrl}
+            onChange={onChange}
+            className="input"
+            placeholder="https://mycoolblog.com"
+          />
+        </div>
+      </div>
+      <div className="field">
+        <label className="label">Collections directory</label>
+        <div className="control">
+          <TextInput
+            name="websiteName"
+            value={config?.websiteUrl}
+            onChange={onChange}
+            className="input"
+            placeholder="https://mycoolblog.com"
+          />
+        </div>
+      </div>
     </section>
   );
 }
