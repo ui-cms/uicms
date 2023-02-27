@@ -9,8 +9,6 @@ import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
 import { TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
 
-const VIEWS = { configuration: "configuration", collections: "collections" };
-
 export default function Repo() {
   const { query } = useRouter();
   const [owner, repoName] = query.params ? query.params : [];
@@ -56,6 +54,27 @@ export default function Repo() {
     }
   }, [config, githubApi.rest.repos, loading, owner, repoName]);
 
+  async function saveConfig(_config) {
+    try {
+      setLoading(true);
+      const res = await githubApi.rest.repos.createOrUpdateFileContents({
+        owner: owner,
+        repo: repoName,
+        path: UICMS_CONFIGS.fileName,
+        message: "uicms config file updated",
+        content: window.btoa(JSON.stringify(_config)),  // base64 encode
+      });
+      debugger;
+
+      setConfig(_config);
+    } catch (e) {
+      if (e.status === 404) {
+      } else displayError("Error saving config file!", e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <Page loading={loading} title={repoName || "Repo"}>
       <TitleWithTabs
@@ -70,7 +89,7 @@ export default function Repo() {
           },
           {
             text: "Configuration",
-            content: <Config config={config} />,
+            content: <Configuration config={config} saveConfig={saveConfig} />,
             icon: <FaRegSun />,
             skip: !config,
           },
@@ -116,61 +135,99 @@ function NotFound() {
   );
 }
 
-function Config({ config }) {
-  function onChange(e) {}
+function Configuration({ config, saveConfig }) {
+  const [conf, setConf] = useState({ ...config }); // local version
+
+  function onChange(e) {
+    const { name, value } = e;
+    const _conf = { ...conf, [name]: value };
+    setConf(_conf);
+  }
+
+  function hasChanges() {
+    return JSON.stringify(conf) !== JSON.stringify(config);
+  }
 
   return (
-    <section className="box is-shadowless has-background-white-bis p-3">
-      <p className="title is-6">Configuration</p>
-
-      <div className="field">
-        <label className="label">Website name</label>
-        <div className="control">
-          <TextInput
-            name="websiteName"
-            value={config?.websiteName}
-            onChange={onChange}
-            className="input"
-            placeholder="Bobs personal blog"
-          />
-        </div>
-      </div>
-      <div className="field">
-        <label className="label">Website URL</label>
-        <div className="control">
-          <TextInput
-            name="websiteName"
-            value={config?.websiteUrl}
-            onChange={onChange}
-            className="input"
-            placeholder="https://mycoolblog.com"
-          />
-        </div>
-      </div>
-      <div className="field">
-        <label className="label">Assets directory</label>
-        <div className="control">
-          <TextInput
-            name="websiteName"
-            value={config?.websiteUrl}
-            onChange={onChange}
-            className="input"
-            placeholder="https://mycoolblog.com"
-          />
-        </div>
-      </div>
-      <div className="field">
-        <label className="label">Collections directory</label>
-        <div className="control">
-          <TextInput
-            name="websiteName"
-            value={config?.websiteUrl}
-            onChange={onChange}
-            className="input"
-            placeholder="https://mycoolblog.com"
-          />
-        </div>
+    <section className="box is-shadowless has-background-white-bis p-3 pb-6">
+      <div className="mt-3 w-50 w-100-sm">
+        <InputWithHelp
+          name="websiteName"
+          value={conf?.websiteName}
+          onChange={onChange}
+          label="Website name"
+          help="Just a name to identify for yourself."
+          placeholder="Bob's personal blog"
+        />
+        <InputWithHelp
+          name="websiteUrl"
+          value={conf?.websiteUrl}
+          onChange={onChange}
+          label="Website URL"
+          placeholder="https://mycoolblog.com"
+        />
+        <InputWithHelp
+          name="assetsDirectory"
+          value={conf?.assetsDirectory}
+          onChange={onChange}
+          label="Assets directory"
+          help="The git directory where you would like static asset files (like images) to be stored."
+          placeholder="_contents/assets"
+          required={true}
+        />
+        <InputWithHelp
+          name="collectionsDirectory"
+          value={conf?.collectionsDirectory}
+          onChange={onChange}
+          label="Collections directory"
+          help={
+            <span>
+              The git directory where you would like collection items (
+              <code>.md</code> files) to be stored.
+            </span>
+          }
+          placeholder="_contents/collections"
+          required={true}
+        />
+        <button
+          onClick={async () => saveConfig(conf)}
+          disabled={!hasChanges()}
+          className="button is-primary float-right"
+        >
+          Save changes
+        </button>
       </div>
     </section>
+  );
+}
+
+function InputWithHelp({
+  name,
+  value,
+  onChange,
+  label = "",
+  help = "",
+  placeholder = "",
+  required = false,
+}) {
+  return (
+    <div className="field mb-5">
+      <label className="label d-inline-block d-block-sm mr-6 mb-1">
+        {label}
+        {required && <span className="has-text-danger-dark ml-1">*</span>}
+      </label>
+      <p className="help d-inline-block d-block-sm mt-0 mb-1 float-right float-left-sm">
+        {help}
+      </p>
+      <div className="control">
+        <TextInput
+          name={name}
+          value={value}
+          onChange={onChange}
+          className="input"
+          placeholder={placeholder}
+        />
+      </div>
+    </div>
   );
 }

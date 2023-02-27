@@ -23,12 +23,12 @@ export default function TitleWithTabs({
         style={{ borderBottom: "1px solid hsl(0, 0%, 86%)" }}
       >
         {title && (
-          <div className="is-align-self-center width-100-sm">
+          <div className="is-align-self-center w-100-sm">
             <p className="title is-4 pr-6 is-text-overflow">{title}</p>
           </div>
         )}
         {subtitle && (
-          <div className="is-align-self-center width-100">
+          <div className="is-align-self-center w-100">
             <p className="subtitle is-5 is-text-overflow">{subtitle}</p>
           </div>
         )}
