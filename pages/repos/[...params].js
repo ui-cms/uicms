@@ -47,7 +47,7 @@ export default function Repo() {
           setConfig(JSON.parse(res.data));
         } catch (e) {
           if (e.status === 404) {
-            setConfig("NotFound");
+            setConfig(null);
           } else displayError("Error fetching config file!", e);
         } finally {
           setLoading(false);
@@ -66,13 +66,20 @@ export default function Repo() {
             text: "Collections",
             content: <pre>{JSON.stringify(config, null, 4)}</pre>,
             icon: <FaRegListAlt />,
+            skip: !config,
           },
           {
             text: "Configuration",
             content: <Config config={config} />,
             icon: <FaRegSun />,
+            skip: !config,
           },
-          { text: "Website", href: config?.websiteUrl, icon: <FaGlobe /> },
+          {
+            text: "Website",
+            href: config?.websiteUrl,
+            icon: <FaGlobe />,
+            skip: !config?.websiteUrl,
+          },
           {
             text: "GitHub",
             href: `https://github.com/${owner}/${repoName}`,
@@ -81,14 +88,14 @@ export default function Repo() {
         ]}
       />
 
-      {config === "NotFound" && <NotFound />}
+      {!config && <NotFound />}
     </Page>
   );
 }
 
 function NotFound() {
   return (
-    <article className="message is-warning">
+    <article className="message is-warning mt-3">
       <div className="message-header">
         <p>Incompatible repo</p>
       </div>
