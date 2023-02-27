@@ -8,7 +8,7 @@ import Tabs from "@/components/tabs";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import TitleWithTabs from "@/components/TitleWithTabs";
+import TitleWithTabs from "@/components/titleWithTabs";
 
 export default function Repos() {
   const [loading, setLoading] = useState(false);
