@@ -6,7 +6,6 @@ import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
-
 import TitleWithTabs from "@/components/TitleWithTabs";
 import { TextInput } from "@/components/form";
 

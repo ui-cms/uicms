@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
 
 // tab with content: [{text: "my component", icon: <Icon/>, content: jsx]
 // tab with onClick: [{text: "open popup", icon: <Icon/>, onClick: ()=>()}]
