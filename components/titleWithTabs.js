@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
+import { ImArrowUpRight2 } from "react-icons/im";
 
 // tab with content: [{text: "my component", icon: <Icon/>, content: jsx]
 // tab with onClick: [{text: "open popup", icon: <Icon/>, onClick: ()=>()}]
@@ -46,10 +47,11 @@ export default function TitleWithTabs({
                         className={activeTab === index ? "is-active" : ""}
                       >
                         {tab.href ? (
-                          <Link href={tab.href} target="_blank">
-                            {icon}
-                            {tab.text}
-                          </Link>
+                          <LinkWithHref
+                            href={tab.href}
+                            icon={icon}
+                            text={tab.text}
+                          />
                         ) : (
                           <a
                             onClick={() =>
@@ -71,5 +73,20 @@ export default function TitleWithTabs({
         {tabs[activeTab].content}
       </>
     )
+  );
+}
+
+function LinkWithHref({ href, icon, text }) {
+  const external = href.startsWith("http");
+  return (
+    <Link href={href} target={external ? "_blank" : ""}>
+      {icon}
+      {text}
+      {external && (
+        <span className="icon is-small">
+          <ImArrowUpRight2 />
+        </span>
+      )}
+    </Link>
   );
 }
