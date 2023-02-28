@@ -11,7 +11,7 @@ export function TextInput({ name, value, onChange, className="", placeholder }) 
       value={value}
       onChange={change}
       type="text"
-      className={className}
+      className={`has-background-white-bis ${className}`}
       placeholder={placeholder}
     />
   );

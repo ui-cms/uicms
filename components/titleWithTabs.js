@@ -19,7 +19,7 @@ export default function TitleWithTabs({
   return (
     <>
       <div
-        className={`is-flex flex-dir-col-sm ${className}`}
+        className={`is-flex flex-dir-col-sm has-background-light ${className}`}
         style={{ borderBottom: "1px solid hsl(0, 0%, 86%)" }}
       >
         {title && (
