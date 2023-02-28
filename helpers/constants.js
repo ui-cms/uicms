@@ -32,3 +32,5 @@ export const UICMS_CONFIG_STARTER_TEMPLATE = {
   collectionsDirectory: UICMS_CONFIGS.defaultCollectionsDirectory,
   collections: [],
 };
+
+export const UICMS_TOPIC = "uicms"; // to be used as a topic in GitHub repos

@@ -4,11 +4,11 @@ import { FaDatabase, FaGithub, FaGlobe, FaStar } from "react-icons/fa";
 import { MdLock, MdLockOpen, MdSearch } from "react-icons/md";
 import { CheckBox, TextInput } from "@/components/form";
 import Page from "@/components/layout/page";
-import Tabs from "@/components/tabs";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import TitleWithTabs from "@/components/titleWithTabs";
+import { UICMS_TOPIC } from "@/helpers/constants";
 
 export default function Repos() {
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ export default function Repos() {
         tabs={[
           {
             text: "Tagged",
-            content: <MarkedRepos repos={repos} />,
+            content: <TaggedRepos repos={repos} />,
             icon: <FaStar />,
           },
           {
@@ -56,11 +56,11 @@ export default function Repos() {
   );
 }
 
-function MarkedRepos({ repos }) {
-  const markedRepos = repos.filter((r) => hasUICMSTopic(r));
+function TaggedRepos({ repos }) {
+  const taggedRepos = repos.filter((r) => hasUICMSTopic(r));
   return (
     <div className="columns is-multiline mt-1">
-      {markedRepos.map((repo) => (
+      {taggedRepos.map((repo) => (
         <div
           key={repo.id}
           className="column is-one-quarter-desktop is-one-third-tablet tile"
@@ -185,7 +185,7 @@ function AllRepos({ repos }) {
             <Link
               href={`repos/${repo.owner.login}/${repo.name}`}
               key={repo.id}
-              className="panel-block"
+              className="panel-block is-text-overflow"
             >
               <span className="panel-icon is-size-5">
                 {repo.private ? (
@@ -195,8 +195,15 @@ function AllRepos({ repos }) {
                 )}
               </span>
               {repo.name}
-              {hasUICMSTopic(repo) && (
-                <span className="ml-4 tag is-primary">UICMS</span>
+              {hasUICMSTopic(repo) && ( // have it first
+                <span className="ml-4 tag is-primary">{UICMS_TOPIC}</span>
+              )}
+              {repo.topics.map((topic) =>
+                topic === UICMS_TOPIC ? null : (
+                  <span key={topic} className="ml-4 tag is-light">
+                    {topic}
+                  </span>
+                )
               )}
             </Link>
           );
@@ -207,5 +214,5 @@ function AllRepos({ repos }) {
 }
 
 function hasUICMSTopic(repo) {
-  return repo.topics.includes("uicms");
+  return repo.topics.includes(UICMS_TOPIC);
 }
