@@ -1,5 +1,8 @@
 import Page from "@/components/layout/page";
-import { UICMS_CONFIGS } from "@/helpers/constants";
+import {
+  UICMS_CONFIGS,
+  UICMS_CONFIG_STARTER_TEMPLATE,
+} from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -14,7 +17,7 @@ export default function Repo() {
   const [owner, repoName] = query.params ? query.params : [];
   // const [repo, setRepo] = useState(null);
   const [config, setConfig] = useState(null);
-  const [sha, setSha] = useState(null); // SHA blob of config file
+  const [sha, setSha] = useState(null); // SHA blob of config file. Use it to update file content.
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -61,11 +64,11 @@ export default function Repo() {
     async (_config) => {
       try {
         setLoading(true);
-        const res = await githubApi.rest.repos.createOrUpdateFileContents({
+        await githubApi.rest.repos.createOrUpdateFileContents({
           owner: owner,
           repo: repoName,
           path: UICMS_CONFIGS.fileName,
-          message: "uicms config file updated",
+          message: `uicms config file ${sha ? "updated" : "created"}`,
           content: window.btoa(JSON.stringify(_config)), // base64 encode
           sha: sha,
         });
@@ -88,7 +91,7 @@ export default function Repo() {
             text: "Collections",
             content: <pre>{JSON.stringify(config, null, 4)}</pre>,
             icon: <FaRegListAlt />,
-            skip: !config,
+            skip: !config || !sha,
           },
           {
             text: "Configuration",
@@ -110,12 +113,16 @@ export default function Repo() {
         ]}
       />
 
-      {!config && <NotFound />}
+      {!config && <NotFound setConfig={setConfig} />}
     </Page>
   );
 }
 
-function NotFound() {
+function NotFound({ setConfig }) {
+  function initConfig() {
+    setConfig({ ...UICMS_CONFIG_STARTER_TEMPLATE });
+  }
+
   return (
     <article className="message is-warning mt-3">
       <div className="message-header">
@@ -128,7 +135,10 @@ function NotFound() {
         <div className="block mt-5">
           <p className="">
             Would you like to set UICMS up in this repo ?
-            <button className="button is-primary is-small ml-2">
+            <button
+              onClick={initConfig}
+              className="button is-primary is-small ml-2"
+            >
               Let&apos;s do it
             </button>
           </p>
@@ -161,6 +171,7 @@ function Configuration({ config, saveConfig }) {
           label="Website name"
           help="Just a name to identify for yourself."
           placeholder="Bob's personal blog"
+          required={true}
         />
         <InputWithHelp
           name="websiteUrl"

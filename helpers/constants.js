@@ -24,3 +24,11 @@ export const UICMS_CONFIGS = {
     body: { name: "body", type: "richtext", required: false },
   },
 };
+
+export const UICMS_CONFIG_STARTER_TEMPLATE = {
+  websiteName: "",
+  websiteUrl: "",
+  assetsDirectory: UICMS_CONFIGS.defaultAssetsDirectory,
+  collectionsDirectory: UICMS_CONFIGS.defaultCollectionsDirectory,
+  collections: [],
+};
