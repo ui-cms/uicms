@@ -4,7 +4,7 @@ import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
 import { TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
@@ -14,6 +14,7 @@ export default function Repo() {
   const [owner, repoName] = query.params ? query.params : [];
   // const [repo, setRepo] = useState(null);
   const [config, setConfig] = useState(null);
+  const [sha, setSha] = useState(null); // SHA blob of config file
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -30,50 +31,52 @@ export default function Repo() {
   //   }
   // }, [owner, repo, repoName, state.repos]);
 
-  useEffect(() => {
-    if (repoName && !config && loading) {
-      (async () => {
-        try {
-          const res = await githubApi.rest.repos.getContent({
-            owner: owner,
-            repo: repoName,
-            path: UICMS_CONFIGS.fileName,
-            mediaType: {
-              format: "raw", // otherwise content will be returned in base64
-            },
-          });
-          setConfig(JSON.parse(res.data));
-        } catch (e) {
-          if (e.status === 404) {
-            setConfig(null);
-          } else displayError("Error fetching config file!", e);
-        } finally {
-          setLoading(false);
-        }
-      })();
-    }
-  }, [config, githubApi.rest.repos, loading, owner, repoName]);
-
-  async function saveConfig(_config) {
+  const getConfig = useCallback(async () => {
     try {
-      setLoading(true);
-      const res = await githubApi.rest.repos.createOrUpdateFileContents({
-        owner: owner,
-        repo: repoName,
-        path: UICMS_CONFIGS.fileName,
-        message: "uicms config file updated",
-        content: window.btoa(JSON.stringify(_config)),  // base64 encode
-      });
-      debugger;
-
-      setConfig(_config);
+      const res = await githubApi.customRest.getFileContentAndSha(
+        owner,
+        repoName,
+        UICMS_CONFIGS.fileName
+      );
+      setSha(res.sha);
+      setConfig(JSON.parse(res.content));
     } catch (e) {
-      if (e.status === 404) {
-      } else displayError("Error saving config file!", e);
+      // when 404, no config file, incompatible repo
+      if (e.status !== 404) {
+        displayError("Error fetching config file!", e);
+      }
     } finally {
       setLoading(false);
     }
-  }
+  }, [githubApi.customRest, owner, repoName]);
+
+  // initial fetch
+  useEffect(() => {
+    if (repoName && !config && loading) {
+      getConfig();
+    }
+  }, [config, getConfig, loading, repoName]);
+
+  const saveConfig = useCallback(
+    async (_config) => {
+      try {
+        setLoading(true);
+        const res = await githubApi.rest.repos.createOrUpdateFileContents({
+          owner: owner,
+          repo: repoName,
+          path: UICMS_CONFIGS.fileName,
+          message: "uicms config file updated",
+          content: window.btoa(JSON.stringify(_config)), // base64 encode
+          sha: sha,
+        });
+        await getConfig(); // re-fetch config as sha has been changed
+      } catch (e) {
+        displayError("Error saving config file!", e);
+        setLoading(false);
+      }
+    },
+    [getConfig, githubApi.rest.repos, owner, repoName, sha]
+  );
 
   return (
     <Page loading={loading} title={repoName || "Repo"}>
@@ -150,7 +153,7 @@ function Configuration({ config, saveConfig }) {
 
   return (
     <section className="box is-shadowless has-background-white-bis p-3 pb-6">
-      <div className="mt-3 w-50 w-100-sm">
+      <div className="mt-3 mx-auto w-50 w-100-sm">
         <InputWithHelp
           name="websiteName"
           value={conf?.websiteName}
