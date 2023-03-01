@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styles from "@/styles/Layout.module.scss";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Suspense, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -29,7 +28,7 @@ export default function Page({
         <meta name="description" content={description} />
       </Head>
       <Suspense fallback={<Loading />}>
-        <main className={`container is-fluid py-5 ${styles.main || ""}`}>
+        <main className="container is-fluid py-4">
           {loading ? <Loading /> : children}
         </main>
       </Suspense>

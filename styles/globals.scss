@@ -11,19 +11,6 @@
   position: absolute !important;
 }
 
-.w-25 {
-  width: 25% !important;
-}
-.w-50 {
-  width: 50% !important;
-}
-.w-75 {
-  width: 75% !important;
-}
-.w-100 {
-  width: 100% !important;
-}
-
 .is-text-overflow {
   flex: 1;
   overflow: hidden;
@@ -36,9 +23,8 @@
   display: inline-block !important;
 }
 
-.mx-n1 {
-  margin-left: -0.5rem !important;
-  margin-right: -0.5rem !important;
+.x-scrollable {
+  overflow-x: auto;
 }
 
 .parts {
@@ -62,7 +48,28 @@
   }
 }
 
-// Smaller screens
+.w-25 {
+  width: 25% !important;
+}
+.w-50 {
+  width: 50% !important;
+}
+.w-75 {
+  width: 75% !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+
+.mt-n4 {
+  margin-top: -1rem !important;
+}
+
+.mx-n2 {
+  margin-left: -0.5rem !important;
+  margin-right: -0.5rem !important;
+}
+
 @media screen and (max-width: 769px) {
   .flex-dir-col-sm {
     flex-direction: column;

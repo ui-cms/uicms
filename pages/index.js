@@ -5,7 +5,7 @@ import Link from "next/link";
 import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Page from "@/components/layout/page";
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Home.module.scss";
 
 /**
  * Using server side props checks if there is any cached auth token and will be set in state managemetn if found

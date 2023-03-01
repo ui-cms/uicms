@@ -132,7 +132,7 @@ function AllRepos({ repos }) {
   );
 
   return (
-    <section className="panel is-shadowless p-0 box">
+    <section className="panel is-shadowless p-0 box mt-3">
       <div className="has-background-white-bis p-3">
         <div className="columns">
           <div className="column">

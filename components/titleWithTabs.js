@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ImArrowUpRight2 } from "react-icons/im";
+import styles from "@/styles/TitleWithTabs.module.scss";
 
 export default function TitleWithTabs({
   title,
@@ -19,22 +20,21 @@ export default function TitleWithTabs({
   return (
     <>
       <div
-        className={`is-flex flex-dir-col-sm has-background-light ${className}`}
-        style={{ borderBottom: "1px solid hsl(0, 0%, 86%)" }}
+        className={`is-flex has-background-white-bis flex-dir-col-sm x-scrollable mt-n4 ${styles.titleWithTabs} ${className}`}
       >
         {title && (
           <div className="is-align-self-center w-100-sm">
-            <p className="title is-4 pr-6 is-text-overflow">{title}</p>
+            <p className="title is-5 pr-6 is-text-overflow">{title}</p>
           </div>
         )}
         {subtitle && (
           <div className="is-align-self-center w-100">
-            <p className="subtitle is-5 is-text-overflow">{subtitle}</p>
+            <p className="subtitle is-6 is-text-overflow">{subtitle}</p>
           </div>
         )}
         {filteredTabs.length > 0 && (
           <div className="mt-3-sm">
-            <div className="tabs" style={{ marginBottom: "-1px" }}>
+            <div className={`tabs ${styles.tabs}`}>
               <ul>
                 {filteredTabs.map((tab, index) => {
                   const icon = tab.icon && (

@@ -162,9 +162,8 @@ function Configuration({ config, saveConfig }) {
   }
 
   return (
-    <section className="mx-n1 pt-5">
+    <section className="mx-n2 pt-5">
       <div className="parts mx-auto w-50 w-100-sm">
-        <p className="is-size-5 my-1">Collection element</p>
         <InputWithHelp
           name="websiteName"
           value={conf?.websiteName}
