@@ -133,9 +133,9 @@ function AllRepos({ repos }) {
 
   return (
     <section className="panel is-shadowless p-0 box mt-3">
-      <div className="has-background-white-bis p-3">
+      <div className="p-3 mb-2">
         <div className="columns">
-          <div className="column">
+          <div className="column is-one-third">
             <p className="control has-icons-left">
               <TextInput
                 name="search"
