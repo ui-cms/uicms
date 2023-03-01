@@ -185,7 +185,7 @@ function AllRepos({ repos }) {
             <Link
               href={`repos/${repo.owner.login}/${repo.name}`}
               key={repo.id}
-              className="panel-block is-text-overflow"
+              className="panel-block uc-text-overflow"
             >
               <span className="panel-icon is-size-5">
                 {repo.private ? (

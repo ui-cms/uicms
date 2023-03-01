@@ -20,20 +20,20 @@ export default function TitleWithTabs({
   return (
     <>
       <div
-        className={`is-flex has-background-white-bis flex-dir-col-sm x-scrollable mt-n4 ${styles.titleWithTabs} ${className}`}
+        className={`is-flex has-background-white-bis uc-flex-dir-col-sm uc-x-scrollable uc-mt-n4 uc-pt-2-sm ${styles.titleWithTabs} ${className}`}
       >
         {title && (
-          <div className="is-align-self-center w-100-sm">
-            <p className="title is-5 pr-6 is-text-overflow">{title}</p>
+          <div className="is-align-self-center uc-w-100-sm">
+            <p className="title is-5 pr-6 uc-text-overflow">{title}</p>
           </div>
         )}
         {subtitle && (
-          <div className="is-align-self-center w-100">
-            <p className="subtitle is-6 is-text-overflow">{subtitle}</p>
+          <div className="is-align-self-center uc-w-100">
+            <p className="subtitle is-6 uc-text-overflow">{subtitle}</p>
           </div>
         )}
         {filteredTabs.length > 0 && (
-          <div className="mt-3-sm">
+          <div className="uc-mt-3-sm">
             <div className={`tabs ${styles.tabs}`}>
               <ul>
                 {filteredTabs.map((tab, index) => {

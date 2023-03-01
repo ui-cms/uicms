@@ -162,8 +162,8 @@ function Configuration({ config, saveConfig }) {
   }
 
   return (
-    <section className="mx-n2 pt-5">
-      <div className="parts mx-auto w-50 w-100-sm">
+    <section className="uc-mx-n2 pt-5">
+      <div className="uc-parts mx-auto uc-w-50 uc-w-100-sm">
         <InputWithHelp
           name="websiteName"
           value={conf?.websiteName}
@@ -203,7 +203,7 @@ function Configuration({ config, saveConfig }) {
           placeholder="_contents/collections"
           required={true}
         />
-        <div className="part is-clearfix">
+        <div className="uc-part is-clearfix">
           <button
             onClick={async () => saveConfig(conf)}
             disabled={!hasChanges()}
@@ -227,12 +227,12 @@ function InputWithHelp({
   required = false,
 }) {
   return (
-    <div className="part field">
-      <label className="label d-inline-block d-block-sm mr-6 mb-1">
+    <div className="uc-part field">
+      <label className="label uc-d-inline-block uc-d-block-sm mr-6 mb-1">
         {label}
         {required && <span className="has-text-danger-dark ml-1">*</span>}
       </label>
-      <p className="help d-inline-block d-block-sm mt-0 mb-1 is-pulled-right float-left-sm">
+      <p className="help uc-d-inline-block uc-d-block-sm mt-0 mb-1 is-pulled-right uc-float-left-sm">
         {help}
       </p>
       <div className="control">
