@@ -36,6 +36,7 @@
     padding: 1rem;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+    display: block;
   }
   .uc-part:first-of-type {
     border-top-left-radius: 10px;
@@ -45,6 +46,16 @@
     border-bottom-width: 1px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+  }
+  a.uc-part {
+    color: black;
+  }
+  a.uc-part.active,
+  a.uc-part:hover {
+    background-color: hsl(0, 0%, 98%);
+  }
+  a.uc-part.active {
+    font-weight: 500;
   }
 }
 
@@ -75,7 +86,7 @@
   }
 
   .uc-pt-2-sm {
-    padding-top: .5rem !important;
+    padding-top: 0.5rem !important;
   }
 
   .uc-mt-3-sm {

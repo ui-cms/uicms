@@ -9,6 +9,7 @@ import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
+import { FcPlus } from "react-icons/fc";
 import { TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
 
@@ -89,7 +90,7 @@ export default function Repo() {
         tabs={[
           {
             text: "Collections",
-            content: <pre>{JSON.stringify(config, null, 4)}</pre>,
+            content: <Collections config={config}/>,
             icon: <FaRegListAlt />,
             skip: !config || !sha,
           },
@@ -145,6 +146,34 @@ function NotFound({ setConfig }) {
         </div>
       </div>
     </article>
+  );
+}
+
+function Collections({ config }) {
+  return (
+    <section className="columns mt-3">
+      <aside className="column is-one-fifth uc-parts">
+        <div className="is-flex is-align-items-center mb-2">
+          <p className="uc-w-100 title is-5 m-0">Collections</p>
+          <button className="button is-primary is-light">
+            <span className="icon mr-1">
+              <FcPlus />
+            </span>
+            New
+          </button>
+        </div>
+
+        <a className="uc-part">Blog</a>
+        <a className="uc-part">Blog</a>
+        <a className="uc-part">Blog</a>
+        <a className="uc-part">Blog</a>
+        <a className="uc-part">Blog</a>
+        <a className="uc-part active">Blog</a>
+      </aside>
+      <div className="column">
+        <pre>{JSON.stringify(config, null, 4)}</pre>
+      </div>
+    </section>
   );
 }
 
