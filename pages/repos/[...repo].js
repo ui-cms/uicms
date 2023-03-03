@@ -15,7 +15,7 @@ import TitleWithTabs from "@/components/titleWithTabs";
 
 export default function Repo() {
   const router = useRouter();
-  const [owner, repoName] = router.query.params ? router.query.params : [];
+  const [repoOwner, repoName] = router.query.repo || [];
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -26,7 +26,7 @@ export default function Repo() {
   const getConfig = useCallback(async () => {
     try {
       const res = await githubApi.customRest.getFileContentAndSha(
-        owner,
+        repoOwner,
         repoName,
         UICMS_CONFIGS.fileName
       );
@@ -43,25 +43,28 @@ export default function Repo() {
     } finally {
       setLoading(false);
     }
-  }, [dispatchAction, githubApi.customRest, owner, repo, repoName]);
+  }, [dispatchAction, githubApi.customRest, repoOwner, repo, repoName]);
 
   // Initial fetch repo from state management
   useEffect(() => {
     let _repo = null;
-    if (state.repos.length > 0 && owner && repoName) {
-      _repo = state.repos.find((r) => r.full_name === `${owner}/${repoName}`);
+    if (state.repos.length > 0 && repoOwner && repoName) {
+      _repo = state.repos.find(
+        (r) => r.owner === repoOwner && r.name === repoName
+      );
+      if (_repo) {
+        setRepo(_repo);
+        if (_repo.configFile.data) {
+          setLoading(false);
+        }
+      }
     }
 
-    if (_repo) {
-      setRepo(_repo);
-      if (_repo.configFile.data) {
-        setLoading(false);
-      }
-    } else {
-      // If landed directly to this page and repos have not been loaded to state management yet, redirect to repos page
+    // If landed directly to this page and repos have not been loaded to state management yet, redirect to repos page
+    if (!_repo) {
       router.push("/repos");
     }
-  }, [owner, repoName, router, state.repos]);
+  }, [repoName, repoOwner, router, state.repos]);
 
   // If repo doesn't have config file data yet, fetch it
   useEffect(() => {
@@ -75,7 +78,7 @@ export default function Repo() {
       try {
         setLoading(true);
         await githubApi.rest.repos.createOrUpdateFileContents({
-          owner: owner,
+          owner: repoOwner,
           repo: repoName,
           path: UICMS_CONFIGS.fileName,
           message: `uicms config file ${sha ? "updated" : "created"}`,
@@ -88,14 +91,14 @@ export default function Repo() {
         setLoading(false);
       }
     },
-    [getConfig, githubApi.rest.repos, owner, repoName, sha]
+    [getConfig, githubApi.rest.repos, repoOwner, repoName, sha]
   );
 
   return (
     <Page loading={loading} title={repoName || "Repo"}>
       <TitleWithTabs
         title={config?.websiteName}
-        subtitle={`${owner}/${repoName}`}
+        subtitle={`${repoOwner}/${repoName}`}
         tabs={[
           {
             text: "Collections",
@@ -117,7 +120,7 @@ export default function Repo() {
           },
           {
             text: "GitHub",
-            href: `https://github.com/${owner}/${repoName}`,
+            href: `https://github.com/${repoOwner}/${repoName}`,
             icon: <FaGithub />,
           },
         ]}
