@@ -15,4 +15,7 @@ export default class Actions {
   setRepos(repos) {
     this.dispatch({ type: "setRepos", payload: repos });
   }
+  updateRepo(repo) {
+    this.dispatch({ type: "updateRepo", payload: repo });
+  }
 }

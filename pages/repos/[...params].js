@@ -7,33 +7,21 @@ import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
 import { FcPlus } from "react-icons/fc";
 import { TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
 
 export default function Repo() {
-  const { query } = useRouter();
-  const [owner, repoName] = query.params ? query.params : [];
-  // const [repo, setRepo] = useState(null);
-  const [config, setConfig] = useState(null);
-  const [sha, setSha] = useState(null); // SHA blob of config file. Use it to update file content.
+  const router = useRouter();
+  const [owner, repoName] = router.query.params ? router.query.params : [];
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-
-  // useEffect(() => {
-  //   // optionally finds the repos from state management. If landed directly to this page, this won't work
-  //   if (!repo && state.repos.length > 0 && owner && repoName) {
-  //     const _repo = state.repos.find(
-  //       (r) => r.full_name === `${owner}/${repoName}`
-  //     );
-  //     if (_repo) {
-  //       setRepo(_repo);
-  //     }
-  //   }
-  // }, [owner, repo, repoName, state.repos]);
+  const [repo, setRepo] = useState(null);
+  const sha = repo?.configFile.sha;
+  const config = repo?.configFile.data;
 
   const getConfig = useCallback(async () => {
     try {
@@ -42,8 +30,11 @@ export default function Repo() {
         repoName,
         UICMS_CONFIGS.fileName
       );
-      setSha(res.sha);
-      setConfig(JSON.parse(res.content));
+      const _repo = {
+        ...repo,
+        configFile: { sha: res.sha, data: JSON.parse(res.content) },
+      };
+      dispatchAction.updateRepo(_repo);
     } catch (e) {
       // when 404, no config file, incompatible repo
       if (e.status !== 404) {
@@ -52,14 +43,32 @@ export default function Repo() {
     } finally {
       setLoading(false);
     }
-  }, [githubApi.customRest, owner, repoName]);
+  }, [dispatchAction, githubApi.customRest, owner, repo, repoName]);
 
-  // initial fetch
+  // Initial fetch repo from state management
   useEffect(() => {
-    if (repoName && !config && loading) {
+    let _repo = null;
+    if (state.repos.length > 0 && owner && repoName) {
+      _repo = state.repos.find((r) => r.full_name === `${owner}/${repoName}`);
+    }
+
+    if (_repo) {
+      setRepo(_repo);
+      if (_repo.configFile.data) {
+        setLoading(false);
+      }
+    } else {
+      // If landed directly to this page and repos have not been loaded to state management yet, redirect to repos page
+      router.push("/repos");
+    }
+  }, [owner, repoName, router, state.repos]);
+
+  // If repo doesn't have config file data yet, fetch it
+  useEffect(() => {
+    if (repo && !repo.configFile.data && loading) {
       getConfig();
     }
-  }, [config, getConfig, loading, repoName]);
+  }, [getConfig, loading, repo]);
 
   const saveConfig = useCallback(
     async (_config) => {
@@ -90,7 +99,7 @@ export default function Repo() {
         tabs={[
           {
             text: "Collections",
-            content: <Collections config={config}/>,
+            content: <Collections config={config} />,
             icon: <FaRegListAlt />,
             skip: !config || !sha,
           },
@@ -114,7 +123,11 @@ export default function Repo() {
         ]}
       />
 
-      {!config && <NotFound setConfig={setConfig} />}
+      {!config && (
+        <NotFound
+          setConfig={(conf) => setRepo({ ...repo, configFile: { data: conf } })}
+        />
+      )}
     </Page>
   );
 }

@@ -10,15 +10,8 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaGithub } from "react-icons/fa";
-
-const STATUS = {
-  notStarted: "notStarted",
-  loading: "loading",
-  fail: "fail",
-  done: "done",
-};
 
 /**
  * Do not have more than one instance of this component at the same page
@@ -81,7 +74,7 @@ export default function SigninWithGitHubButton({
 
   return (
     <Link
-      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo`} //&scope=user
+      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo`}
       className={`button ${className || ""} ${
         loading.current ? "is-loading" : ""
       } ${error ? "is-danger" : "is-dark"}`}

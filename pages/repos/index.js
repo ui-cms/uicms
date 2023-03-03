@@ -63,14 +63,14 @@ function TaggedRepos({ repos }) {
       {taggedRepos.map((repo) => (
         <div
           key={repo.id}
-          className="column is-one-quarter-desktop is-one-third-tablet tile"
+          className="column is-one-quarter-desktop is-one-third-tablet tile uc-overflow-hidden"
         >
           <Link
-            href={`repos/${repo.owner.login}/${repo.name}`}
-            className="tile is-child notification is-primary is-light"
+            href={`repos/${repo.owner}/${repo.name}`}
+            className="tile is-child notification is-primary is-light uc-text-overflow"
           >
-            <p className="title is-5">{repo.name}</p>
-            <p className="subtitle is-6">{repo.description || "-"}</p>
+            <p className="title is-5 uc-text-overflow">{repo.name}</p>
+            <p className="subtitle is-6 uc-text-overflow">{repo.description || "-"}</p>
             <ul>
               <li className="mb-2">
                 <Link
@@ -183,7 +183,7 @@ function AllRepos({ repos }) {
         filteredRepos.map((repo) => {
           return (
             <Link
-              href={`repos/${repo.owner.login}/${repo.name}`}
+              href={`repos/${repo.owner}/${repo.name}`}
               key={repo.id}
               className="panel-block uc-text-overflow"
             >

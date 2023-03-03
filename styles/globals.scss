@@ -18,13 +18,15 @@
   white-space: nowrap;
   line-height: initial !important;
 }
+.uc-overflow-hidden {
+  overflow: hidden;
+}
+.uc-x-scrollable {
+  overflow-x: auto;
+}
 
 .uc-d-inline-block {
   display: inline-block !important;
-}
-
-.uc-x-scrollable {
-  overflow-x: auto;
 }
 
 .uc-parts {
