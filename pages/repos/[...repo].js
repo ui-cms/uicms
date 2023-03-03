@@ -131,6 +131,8 @@ export default function Repo() {
           setConfig={(conf) => setRepo({ ...repo, configFile: { data: conf } })}
         />
       )}
+
+      {config && <pre>{JSON.stringify(config, null, 4)}</pre>}
     </Page>
   );
 }
@@ -166,6 +168,7 @@ function NotFound({ setConfig }) {
 }
 
 function Collections({ config }) {
+  const [active, setActive] = useState(null);
   return (
     <section className="columns mt-3">
       <aside className="column is-one-fifth uc-parts">
@@ -179,16 +182,17 @@ function Collections({ config }) {
           </button>
         </div>
 
-        <a className="uc-part">Blog</a>
-        <a className="uc-part">Blog</a>
-        <a className="uc-part">Blog</a>
-        <a className="uc-part">Blog</a>
-        <a className="uc-part">Blog</a>
-        <a className="uc-part active">Blog</a>
+        {config.collections.map((c, index) => (
+          <a
+            key={index}
+            className={`uc-part ${index === active ? "active" : ""}`}
+            onClick={()=>setActive(index)}
+          >
+            {c.name}
+          </a>
+        ))}
       </aside>
-      <div className="column">
-        <pre>{JSON.stringify(config, null, 4)}</pre>
-      </div>
+      <div className="column"><pre>{JSON.stringify(config.collections[active], null, 4)}</pre></div>
     </section>
   );
 }
