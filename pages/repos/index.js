@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { FaDatabase, FaGithub, FaGlobe, FaStar } from "react-icons/fa";
-import { MdLock, MdLockOpen, MdSearch } from "react-icons/md";
+import { FaDatabase, FaGithub, FaGlobe, FaStar, FaPlay } from "react-icons/fa";
+import { MdLock, MdLockOpen, MdSearch, MdUpdate } from "react-icons/md";
 import { CheckBox, TextInput } from "@/components/form";
 import Page from "@/components/layout/page";
 import { displayError } from "@/helpers/utilities";
@@ -60,48 +60,84 @@ function TaggedRepos({ repos }) {
   const taggedRepos = repos.filter((r) => hasUICMSTopic(r));
   return (
     <div className="columns is-multiline mt-1">
-      {taggedRepos.map((repo) => (
-        <div
-          key={repo.id}
-          className="column is-one-quarter-desktop is-one-third-tablet tile uc-overflow-hidden"
-        >
-          <Link
-            href={`repos/${repo.owner}/${repo.name}`}
-            className="tile is-child notification is-primary is-light uc-text-overflow"
+      {taggedRepos.map((repo) => {
+        const url = `repos/${repo.owner}/${repo.name}`;
+        return (
+          <div
+            key={repo.id}
+            className="column is-one-quarter-desktop is-one-third-tablet"
           >
-            <p className="title is-5 uc-text-overflow">{repo.name}</p>
-            <p className="subtitle is-6 uc-text-overflow">{repo.description || "-"}</p>
-            <ul>
-              <li className="mb-2">
+            <div className="card uc-overflow-hidden has-background-primary-light is-shadowless">
+              <Link href={url}>
+                <div className="card-content">
+                  <div className="media">
+                    <div className="media-left">
+                      <span className="panel-icon mt-2 has-text-primary-dark">
+                        {repo.private ? (
+                          <MdLock size={32} title="Private repo" />
+                        ) : (
+                          <MdLockOpen size={32} title="Public repo" />
+                        )}
+                      </span>
+                    </div>
+                    <div className="media-content">
+                      <p className="title is-4 has-text-primary-dark uc-text-overflow">
+                        {repo.name}
+                      </p>
+                      <p className="subtitle is-6 has-text-primary-dark uc-text-overflow">
+                        @{repo.owner}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="content has-text-primary-dark">
+                    <p className="mb-2 uc-text-overflow">{repo.description}</p>
+                    <span
+                      title="Last updated"
+                      className="icon-text is-align-items-center"
+                    >
+                      <MdUpdate size={20} className="mr-1 mt-0" />
+                      {repo.updated_at
+                        ? new Date(repo.updated_at).toLocaleString()
+                        : "-"}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+              <footer class="card-footer has-text-primary-dark">
                 <Link
                   href={repo.html_url}
                   target="_blank"
-                  className="icon-text mr-2"
+                  className="card-footer-item icon-text"
                 >
                   <span className="icon">
                     <FaGithub size={20} />
                   </span>
-                  <span>{repo.full_name}</span>
+                  <span>GitHub</span>
                 </Link>
-              </li>
-              {repo.homepage && (
-                <li>
-                  <Link
-                    href={repo.homepage}
-                    target="_blank"
-                    className="icon-text"
-                  >
-                    <span className="icon">
-                      <FaGlobe size={20} />
-                    </span>
-                    <span>{repo.homepage}</span>
-                  </Link>
-                </li>
-              )}
-            </ul>
-          </Link>
-        </div>
-      ))}
+                <Link
+                  href={repo.homepage || "#"}
+                  target={repo.homepage ? "_blank" : ""}
+                  className={`card-footer-item icon-text ${
+                    !repo.homepage ? "uc-opacity-25 uc-cursor-default" : ""
+                  }`}
+                >
+                  <span className="icon">
+                    <FaGlobe size={20} />
+                  </span>
+                  <span>Website</span>
+                </Link>
+                <Link href={url} className="card-footer-item icon-text">
+                  <span className="icon">
+                    <FaPlay size={20} />
+                  </span>
+                  <span>View</span>
+                </Link>
+              </footer>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

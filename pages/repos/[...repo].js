@@ -199,7 +199,7 @@ function Collections({ config, repoOwner, repoName }) {
           </button>
         </div>
 
-        <div class="uc-parts uc-mx-n2-sm">
+        <div className="uc-parts uc-mx-n2-sm">
           {config.collections.map((c, index) => (
             <a
               key={index}
@@ -230,7 +230,7 @@ function Collections({ config, repoOwner, repoName }) {
               Settings
             </button>
           </div>
-          <div class="uc-parts uc-mx-n2-sm">
+          <div className="uc-parts uc-mx-n2-sm">
             {sampleFiles
               .sort()
               .reverse()
@@ -241,7 +241,7 @@ function Collections({ config, repoOwner, repoName }) {
                 return (
                   <Link
                     key={index}
-                    class="uc-part is-flex"
+                    className="uc-part is-flex"
                     href={`/item/${repoOwner}/${repoName}/${encodeURIComponent(
                       config.collections[active].name
                     )}/${encodeURIComponent(file)}`}
