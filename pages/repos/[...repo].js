@@ -12,6 +12,7 @@ import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
 import { FcPlus } from "react-icons/fc";
 import { TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
+import Link from "next/link";
 
 export default function Repo() {
   const router = useRouter();
@@ -102,7 +103,13 @@ export default function Repo() {
         tabs={[
           {
             text: "Collections",
-            content: <Collections config={config} />,
+            content: (
+              <Collections
+                config={config}
+                repoOwner={repoOwner}
+                repoName={repoName}
+              />
+            ),
             icon: <FaRegListAlt />,
             skip: !config || !sha,
           },
@@ -167,32 +174,96 @@ function NotFound({ setConfig }) {
   );
 }
 
-function Collections({ config }) {
+function Collections({ config, repoOwner, repoName }) {
   const [active, setActive] = useState(null);
+  const sampleFiles = [
+    "2302121450_How_to_edit_some_file_in_23.md",
+    "2309231150_Lorem_impsu_stuff_goes_here.md",
+    "2101232350_Nice_and_cool_stuffs_happen.md",
+    "2011211415_Wherever_you_go_never_do_this.md",
+    "2208201950_Slug_is_a_title_that_is.md",
+    "2311221035_Underscore_sepearted_basically.md",
+    "2212222042_A/n othe+r_tit&le.md",
+    "2105212200_Wont_hurt.md",
+  ];
   return (
     <section className="columns mt-3">
-      <aside className="column is-one-fifth uc-parts">
+      <aside className="column is-one-fifth">
         <div className="is-flex is-align-items-center mb-2">
           <p className="uc-w-100 title is-5 m-0">Collections</p>
           <button className="button is-primary is-light">
             <span className="icon mr-1">
               <FcPlus />
             </span>
-            New
+            New collection
           </button>
         </div>
 
-        {config.collections.map((c, index) => (
-          <a
-            key={index}
-            className={`uc-part ${index === active ? "active" : ""}`}
-            onClick={()=>setActive(index)}
-          >
-            {c.name}
-          </a>
-        ))}
+        <div class="uc-parts uc-mx-n2-sm">
+          {config.collections.map((c, index) => (
+            <a
+              key={index}
+              className={`uc-part ${index === active ? "active" : ""}`}
+              onClick={() => setActive(index)}
+            >
+              {c.name}
+            </a>
+          ))}
+        </div>
       </aside>
-      <div className="column"><pre>{JSON.stringify(config.collections[active], null, 4)}</pre></div>
+      {active !== null && (
+        <div className="column">
+          <div className="is-flex is-align-items-center mb-2">
+            <p className="uc-w-100 title is-5 m-0">
+              {config.collections[active].name}
+            </p>
+            <button className="button is-primary is-light mr-2">
+              <span className="icon mr-1">
+                <FcPlus />
+              </span>
+              New item
+            </button>
+            <button className="button is-light">
+              <span className="icon mr-1">
+                <FcPlus />
+              </span>
+              Settings
+            </button>
+          </div>
+          <div class="uc-parts uc-mx-n2-sm">
+            {sampleFiles
+              .sort()
+              .reverse()
+              .map((file, index) => {
+                const name = file
+                  .substring(10, file.length - 3)
+                  .replaceAll("_", " ");
+                return (
+                  <Link
+                    key={index}
+                    class="uc-part is-flex"
+                    href={`/item/${repoOwner}/${repoName}/${encodeURIComponent(
+                      config.collections[active].name
+                    )}/${encodeURIComponent(file)}`}
+                  >
+                    <div className="uc-text-overflow">
+                      <h1 className="is-size-5 uc-text-overflow">{name}</h1>
+                      <small className="has-text-grey">
+                        {`${file.substring(4, 6)}/${file.substring(
+                          2,
+                          4
+                        )}/${file.substring(0, 2)}, ${file.substring(
+                          6,
+                          8
+                        )}:${file.substring(8, 10)}`}
+                      </small>
+                    </div>
+                  </Link>
+                );
+              })}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -211,7 +282,7 @@ function Configuration({ config, saveConfig }) {
   }
 
   return (
-    <section className="uc-mx-n2 pt-5">
+    <section className="uc-mx-n2-sm pt-5">
       <div className="uc-parts mx-auto uc-w-50 uc-w-100-sm">
         <InputWithHelp
           name="websiteName"
@@ -256,7 +327,7 @@ function Configuration({ config, saveConfig }) {
           <button
             onClick={async () => saveConfig(conf)}
             disabled={!hasChanges()}
-            className="button is-primary is-pulled-right"
+            className="button is-primary is-light is-pulled-right"
           >
             Save changes
           </button>
@@ -281,7 +352,7 @@ function InputWithHelp({
         {label}
         {required && <span className="has-text-danger-dark ml-1">*</span>}
       </label>
-      <p className="help uc-d-inline-block uc-d-block-sm mt-0 mb-1 is-pulled-right uc-float-left-sm">
+      <p className="help uc-d-inline-block uc-d-block-sm mt-0 mb-1 uc-float-right uc-float-left-sm">
         {help}
       </p>
       <div className="control">

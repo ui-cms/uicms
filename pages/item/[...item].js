@@ -2,15 +2,17 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Page from "@/components/layout/page";
+import Script from "next/script";
 
 export default function CollectionItem() {
   const router = useRouter();
-  const [repoOwner, repoName, collectionName, itemSlug] = router.query.item || [];
+  let [repoOwner, repoName, collectionName, itemSlug] = router.query.item || [];
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const [repo, setRepo] = useState(null);
-  const [config, setConfig] = useState(null);
+  const [config, setConfig] = useState(null); // collection config
   const [item, setItem] = useState(null);
 
   // Initial fetch repo from state management
@@ -22,13 +24,15 @@ export default function CollectionItem() {
       );
       if (_repo) {
         setRepo(_repo);
-        _config = _repo.collections.find((c) => c.name === collectionName);
+        _config = _repo.configFile.data.collections.find(
+          (c) => c.name === collectionName
+        );
         setConfig(_config);
       }
     }
 
     // If landed directly to this page and repos have not been loaded to state management yet, redirect to repos page
-    if (_config) {
+    if (!_config) {
       router.push("/repos");
     }
   }, [collectionName, repoName, repoOwner, router, state.repos]);
@@ -39,5 +43,13 @@ export default function CollectionItem() {
     }
   }, []);
 
-  return <pre>{JSON.stringify(router.query.item)}</pre>;
+  return (
+    <Page title="Item">
+      <h1>Editor will be here</h1>
+      <Script src="https://example.com/script.js" />
+
+      <pre>{JSON.stringify(router.query.item)}</pre>
+      <br />
+    </Page>
+  );
 }
