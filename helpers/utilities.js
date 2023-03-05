@@ -22,7 +22,8 @@ export function orderBy(list, propertyName = null, asc = true) {
     let valA = a[propertyName];
     let valB = b[propertyName];
     let result;
-    if (typeof valA === "string" && typeof valB === "string") { // string
+    if (typeof valA === "string" && typeof valB === "string") {
+      // string
       valA = valA.toLocaleLowerCase();
       valB = valB.toLocaleLowerCase();
       result = valA < valB ? -1 : valA > valB ? 1 : 0;
@@ -31,4 +32,16 @@ export function orderBy(list, propertyName = null, asc = true) {
     }
     return result * (asc ? 1 : -1);
   });
+}
+
+/**
+ * Will generate a random string of lower case characters of given length
+ * @param {Number} length
+ */
+export function generateRandomString(length) {
+  return [...Array(length)].reduce(
+    (accumulator) =>
+      accumulator + String.fromCharCode(97 + Math.floor(Math.random() * 26)),
+    ""
+  );
 }

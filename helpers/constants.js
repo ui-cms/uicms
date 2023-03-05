@@ -17,12 +17,12 @@ export const UICMS_CONFIGS = {
     date: "date",
     file: "file",
   },
-  collectionItemDefaultProperties: {
-    author: { name: "author", type: "string", required: true },
-    date: { name: "date", type: "date", required: true },
-    published: { name: "published", type: "boolean", required: true },
-    body: { name: "body", type: "richtext", required: false },
-  },
+  collectionItemDefaultProperties: [
+    { name: "author", type: "string", required: true },
+    { name: "date", type: "date", required: true },
+    { name: "published", type: "boolean", required: true },
+    { name: "body", type: "richtext", required: false },
+  ],
 };
 
 export const UICMS_CONFIG_STARTER_TEMPLATE = {

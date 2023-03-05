@@ -7,7 +7,7 @@ import Script from "next/script";
 
 export default function CollectionItem() {
   const router = useRouter();
-  let [repoOwner, repoName, collectionName, itemSlug] = router.query.item || [];
+  let [repoOwner, repoName, collectionId, itemSlug] = router.query.item || [];
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -25,7 +25,7 @@ export default function CollectionItem() {
       if (_repo) {
         setRepo(_repo);
         _config = _repo.configFile.data.collections.find(
-          (c) => c.name === collectionName
+          (c) => c.id === collectionId
         );
         setConfig(_config);
       }
@@ -35,13 +35,14 @@ export default function CollectionItem() {
     if (!_config) {
       router.push("/repos");
     }
-  }, [collectionName, repoName, repoOwner, router, state.repos]);
+  }, [collectionId, repoName, repoOwner, router, state.repos]);
 
-  useEffect(() => {
-    if (!item && loading) {
-      // fetch here
-    }
-  }, []);
+  // // inital fetch
+  // useEffect(() => {
+  //   if (!item && loading) {
+  //     // fetch here
+  //   }
+  // }, []);
 
   return (
     <Page title="Item">

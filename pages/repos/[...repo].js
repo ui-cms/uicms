@@ -3,13 +3,13 @@ import {
   UICMS_CONFIGS,
   UICMS_CONFIG_STARTER_TEMPLATE,
 } from "@/helpers/constants";
-import { displayError } from "@/helpers/utilities";
+import { displayError, generateRandomString } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
-import { FcPlus } from "react-icons/fc";
+import { FcPlus, FcSettings } from "react-icons/fc";
 import { TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
 import Link from "next/link";
@@ -115,7 +115,9 @@ export default function Repo() {
           },
           {
             text: "Configuration",
-            content: <Configuration config={config} saveConfig={saveConfig} />,
+            content: (
+              <RepoConfiguration config={config} saveConfig={saveConfig} />
+            ),
             icon: <FaRegSun />,
             skip: !config,
           },
@@ -139,7 +141,11 @@ export default function Repo() {
         />
       )}
 
-      {config && <pre>{JSON.stringify(config, null, 4)}</pre>}
+      {repo?.updated_at && (
+        <p className="has-text-grey">
+          Repo last updated: {new Date(repo.updated_at).toLocaleString()}
+        </p>
+      )}
     </Page>
   );
 }
@@ -175,7 +181,9 @@ function NotFound({ setConfig }) {
 }
 
 function Collections({ config, repoOwner, repoName }) {
-  const [active, setActive] = useState(null);
+  const [selectedCollection, setSelectedCollection] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
+
   const sampleFiles = [
     "2302121450_How_to_edit_some_file_in_23.md",
     "2309231150_Lorem_impsu_stuff_goes_here.md",
@@ -186,6 +194,7 @@ function Collections({ config, repoOwner, repoName }) {
     "2212222042_A/n othe+r_tit&le.md",
     "2105212200_Wont_hurt.md",
   ];
+
   return (
     <section className="columns mt-3">
       <aside className="column is-one-fifth">
@@ -200,75 +209,186 @@ function Collections({ config, repoOwner, repoName }) {
         </div>
 
         <div className="uc-parts uc-mx-n2-sm">
-          {config.collections.map((c, index) => (
+          {config.collections.map((c) => (
             <a
-              key={index}
-              className={`uc-part ${index === active ? "active" : ""}`}
-              onClick={() => setActive(index)}
+              key={c.id}
+              className={`uc-part ${
+                c.id === selectedCollection?.id ? "active" : ""
+              }`}
+              onClick={() => {
+                setSelectedCollection(c);
+                setShowSettings(false);
+              }}
             >
               {c.name}
             </a>
           ))}
         </div>
       </aside>
-      {active !== null && (
+
+      {!selectedCollection ? (
+        <p className="mx-auto my-auto">
+          {config.collections.length > 0
+            ? "Select a collection to view its items."
+            : "Create a collection to get started."}
+        </p>
+      ) : (
         <div className="column">
-          <div className="is-flex is-align-items-center mb-2">
-            <p className="uc-w-100 title is-5 m-0">
-              {config.collections[active].name}
-            </p>
-            <button className="button is-primary is-light mr-2">
-              <span className="icon mr-1">
-                <FcPlus />
-              </span>
-              New item
-            </button>
-            <button className="button is-light">
-              <span className="icon mr-1">
-                <FcPlus />
-              </span>
-              Settings
-            </button>
-          </div>
-          <div className="uc-parts uc-mx-n2-sm">
-            {sampleFiles
-              .sort()
-              .reverse()
-              .map((file, index) => {
-                const name = file
-                  .substring(10, file.length - 3)
-                  .replaceAll("_", " ");
-                return (
-                  <Link
-                    key={index}
-                    className="uc-part is-flex"
-                    href={`/item/${repoOwner}/${repoName}/${encodeURIComponent(
-                      config.collections[active].name
-                    )}/${encodeURIComponent(file)}`}
-                  >
-                    <div className="uc-text-overflow">
-                      <h1 className="is-size-5 uc-text-overflow">{name}</h1>
-                      <small className="has-text-grey">
-                        {`${file.substring(4, 6)}/${file.substring(
-                          2,
-                          4
-                        )}/${file.substring(0, 2)}, ${file.substring(
-                          6,
-                          8
-                        )}:${file.substring(8, 10)}`}
-                      </small>
-                    </div>
-                  </Link>
-                );
-              })}
-          </div>
+          {showSettings ? (
+            <CollectionSettings
+              config={config}
+              collectionId={selectedCollection.id}
+            />
+          ) : (
+            <>
+              <div className="is-flex is-align-items-center mb-2">
+                <p className="uc-w-100 title is-5 m-0">
+                  {selectedCollection.name}
+                </p>
+                <button className="button is-primary is-light mr-2">
+                  <span className="icon mr-1">
+                    <FcPlus />
+                  </span>
+                  New item
+                </button>
+                <button
+                  className="button is-light"
+                  onClick={() => setShowSettings(true)}
+                >
+                  <span className="icon mr-1">
+                    <FcSettings />
+                  </span>
+                  Settings
+                </button>
+              </div>
+              <div className="uc-parts uc-mx-n2-sm">
+                {sampleFiles
+                  .sort()
+                  .reverse()
+                  .map((file, index) => {
+                    const name = file
+                      .substring(10, file.length - 3)
+                      .replaceAll("_", " ");
+                    return (
+                      <Link
+                        key={index}
+                        className="uc-part is-flex"
+                        href={`/item/${repoOwner}/${repoName}/${
+                          selectedCollection.id
+                        }/${encodeURIComponent(file)}`}
+                      >
+                        <div className="uc-text-overflow">
+                          <h1 className="is-size-5 uc-text-overflow">{name}</h1>
+                          <small className="has-text-grey">
+                            {`${file.substring(4, 6)}/${file.substring(
+                              2,
+                              4
+                            )}/${file.substring(0, 2)} ${file.substring(
+                              6,
+                              8
+                            )}:${file.substring(8, 10)}`}
+                          </small>
+                        </div>
+                      </Link>
+                    );
+                  })}
+              </div>
+            </>
+          )}
         </div>
       )}
     </section>
   );
 }
 
-function Configuration({ config, saveConfig }) {
+function CollectionSettings({ config, collectionId }) {
+  const unChagedCollection = useRef(null); // for hasChanges comparison
+  const [collection, setCollection] = useState(null); // local version
+
+  useEffect(() => {
+    debugger;
+    const _collection = config.collections.find((c) => c.id === collectionId);
+    setCollection(_collection);
+    unChagedCollection.current = _collection;
+  }, [collectionId, config.collections]);
+
+  function onChange(e) {
+    const { name, value } = e;
+    const _collection = { ...collection, [name]: value };
+    setCollection(_collection);
+  }
+
+  function save() {
+    if (confirm("Are you sure ? ")) {
+      const id = generateId(collection.name);
+      debugger;
+      // saveConfig(config);
+    }
+  }
+
+  function generateId(str) {
+    let id = str.toLowerCase().replace(/[^a-z]/g, ""); // only lower case english letters allowed
+    if (id.length <= 8) {
+      // has to be of size 8
+      id = id + generateRandomString(8 - id.length); // if less add new random chars
+    }
+    if (config.collections.includes((c) => c.id === id)) {
+      // if already use within collection ids
+      id = id.substring(0, 4); // has to generate last 3 chars randomly again
+      generateId(id);
+    }
+    return id;
+  }
+
+  function hasChanges() {
+    return (
+      JSON.stringify(collection) !== JSON.stringify(unChagedCollection.current)
+    );
+  }
+
+  return (
+    <section className="uc-w-50">
+      <fieldset className="uc-parts">
+        <InputWithHelp
+          name="name"
+          value={collection?.name}
+          onChange={onChange}
+          label="Collection"
+          help="Just a name to identify for yourself."
+          placeholder="Bob's personal blog"
+          required={true}
+        />
+        <InputWithHelp
+          name="directory"
+          value={collection?.directory}
+          onChange={onChange}
+          label="Directory"
+          placeholder="https://mycoolblog.com"
+        />
+        <InputWithHelp
+          name="item.name"
+          value={collection?.item.name}
+          onChange={onChange}
+          label="Item name"
+          help="The git directory where you would like static asset files (like images) to be stored."
+          placeholder="_contents/assets"
+          required={true}
+        />
+        <div className="uc-part is-clearfix">
+          <button
+            onClick={save}
+            disabled={!hasChanges()}
+            className="button is-primary is-light is-pulled-right"
+          >
+            Save changes
+          </button>
+        </div>
+      </fieldset>
+    </section>
+  );
+}
+
+function RepoConfiguration({ config, saveConfig }) {
   const [conf, setConf] = useState({ ...config }); // local version
 
   function onChange(e) {
@@ -277,13 +397,19 @@ function Configuration({ config, saveConfig }) {
     setConf(_conf);
   }
 
+  function save() {
+    if (confirm("Are you sure ? ")) {
+      saveConfig(conf);
+    }
+  }
+
   function hasChanges() {
     return JSON.stringify(conf) !== JSON.stringify(config);
   }
 
   return (
     <section className="uc-mx-n2-sm pt-5">
-      <div className="uc-parts mx-auto uc-w-50 uc-w-100-sm">
+      <fieldset className="uc-parts mx-auto uc-w-50 uc-w-100-sm">
         <InputWithHelp
           name="websiteName"
           value={conf?.websiteName}
@@ -325,14 +451,14 @@ function Configuration({ config, saveConfig }) {
         />
         <div className="uc-part is-clearfix">
           <button
-            onClick={async () => saveConfig(conf)}
+            onClick={save}
             disabled={!hasChanges()}
             className="button is-primary is-light is-pulled-right"
           >
             Save changes
           </button>
         </div>
-      </div>
+      </fieldset>
     </section>
   );
 }

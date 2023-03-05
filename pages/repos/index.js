@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { FaDatabase, FaGithub, FaGlobe, FaStar, FaPlay } from "react-icons/fa";
+import { FaDatabase, FaGithub, FaGlobe, FaStar, FaPlay, FaSearch } from "react-icons/fa";
 import { MdLock, MdLockOpen, MdSearch, MdUpdate } from "react-icons/md";
 import { CheckBox, TextInput } from "@/components/form";
 import Page from "@/components/layout/page";
@@ -69,19 +69,19 @@ function TaggedRepos({ repos }) {
           >
             <div className="card uc-overflow-hidden has-background-primary-light is-shadowless">
               <Link href={url}>
-                <div className="card-content">
-                  <div className="media">
+                <div className="card-content px-4 py-3">
+                  <div className="media mb-3">
                     <div className="media-left">
                       <span className="panel-icon mt-2 has-text-primary-dark">
                         {repo.private ? (
-                          <MdLock size={32} title="Private repo" />
+                          <MdLock size={24} title="Private repo" />
                         ) : (
-                          <MdLockOpen size={32} title="Public repo" />
+                          <MdLockOpen size={24} title="Public repo" />
                         )}
                       </span>
                     </div>
                     <div className="media-content">
-                      <p className="title is-4 has-text-primary-dark uc-text-overflow">
+                      <p className="title is-5 has-text-primary-dark uc-text-overflow">
                         {repo.name}
                       </p>
                       <p className="subtitle is-6 has-text-primary-dark uc-text-overflow">
@@ -92,44 +92,35 @@ function TaggedRepos({ repos }) {
 
                   <div className="content has-text-primary-dark">
                     <p className="mb-2 uc-text-overflow">{repo.description}</p>
-                    <span
-                      title="Last updated"
-                      className="icon-text is-align-items-center"
-                    >
-                      <MdUpdate size={20} className="mr-1 mt-0" />
-                      {repo.updated_at
-                        ? new Date(repo.updated_at).toLocaleString()
-                        : "-"}
-                    </span>
                   </div>
                 </div>
               </Link>
-              <footer class="card-footer has-text-primary-dark">
+              <footer className="card-footer has-text-primary-dark">
                 <Link
                   href={repo.html_url}
                   target="_blank"
-                  className="card-footer-item icon-text"
+                  className="card-footer-item icon-text p-2"
                 >
                   <span className="icon">
-                    <FaGithub size={20} />
+                    <FaGithub size={18} />
                   </span>
                   <span>GitHub</span>
                 </Link>
                 <Link
                   href={repo.homepage || "#"}
                   target={repo.homepage ? "_blank" : ""}
-                  className={`card-footer-item icon-text ${
+                  className={`card-footer-item icon-text p-2 ${
                     !repo.homepage ? "uc-opacity-25 uc-cursor-default" : ""
                   }`}
                 >
                   <span className="icon">
-                    <FaGlobe size={20} />
+                    <FaGlobe size={18} />
                   </span>
                   <span>Website</span>
                 </Link>
-                <Link href={url} className="card-footer-item icon-text">
+                <Link href={url} className="card-footer-item icon-text p-2">
                   <span className="icon">
-                    <FaPlay size={20} />
+                    <FaSearch size={18} />
                   </span>
                   <span>View</span>
                 </Link>
