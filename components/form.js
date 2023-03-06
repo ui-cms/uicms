@@ -13,6 +13,7 @@ export function TextInput({ name, value, onChange, className="", placeholder }) 
       type="text"
       className={`has-background-white-bis ${className}`}
       placeholder={placeholder}
+      autoComplete={false}
     />
   );
 }

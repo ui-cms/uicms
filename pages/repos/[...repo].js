@@ -108,6 +108,7 @@ export default function Repo() {
                 config={config}
                 repoOwner={repoOwner}
                 repoName={repoName}
+                saveConfig={saveConfig}
               />
             ),
             icon: <FaRegListAlt />,
@@ -180,7 +181,7 @@ function NotFound({ setConfig }) {
   );
 }
 
-function Collections({ config, repoOwner, repoName }) {
+function Collections({ config, repoOwner, repoName, saveConfig }) {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -238,6 +239,7 @@ function Collections({ config, repoOwner, repoName }) {
             <CollectionSettings
               config={config}
               collectionId={selectedCollection.id}
+              saveConfig={saveConfig}
             />
           ) : (
             <>
@@ -301,12 +303,25 @@ function Collections({ config, repoOwner, repoName }) {
   );
 }
 
-function CollectionSettings({ config, collectionId }) {
+function CollectionSettings({ config, collectionId, saveConfig }) {
   const unChagedCollection = useRef(null); // for hasChanges comparison
   const [collection, setCollection] = useState(null); // local version
 
+  function save() {
+    if (confirm("Are you sure ? ")) {
+      const _config = { ...config };
+      _config.collections = _config.collections.map((col) =>
+        col.id === collectionId ? collection : col
+      );
+      debugger;
+      // if(!collectionId){
+      // const id = generateId(collection.name);
+      // }
+      saveConfig(_config);
+    }
+  }
+
   useEffect(() => {
-    debugger;
     const _collection = config.collections.find((c) => c.id === collectionId);
     setCollection(_collection);
     unChagedCollection.current = _collection;
@@ -314,16 +329,15 @@ function CollectionSettings({ config, collectionId }) {
 
   function onChange(e) {
     const { name, value } = e;
-    const _collection = { ...collection, [name]: value };
-    setCollection(_collection);
-  }
 
-  function save() {
-    if (confirm("Are you sure ? ")) {
-      const id = generateId(collection.name);
-      debugger;
-      // saveConfig(config);
+    const _collection = { ...collection };
+    if (name === "itemName") {
+      _collection.item = { ..._collection.item, name: value };
+    } else {
+      _collection[name] = value;
     }
+
+    setCollection(_collection);
   }
 
   function generateId(str) {
@@ -347,44 +361,44 @@ function CollectionSettings({ config, collectionId }) {
   }
 
   return (
-    <section className="uc-w-50">
-      <fieldset className="uc-parts">
-        <InputWithHelp
-          name="name"
-          value={collection?.name}
-          onChange={onChange}
-          label="Collection"
-          help="Just a name to identify for yourself."
-          placeholder="Bob's personal blog"
-          required={true}
-        />
-        <InputWithHelp
-          name="directory"
-          value={collection?.directory}
-          onChange={onChange}
-          label="Directory"
-          placeholder="https://mycoolblog.com"
-        />
-        <InputWithHelp
-          name="item.name"
-          value={collection?.item.name}
-          onChange={onChange}
-          label="Item name"
-          help="The git directory where you would like static asset files (like images) to be stored."
-          placeholder="_contents/assets"
-          required={true}
-        />
-        <div className="uc-part is-clearfix">
-          <button
-            onClick={save}
-            disabled={!hasChanges()}
-            className="button is-primary is-light is-pulled-right"
-          >
-            Save changes
-          </button>
-        </div>
-      </fieldset>
-    </section>
+    <fieldset className="uc-parts">
+      <InputWithHelp
+        name="name"
+        value={collection?.name}
+        onChange={onChange}
+        label="Collection"
+        help="Name of the collection. Usually in plural."
+        placeholder="E.g: Blogposts, FAQs, Services, Skills, Slides"
+        required={true}
+      />
+      <InputWithHelp
+        name="directory"
+        value={collection?.directory}
+        onChange={onChange}
+        label="Directory"
+        help="The directory where items of this collection will be stored"
+        placeholder="_contents/collections/blogposts"
+        required={true}
+      />
+      <InputWithHelp
+        name="itemName"
+        value={collection?.item.name}
+        onChange={onChange}
+        label="Item name"
+        help="The name of items that belong to this collection."
+        placeholder="Blogpost"
+        required={true}
+      />
+      <div className="uc-part is-clearfix">
+        <button
+          onClick={save}
+          disabled={!hasChanges()}
+          className="button is-primary is-light is-pulled-right"
+        >
+          Save changes
+        </button>
+      </div>
+    </fieldset>
   );
 }
 
