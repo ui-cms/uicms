@@ -142,9 +142,9 @@ export default function Repo() {
         />
       )}
 
-      {repo?.updated_at && (
+      {repo?.pushed_at && (
         <p className="has-text-grey">
-          Repo last updated: {new Date(repo.updated_at).toLocaleString()}
+          Repo last updated: {new Date(repo.pushed_at).toLocaleString()}
         </p>
       )}
     </Page>
