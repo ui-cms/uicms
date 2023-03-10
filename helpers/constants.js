@@ -18,11 +18,12 @@ export const UICMS_CONFIGS = {
     file: "file",
   },
   collectionItemDefaultProperties: [
-    { name: "author", type: "string", required: true },
-    { name: "date", type: "date", required: true },
-    { name: "published", type: "boolean", required: true },
-    { name: "body", type: "richtext", required: false },
+    { name: "Author", id: "author", type: "string", required: true },
+    { name: "Date", id: "date", type: "date", required: true },
+    { name: "Published", id: "published", type: "boolean", required: true },
+    { name: "Body", id: "body", type: "richtext", required: false },
   ],
+  uniqueKeyLength: 6, // e.g collection ids
 };
 
 export const UICMS_CONFIG_STARTER_TEMPLATE = {

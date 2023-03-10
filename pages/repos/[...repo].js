@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
 import { FcPlus, FcSettings } from "react-icons/fc";
-import { TextInput } from "@/components/form";
+import { Select, TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
 import Link from "next/link";
 
@@ -307,20 +307,6 @@ function CollectionSettings({ config, collectionId, saveConfig }) {
   const unChagedCollection = useRef(null); // for hasChanges comparison
   const [collection, setCollection] = useState(null); // local version
 
-  function save() {
-    if (confirm("Are you sure ? ")) {
-      const _config = { ...config };
-      _config.collections = _config.collections.map((col) =>
-        col.id === collectionId ? collection : col
-      );
-      debugger;
-      // if(!collectionId){
-      // const id = generateId(collection.name);
-      // }
-      saveConfig(_config);
-    }
-  }
-
   useEffect(() => {
     const _collection = config.collections.find((c) => c.id === collectionId);
     setCollection(_collection);
@@ -340,18 +326,37 @@ function CollectionSettings({ config, collectionId, saveConfig }) {
     setCollection(_collection);
   }
 
+  function save() {
+    if (confirm("Are you sure ? ")) {
+      const _config = { ...config };
+      _config.collections = _config.collections.map((col) =>
+        col.id === collectionId ? collection : col
+      );
+      debugger;
+      // if(!collectionId){
+      // const id = generateId(collection.name);
+      // }
+      saveConfig(_config);
+    }
+  }
+
   function generateId(str) {
     let id = str.toLowerCase().replace(/[^a-z]/g, ""); // only lower case english letters allowed
-    if (id.length <= 8) {
-      // has to be of size 8
-      id = id + generateRandomString(8 - id.length); // if less add new random chars
+    const len = UICMS_CONFIGS.uniqueKeyLength;
+    if (id.length < len) {
+      id = id + generateRandomString(len - id.length); // if less, add new random chars
+    } else if (id.length > len) {
+      id = id.substring(0, len - 1); // if more, don't take all
     }
+    // if already used within collection ids, remove last 3 and regenerate again
     if (config.collections.includes((c) => c.id === id)) {
-      // if already use within collection ids
-      id = id.substring(0, 4); // has to generate last 3 chars randomly again
-      generateId(id);
+      id = generateId(id.substring(0, len - 1 - 3));
     }
     return id;
+  }
+
+  function setProperty() {
+    debugger;
   }
 
   function hasChanges() {
@@ -389,6 +394,24 @@ function CollectionSettings({ config, collectionId, saveConfig }) {
         placeholder="Blogpost"
         required={true}
       />
+      <>
+        {collection?.item &&
+          collection.item.properties.map((p) => {
+            const defaultProp =
+              UICMS_CONFIGS.collectionItemDefaultProperties.find(
+                (d) => d.id === p.id
+              );
+            return (
+              <ItemProperty
+                key={p.id}
+                property={p}
+                setProperty={setProperty}
+                isDefault={!!defaultProp}
+                required={defaultProp && defaultProp.required}
+              />
+            );
+          })}
+      </>
       <div className="uc-part is-clearfix">
         <button
           onClick={save}
@@ -503,6 +526,66 @@ function InputWithHelp({
           className="input"
           placeholder={placeholder}
         />
+      </div>
+    </div>
+  );
+}
+
+function ItemProperty({
+  property,
+  setProperty,
+  isDefault = false,
+  required = false,
+}) {
+  function onChange(e) {
+    debugger;
+  }
+
+  return (
+    <div className="uc-part">
+      <div className="columns">
+        <div className="column">
+          <label className="label uc-d-inline-block uc-d-block-sm mr-6 mb-1">
+            Type
+          </label>
+          <div class="control">
+            <div className="select">
+              <Select value={property.type} onChange={onChange} name="type">
+                <option value={null}>Select type</option>
+                {Object.values(UICMS_CONFIGS.collectionItemPropertyTypes).map(
+                  (t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  )
+                )}
+              </Select>
+            </div>
+          </div>
+        </div>
+        <div className="column is-one-quarter">
+          <label className="label uc-d-inline-block uc-d-block-sm mr-6 mb-1">
+            Name
+          </label>
+          <div className="control mr-3">
+            <TextInput
+              name="name"
+              value={property.name}
+              onChange={onChange}
+              className="input"
+            />
+          </div>
+        </div>
+
+        <div className="column is-full">
+          {isDefault && required ? (
+            <p className="help mb-1 uc-float-right uc-float-left-sm">
+              This is a default built-in property.
+            </p>
+          ) : (
+            <button className="delete"></button>
+          )}
+        </div>
       </div>
     </div>
   );
