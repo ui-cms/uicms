@@ -5,85 +5,56 @@
  * https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
  */
 
-import { displayError } from "@/helpers/utilities";
-import useGitHubApi from "@/hooks/useGitHubApi";
-import useStateManagement from "@/services/stateManagement/stateManagement";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
+import { displayError } from "@/helpers/utilities";
 
 /**
  * Do not have more than one instance of this component at the same page
  */
-export default function SigninWithGitHubButton({
-  className="",
-  boldText = false,
-}) {
-  const loading = useRef(false);
-  const [error, setError] = useState(false);
-  const githubApi = useGitHubApi();
-  const { query } = useRouter();
-  const { code } = query;
-  const { state, dispatchAction } = useStateManagement();
-  const { authToken } = state;
+export default function SigninWithGitHubButton({ setToken }) {
+  const [loading, setLoading] = useState(false); // null = has errors
+  const router = useRouter();
+  const { code } = router.query;
 
   // After GitHub sign in button clicked, redirected back with code. Use code to fetch auth token from GitHub Api.
   useEffect(() => {
-    if (code && !authToken && !loading.current) {
+    if (code && loading === false) {
       (async () => {
-        loading.current = true;
+        setLoading(true);
         try {
           const res = await fetch(`/api/auth?code=${code}`);
           const data = await res.json();
-
-          if (data.error) {
-            setError(true);
-            displayError("Error signing in to GitHub!", data.error);
+          if (!data.error) {
+            setToken(data.access_token);
           } else {
-            dispatchAction.setAuthToken(data.access_token);
+            displayError("Error fetching auth token from GitHub!", data.error);
+            setLoading(null);
           }
         } catch (e) {
-          setError(true);
-          displayError("Error fetching auth token from GitHub!", e);
+          displayError("Error signing in to GitHub!", e);
+          setLoading(null);
         }
       })();
     }
-  }, [authToken, code, dispatchAction]);
-
-  // If there is a token (fetched from GitHub Api), use it to fetch current user.
-  useEffect(() => {
-    if (authToken && !state.currentUser && (loading.current || !error)) {
-      (async () => {
-        try {
-          const res = await githubApi.rest.users.getAuthenticated();
-          dispatchAction.setCurrentUser(res.data);
-        } catch (e) {
-          setError(true);
-          displayError("Error fetching authenticated user!", e);
-        }
-      })();
-    }
-  }, [
-    authToken,
-    dispatchAction,
-    error,
-    githubApi.rest.users,
-    state.currentUser,
-  ]);
+  }, [code, loading, setToken]);
 
   return (
     <Link
       href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo`}
-      className={`button ${className || ""} ${
-        loading.current ? "is-loading" : ""
-      } ${error ? "is-danger" : "is-dark"}`}
+      className={`button ${loading ? "loading" : ""} `}
     >
-      <span className="icon">
+      <span className="">
         <FaGithub />
       </span>
-      <span className={boldText ? "has-text-weight-bold" : ""}>
-        {error ? "Error, try again" : "Sign in with GitHub"}
+      <span className="">
+        {loading
+          ? "Loading"
+          : loading === null
+          ? "Try again"
+          : "Sign in with GitHub"}
       </span>
     </Link>
   );

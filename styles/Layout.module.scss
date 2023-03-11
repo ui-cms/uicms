@@ -1,25 +1,9 @@
-.logo {
-  padding-right: 1.3rem !important;
-
-  padding-top: 0.2rem !important;
-  padding-bottom: 0.2rem !important;
+.layout {
+  display: flex;
 }
-.logo::after {
-  border: 3px solid transparent;
-  border-radius: 2px;
-  border-right: 0;
-  border-top: 0;
-  content: " ";
-  display: block;
-  height: 0.625em;
-  margin-top: -0.4375em;
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  transform: rotate(-45deg);
-  transform-origin: center;
-  width: 0.625em;
-  border-color: hsl(0, 0%, 65%);
-  margin-top: -0.375em;
-  right: 0;
+
+@media screen and (max-width: 768px) {
+  .layout {
+    display: block;
+  }
 }

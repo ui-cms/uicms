@@ -1,0 +1,9 @@
+.brand {
+  font-size: 6rem;
+}
+
+@media screen and (max-width: 768px) {
+  .brand {
+    font-size: 3rem;
+  }
+}

@@ -15,19 +15,15 @@ export default function SignOut() {
   }, []);
 
   return (
-    <Page authProtected={false}>
-      <section className="hero is-medium">
-        <div className="hero-body">
-          <p className="title">Good bye!</p>
-          <p className="subtitle">
-            You have been signed out of UICMS now. Note that, this doesn&apos;t
-            affect your GitHub authentication.
-          </p>
-          <Link href="/" className="button is-primary">
-            Home
-          </Link>
-        </div>
-      </section>
+    <Page authProtected={false} absolute={true}>
+      <div>
+        <h1>Good bye!</h1>
+        <p>
+          You have been signed out of UICMS now. Note that, this doesn&apos;t
+          affect your GitHub authentication.
+        </p>
+        <Link href="/">Home</Link>
+      </div>
     </Page>
   );
 }

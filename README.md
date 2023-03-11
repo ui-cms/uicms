@@ -1,7 +1,6 @@
 ## Tech stack
 - This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
   - Next.js is [React.js](https://reactjs.org/) framework.
-- [Bulma](https://bulma.io/) CSS framwework has been used to design UI.
 
 ## Getting Started
 ### Requirements

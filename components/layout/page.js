@@ -2,6 +2,7 @@ import Head from "next/head";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Suspense, useEffect } from "react";
 import { useRouter } from "next/router";
+import styles from "@/styles/Page.module.scss";
 
 export default function Page({
   children,
@@ -9,6 +10,7 @@ export default function Page({
   loading = false,
   title = "UI CMS",
   description = "Simple yet powerful gitbased CMS",
+  absolute = false, // absolute full page (layout) that is covering full screen
 }) {
   const router = useRouter();
   const { state } = useStateManagement();
@@ -28,28 +30,14 @@ export default function Page({
         <meta name="description" content={description} />
       </Head>
       <Suspense fallback={<Loading />}>
-        <main className="container is-fluid py-4">
+        <article className={absolute ? styles.absolute : styles.content}>
           {loading ? <Loading /> : children}
-        </main>
+        </article>
       </Suspense>
     </>
   );
 }
 
-function Loading() {
-  return (
-    <div className="columns is-centered is-mobile">
-      <div className="column is-one-third-tablet is-three-fifths-mobile pt-6 mt-6 is-relative">
-        <span
-          className="uc-center-absolute uc-position-absolute has-text-grey"
-          style={{ bottom: "4px", fontSize: "10px" }}
-        >
-          L O A D I N G
-        </span>
-        <progress className="progress is-small is-primary mt-6" max="100">
-          15%
-        </progress>
-      </div>
-    </div>
-  );
+export function Loading() {
+  return <div>Loading...</div>;
 }

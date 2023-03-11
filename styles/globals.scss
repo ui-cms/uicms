@@ -2,13 +2,46 @@
 ***** GLOBAL STYLE *****
 */
 
-.uc-center-absolute {
-  left: 50%;
-  transform: translate(-50%, -50%);
+body {
+  margin: 0;
+}
+i {
+  font-style: normal;
 }
 
-.uc-position-absolute {
-  position: absolute !important;
+.d-flex {
+  display: flex;
+}
+.d-block {
+  display: block;
+}
+.d-none {
+  display: none;
+}
+
+.position-absolute {
+  position: absolute;
+}
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.w-100 {
+  width: 100%;
+}
+.h-100 {
+  height: 100%;
+}
+
+.bg-light {
+  background-color: #f6f8fa;
 }
 
 .uc-text-overflow {
@@ -120,19 +153,3 @@
     float: left !important;
   }
 }
-
-/* 
-***** CUSTOMIZING BULMA *****
-*/
-
-@media screen and (max-width: 1024px) {
-  .container.is-fluid {
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-  }
-}
-
-// Overridding Bulma variables. For more variables see this url: https://bulma.io/documentation/customize/variables/#derived-variables
-// $primary: #fa7203;
-
-@import "~bulma/bulma.sass";

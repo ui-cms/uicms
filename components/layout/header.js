@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "@/styles/Layout.module.scss";
-import SigninWithGitHubButton from "./signinWithGitHubButton";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 
@@ -180,7 +178,7 @@ export default function Header() {
               </>
             ) : (
               <div className="navbar-item">
-                <SigninWithGitHubButton boldText={true} />
+                {/* <SigninWithGitHubButton boldText={true} /> */}
               </div>
             )}
           </div>
