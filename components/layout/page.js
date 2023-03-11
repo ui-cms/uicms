@@ -2,6 +2,7 @@ import Head from "next/head";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Suspense, useEffect } from "react";
 import { useRouter } from "next/router";
+import styles from "@/styles/Page.module.scss";
 
 export default function Page({
   children,
@@ -29,13 +30,7 @@ export default function Page({
         <meta name="description" content={description} />
       </Head>
       <Suspense fallback={<Loading />}>
-        <article
-          className={
-            absolute
-              ? "position-absolute w-100 h-100 top-0 left-0 bg-light d-flex align-items-center justify-content-center text-center"
-              : ""
-          }
-        >
+        <article className={absolute ? styles.absolute : styles.content}>
           {loading ? <Loading /> : children}
         </article>
       </Suspense>

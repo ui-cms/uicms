@@ -193,7 +193,6 @@ function Collections({ config, repoOwner, repoName, saveConfig }) {
     "2208201950_Slug_is_a_title_that_is.md",
     "2311221035_Underscore_sepearted_basically.md",
     "2212222042_A/n othe+r_tit&le.md",
-    "2105212200_Wont_hurt.md",
   ];
 
   return (
@@ -209,7 +208,7 @@ function Collections({ config, repoOwner, repoName, saveConfig }) {
           </button>
         </div>
 
-        <div className="uc-parts uc-mx-n2-sm">
+        <div className="uc-parts">
           {config.collections.map((c) => (
             <a
               key={c.id}
@@ -263,7 +262,7 @@ function Collections({ config, repoOwner, repoName, saveConfig }) {
                   Settings
                 </button>
               </div>
-              <div className="uc-parts uc-mx-n2-sm">
+              <div className="uc-parts">
                 {sampleFiles
                   .sort()
                   .reverse()
@@ -447,7 +446,7 @@ function RepoConfiguration({ config, saveConfig }) {
   }
 
   return (
-    <section className="uc-mx-n2-sm pt-5">
+    <section className=" pt-5">
       <fieldset className="uc-parts mx-auto uc-w-50 uc-w-100-sm">
         <InputWithHelp
           name="websiteName"

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { withIronSessionSsr } from "iron-session/next";
-import Link from "next/link";
 import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Page from "@/components/layout/page";
@@ -56,7 +55,7 @@ export default function Home({ token }) {
       loading={!!authToken || !!token}
     >
       <div>
-        <h1>UI CMS</h1>
+        <h1 className={styles.brand}>UI CMS</h1>
         <SigninWithGitHubButton
           setToken={(t) => dispatchAction.setAuthToken(t)}
         />

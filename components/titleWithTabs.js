@@ -20,7 +20,6 @@ export default function TitleWithTabs({
   return (
     <>
       <div
-        className={`is-flex has-background-white-bis uc-flex-dir-col-sm uc-x-scrollable uc-mt-n4 uc-pt-2-sm ${styles.titleWithTabs} ${className}`}
       >
         {title && (
           <div className="is-align-self-center uc-w-100-sm">
