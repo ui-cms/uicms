@@ -21,7 +21,6 @@
     "react-icons": "^4.7.1"
   },
   "devDependencies": {
-    "bulma": "^0.9.4",
     "sass": "^1.58.1"
   }
 }

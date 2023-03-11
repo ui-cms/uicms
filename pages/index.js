@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { withIronSessionSsr } from "iron-session/next";
 import Link from "next/link";
@@ -6,11 +6,16 @@ import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Page from "@/components/layout/page";
 import styles from "@/styles/Home.module.scss";
+import SigninWithGitHubButton from "@/components/layout/signinWithGitHubButton";
+import { displayError } from "@/helpers/utilities";
+import useGitHubApi from "@/hooks/useGitHubApi";
 
 /**
- * Using server side props checks if there is any cached auth token and will be set in state managemetn if found
+ * Using server side props checks if there is any cached auth token and will be set in state management if found
  */
 export default function Home({ token }) {
+  const [loading, setLoading] = useState(token && true);
+  const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { currentUser, authToken } = state;
   const router = useRouter();
@@ -22,6 +27,21 @@ export default function Home({ token }) {
     }
   }, [authToken, dispatchAction, token]);
 
+  // If auth token in state management, then fetch current user
+  useEffect(() => {
+    if (authToken && !currentUser) {
+      (async () => {
+        try {
+          const res = await githubApi.rest.users.getAuthenticated();
+          dispatchAction.setCurrentUser(res.data);
+        } catch (e) {
+          displayError("Error fetching authenticated user!", e);
+          setLoading(false);
+        }
+      })();
+    }
+  }, [authToken, currentUser, dispatchAction, githubApi.rest.users]);
+
   // Redirect to previous page or repos page when authorized user
   useEffect(() => {
     if (currentUser) {
@@ -32,29 +52,18 @@ export default function Home({ token }) {
 
   return (
     <Page authProtected={false}>
-      <section className="hero is-medium is-primary box">
-        <div className="hero-body">
-          <p className="title">Welcome!</p>
-          <p className="subtitle">
-            Get started to use{" "}
-            <Link
-              href="https://uicms.app"
-              target="_blank"
-              className="is-underlined"
-            >
-              UICMS
-            </Link>{" "}
-            by signing in to your{" "}
-            <Link
-              href="https://github.com"
-              target="_blank"
-              className="is-underlined"
-            >
-              GitHub
-            </Link>{" "}
-            account.
-          </p>
-        </div>
+      <section className="position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
+        {!token && (
+          <div className="text-center">
+            <h1>UI CMS</h1>
+            <SigninWithGitHubButton
+              setToken={(t) => dispatchAction.setAuthToken(t)}
+              setLoading={setLoading}
+              hidden={loading}
+            />
+          </div>
+        )}
+        {loading && <span>Loading</span>}
       </section>
     </Page>
   );
