@@ -180,7 +180,7 @@ export default function Header() {
               </>
             ) : (
               <div className="navbar-item">
-                <SigninWithGitHubButton boldText={true} />
+                {/* <SigninWithGitHubButton boldText={true} /> */}
               </div>
             )}
           </div>

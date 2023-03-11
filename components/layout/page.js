@@ -9,6 +9,7 @@ export default function Page({
   loading = false,
   title = "UI CMS",
   description = "Simple yet powerful gitbased CMS",
+  absolute = false, // absolute full page (layout) that is covering full screen
 }) {
   const router = useRouter();
   const { state } = useStateManagement();
@@ -28,14 +29,20 @@ export default function Page({
         <meta name="description" content={description} />
       </Head>
       <Suspense fallback={<Loading />}>
-        <main>{loading ? <Loading /> : children}</main>
+        <article
+          className={
+            absolute
+              ? "position-absolute w-100 h-100 bg-light d-flex align-items-center justify-content-center text-center"
+              : ""
+          }
+        >
+          {loading ? <Loading /> : children}
+        </article>
       </Suspense>
     </>
   );
 }
 
-function Loading() {
-  return (
-    <div>Loading...</div>
-  );
+export function Loading() {
+  return <div>Loading...</div>;
 }

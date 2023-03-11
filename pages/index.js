@@ -14,11 +14,10 @@ import useGitHubApi from "@/hooks/useGitHubApi";
  * Using server side props checks if there is any cached auth token and will be set in state management if found
  */
 export default function Home({ token }) {
-  const [loading, setLoading] = useState(token && true);
+  const router = useRouter();
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { currentUser, authToken } = state;
-  const router = useRouter();
 
   // If any auth token passed as props, then set in state management
   useEffect(() => {
@@ -51,20 +50,17 @@ export default function Home({ token }) {
   }, [currentUser, router]);
 
   return (
-    <Page authProtected={false}>
-      <section className="position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
-        {!token && (
-          <div className="text-center">
-            <h1>UI CMS</h1>
-            <SigninWithGitHubButton
-              setToken={(t) => dispatchAction.setAuthToken(t)}
-              setLoading={setLoading}
-              hidden={loading}
-            />
-          </div>
-        )}
-        {loading && <span>Loading</span>}
-      </section>
+    <Page
+      authProtected={false}
+      absolute={true}
+      loading={!!authToken || !!token}
+    >
+      <div>
+        <h1>UI CMS</h1>
+        <SigninWithGitHubButton
+          setToken={(t) => dispatchAction.setAuthToken(t)}
+        />
+      </div>
     </Page>
   );
 }
