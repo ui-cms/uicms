@@ -32,7 +32,7 @@ export default function Page({
         <article
           className={
             absolute
-              ? "position-absolute w-100 h-100 bg-light d-flex align-items-center justify-content-center text-center"
+              ? "position-absolute w-100 h-100 top-0 left-0 bg-light d-flex align-items-center justify-content-center text-center"
               : ""
           }
         >
