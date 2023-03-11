@@ -343,14 +343,16 @@ function CollectionSettings({ config, collectionId, saveConfig }) {
   function generateId(str) {
     let id = str.toLowerCase().replace(/[^a-z]/g, ""); // only lower case english letters allowed
     const len = UICMS_CONFIGS.uniqueKeyLength;
-    if (id.length < len) {
-      id = id + generateRandomString(len - id.length); // if less, add new random chars
-    } else if (id.length > len) {
-      id = id.substring(0, len - 1); // if more, don't take all
+    const half = len / 2; // half from str, half randomly generated
+
+    if (id.length > half) {
+      id = id.substring(0, half - 1); // take only 4 chars
     }
-    // if already used within collection ids, remove last 3 and regenerate again
+    id = id + generateRandomString(len - id.length); // add random chars to match length
+
+    // if already used within collection ids, take first half and regenerate the other half
     if (config.collections.includes((c) => c.id === id)) {
-      id = generateId(id.substring(0, len - 1 - 3));
+      id = generateId(id.substring(0, half - 1));
     }
     return id;
   }

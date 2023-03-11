@@ -23,7 +23,7 @@ export const UICMS_CONFIGS = {
     { name: "Published", id: "published", type: "boolean", required: true },
     { name: "Body", id: "body", type: "richtext", required: false },
   ],
-  uniqueKeyLength: 6, // e.g collection ids
+  uniqueKeyLength: 8, // e.g collection ids
 };
 
 export const UICMS_CONFIG_STARTER_TEMPLATE = {
