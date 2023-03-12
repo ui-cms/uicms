@@ -4,13 +4,12 @@
   height: 100vh;
   width: 30%;
   min-width: 350px;
-  background-color: $lightest;
+  background-color: $lighter;
   border-right: 1px solid $regular;
-  z-index: 10;
 }
 
 .header {
-  background-color: $lighter;
+  background-color: $light;
   border-bottom: 1px solid $regular;
   padding: 0.5rem 1rem 0.5rem 1rem;
   display: flex;
@@ -66,6 +65,7 @@
     width: 100%;
     height: auto;
     border: none;
+    z-index: 10;
   }
 
   .header {
