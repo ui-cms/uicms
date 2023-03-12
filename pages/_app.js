@@ -1,6 +1,6 @@
 import Layout from "@/components/layout/layout";
 import { StateManagement } from "@/services/stateManagement/stateManagement";
-import "@/styles/globals.scss";
+import "@/styles/_globals.scss";
 
 export default function App({ Component, pageProps }) {
   return (

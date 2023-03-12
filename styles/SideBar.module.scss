@@ -1,15 +1,16 @@
+@use "variables" as *;
+
 .sidebar {
   height: 100vh;
   width: 30%;
   min-width: 350px;
-  background-color: white;
-  border-right: 1px solid #d8dee4;
-  z-index: 10;
+  background-color: $lighter;
+  border-right: 1px solid $regular;
 }
 
 .header {
-  background-color: #f6f8fa;
-  border-bottom: 1px solid #d8dee4;
+  background-color: $light;
+  border-bottom: 1px solid $regular;
   padding: 0.5rem 1rem 0.5rem 1rem;
   display: flex;
   align-items: center;
@@ -23,7 +24,7 @@
 .brand {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #24292f;
+  color: $darker
 }
 
 .user {
@@ -38,7 +39,7 @@
   }
 
   img {
-    border: 1px solid #d8dee4;
+    border: 1px solid $regular;
     border-radius: 1rem;
   }
 
@@ -46,12 +47,12 @@
     position: absolute;
     right: -15px;
     top: 32px;
-    background-color: #f0f4f8;
+    background-color: $light;
     border-radius: 5px;
     list-style: none;
     width: 200px;
     text-align: right;
-    box-shadow: 0 3px 10px 2px #d8dee4;
+    box-shadow: 0 3px 10px 2px $regular;
 
     li {
       padding: 10px 10px;
@@ -59,10 +60,12 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $smallScreenBreakpoint) {
   .sidebar {
-    min-width: 100%;
+    width: 100%;
     height: auto;
+    border: none;
+    z-index: 10;
   }
 
   .header {
@@ -79,7 +82,7 @@
   .main {
     visibility: hidden;
     position: absolute;
-    background: white;
+    background: $lightest;
     width: 100%;
     min-height: 80vh;
     left: -100%;

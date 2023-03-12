@@ -1,8 +1,10 @@
+@use "variables" as *;
+
 .brand {
   font-size: 6rem;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $smallScreenBreakpoint) {
   .brand {
     font-size: 3rem;
   }
