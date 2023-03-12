@@ -18,13 +18,14 @@
 
   i {
     display: none;
+    width: 14px;
   }
 }
 
 .brand {
   font-size: 1.75rem;
   font-weight: 700;
-  color: $darker
+  color: $darker;
 }
 
 .user {
@@ -34,8 +35,8 @@
     cursor: pointer;
   }
 
-  summary::marker {
-    content: "";
+  summary {
+    display: flex;
   }
 
   img {
@@ -74,18 +75,23 @@
     }
   }
 
-  .user img {
-    width: 20px;
-    height: 20px;
+  .user {
+    summary {
+      width: 26px;
+    }
+    img {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   .main {
     visibility: hidden;
     position: absolute;
-    background: $lightest;
     width: 100%;
-    min-height: 80vh;
     left: -100%;
+    background-color: $lighter;
+    height: 100%;
   }
 
   .main.open {

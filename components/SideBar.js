@@ -17,16 +17,18 @@ export default function SideBar({}) {
           <i onClick={() => setOpen(!open)}>{open ? "✕" : "☰"}</i>
           <span className={styles.brand}>UI CMS</span>
 
-          {currentUser && (
-            <details className={styles.user}>
-              <summary>
+          <details className={styles.user}>
+            <summary>
+              {currentUser && (
                 <Image
                   src={currentUser.avatar_url}
                   width="32"
                   height="32"
                   alt="username"
                 />
-              </summary>
+              )}
+            </summary>
+            {currentUser && (
               <ul>
                 <li>{currentUser.login}</li>
                 <li>
@@ -42,8 +44,8 @@ export default function SideBar({}) {
                   <a onClick={() => router.push("/signOut")}>Sign out</a>
                 </li>
               </ul>
-            </details>
-          )}
+            )}
+          </details>
         </nav>
         <secion className={`${styles.main} ${open ? styles.open : ""}`}>
           <ul>
