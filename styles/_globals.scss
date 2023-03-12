@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 /*
 ***** GLOBAL STYLE *****
 */
@@ -41,7 +43,7 @@ i {
 }
 
 .bg-light {
-  background-color: #f6f8fa;
+  background-color: $lighter;
 }
 
 .uc-text-overflow {
@@ -123,7 +125,7 @@ i {
   }
 }
 
-@media screen and (max-width: 769px) {
+@media screen and (max-width: $smallScreenBreakpoint) {
   .uc-flex-dir-col-sm {
     flex-direction: column;
   }
