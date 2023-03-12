@@ -8,10 +8,37 @@ export default function Test() {
       <h1>Test page</h1>
       {testVal && <p>{testVal}</p>}
       <button
-        className="button is-primary"
         onClick={() => setTestVal(new Date().getTime())}
       >
-        Start
+        Set time in localStorage
+      </button>
+
+      
+      <button
+        className="primary"
+        onClick={() => setTestVal(new Date().getTime())}
+      >
+        Primary
+      </button>
+
+      <button
+        className="primary light"
+        onClick={() => setTestVal(new Date().getTime())}
+      >
+        Primary
+      </button>
+
+      <button
+        className="secondary"
+        onClick={() => setTestVal(new Date().getTime())}
+      >
+        Secondary
+      </button>
+      <button
+        className="secondary light"
+        onClick={() => setTestVal(new Date().getTime())}
+      >
+        Primary
       </button>
     </Page>
   );

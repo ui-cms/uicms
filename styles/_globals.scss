@@ -10,6 +10,40 @@ body {
 i {
   font-style: normal;
 }
+a {
+  color: $link;
+}
+
+button,
+.button {
+  background-color: $light;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  color: $darker;
+  border-radius: 5px;
+  text-decoration: none;
+}
+button.primary,
+.button.primary {
+  background-color: $primary;
+  color: $lightest;
+}
+button.primary.light,
+.button.primary.light {
+  background-color: $primaryLight;
+  color: $primary;
+}
+button.secondary,
+.button.secondary {
+  background-color: $link;
+  color: $lightest;
+}
+button.secondary.light,
+.button.secondary.light {
+  background-color: $linkLight;
+  color: $link;
+}
 
 .d-flex {
   display: flex;

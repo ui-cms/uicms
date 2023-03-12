@@ -109,9 +109,6 @@ function TaggedRepos({ repos }) {
                 <Link
                   href={repo.homepage || "#"}
                   target={repo.homepage ? "_blank" : ""}
-                  className={`card-footer-item icon-text p-2 ${
-                    !repo.homepage ? "uc-opacity-25 uc-cursor-default" : ""
-                  }`}
                 >
                   <span className="icon">
                     <FaGlobe size={18} />

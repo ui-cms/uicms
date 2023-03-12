@@ -14,7 +14,7 @@ export default function SideBar({}) {
     <Suspense fallback={<Loading />}>
       <aside className={styles.sidebar}>
         <nav className={styles.header}>
-          <i onClick={() => setOpen(!open)}>{open ? "✕" : "☰"}</i>
+          <i onClick={() => setOpen(!open)}>{open ? "✖" : "☰"}</i>
           <span className={styles.brand}>UI CMS</span>
 
           <details className={styles.user}>
