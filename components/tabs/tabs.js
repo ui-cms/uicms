@@ -7,19 +7,19 @@ export default function Tabs({ tabs }) {
   return (
     tabs.length > 0 && (
       <div>
-        <ul className={styles.tabs}>
+        <div className={styles.tabs}>
           {tabs.map((tab, index) => {
             return (
-              <li
+              <button
                 key={index}
                 className={index === active ? styles.active : ""}
                 onClick={() => setActive(index)}
               >
                 {tab.title}
-              </li>
+              </button>
             );
           })}
-        </ul>
+        </div>
         <div className={styles.content}>{tabs[active].content}</div>
       </div>
     )
