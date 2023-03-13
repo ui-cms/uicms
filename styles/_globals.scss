@@ -45,16 +45,6 @@ button.primary.light,
   display: none;
 }
 
-.position-absolute {
-  position: absolute;
-}
-.align-items-center {
-  align-items: center;
-}
-.justify-content-center {
-  justify-content: center;
-}
-
 .text-center {
   text-align: center;
 }
@@ -67,7 +57,17 @@ button.primary.light,
 }
 
 .bg-light {
-  background-color: $lighter;
+  background-color: $light;
+}
+.bg-dark {
+  background-color: $dark;
+}
+.bg-regular {
+  background-color: $regular;
+}
+
+.mr-4{
+  margin-right: $space1;
 }
 
 .uc-text-overflow {

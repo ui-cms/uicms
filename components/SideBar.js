@@ -5,6 +5,12 @@ import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Tabs from "./tabs/tabs";
+import Icon from "@mdi/react";
+import {
+  mdiFolderOutline,
+  mdiFileDocumentOutline,
+  mdiFileCabinet,
+} from "@mdi/js";
 
 export default function SideBar({}) {
   const [open, setOpen] = useState(false);
@@ -49,13 +55,41 @@ export default function SideBar({}) {
           </details>
         </nav>
         <secion className={`${styles.main} ${open ? styles.open : ""}`}>
-        <Tabs
-        tabs={[
-          { title: "Repos", content: <h1>Repos list</h1> },
-          { title: "Collections", content: <h1>Collections list</h1> },
-          { title: "Items", content: <h1>Items list</h1> },
-        ]}
-      />
+          <Tabs
+            tabs={[
+              {
+                title: (
+                  <>
+                    <Icon path={mdiFileCabinet} size={0.8} className="mr-4" />
+                    Repos
+                  </>
+                ),
+                content: <h1>Repos list</h1>,
+              },
+              {
+                title: (
+                  <>
+                    <Icon path={mdiFolderOutline} size={0.8} className="mr-4" />
+                    Collections
+                  </>
+                ),
+                content: <h1>Collections list</h1>,
+              },
+              {
+                title: (
+                  <>
+                    <Icon
+                      path={mdiFileDocumentOutline}
+                      size={0.8}
+                      className="mr-4"
+                    />
+                    Items
+                  </>
+                ),
+                content: <h1>Items list</h1>,
+              },
+            ]}
+          />
           <ul>
             <li>Test</li>
             <li>Test</li>
