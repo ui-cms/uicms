@@ -10,6 +10,7 @@ export default function Layout({ children }) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#f0f4f8" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${inter.className} ${styles.layout}`}>
