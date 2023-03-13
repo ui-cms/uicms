@@ -1,6 +1,6 @@
 import { Suspense, useState } from "react";
 import { useRouter } from "next/router";
-import { Loading } from "./layout/page";
+import { Loader } from "./layout/page";
 import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -11,7 +11,7 @@ export default function SideBar({}) {
   const { currentUser } = state;
   const router = useRouter();
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loader />}>
       <aside className={styles.sidebar}>
         <nav className={styles.header}>
           <i onClick={() => setOpen(!open)}>{open ? "✖" : "☰"}</i>

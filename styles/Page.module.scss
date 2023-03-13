@@ -21,3 +21,36 @@
   // padding-right: 15px;
   // padding-left: 15px;
 }
+
+.loader {
+  color: $darker;
+  display: inline-block;
+  position: relative;
+  font-size: 18px;
+  box-sizing: border-box;
+
+  &:after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: $darker;
+    position: absolute;
+    bottom: 4px;
+    right: -7px;
+    box-sizing: border-box;
+    animation: animloader 1s linear infinite;
+    border-radius: 3px;
+
+    @keyframes animloader {
+      0% {
+        box-shadow: 10px 0 $lighter, 20px 0 $lighter;
+      }
+      50% {
+        box-shadow: 10px 0 $darker, 20px 0 $lighter;
+      }
+      100% {
+        box-shadow: 10px 0 $darker, 20px 0 $darker;
+      }
+    }
+  }
+}

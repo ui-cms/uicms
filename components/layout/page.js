@@ -29,15 +29,15 @@ export default function Page({
         <title>{title}</title>
         <meta name="description" content={description} />
       </Head>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loader />}>
         <article className={absolute ? styles.absolute : styles.content}>
-          {loading ? <Loading /> : children}
+          {loading ? <Loader /> : children}
         </article>
       </Suspense>
     </>
   );
 }
 
-export function Loading() {
-  return <div>Loading...</div>;
+export function Loader() {
+  return <div className={styles.loader}>Loading</div>;
 }
