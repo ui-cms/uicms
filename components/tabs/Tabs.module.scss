@@ -1,0 +1,31 @@
+@use "@/styles/_variables.scss" as *;
+
+.tabs {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding-top: 15px;
+  padding-right: 15px;
+  padding-left: 15px;
+  border-bottom: 1px solid $regular;
+  background-color: $light;
+
+  li {
+    flex-grow: 1;
+    color: $dark;
+    padding: 10px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    border: 1px solid transparent;
+  }
+  li.active {
+    color: $darker;
+    background-color: $lighter;
+    border-color: $regular;
+    border-bottom-color: $lighter;
+    margin-bottom: -1px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+}

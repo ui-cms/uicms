@@ -1,4 +1,5 @@
 import Page, { Loader } from "@/components/layout/page";
+import Tabs from "@/components/tabs/tabs";
 import useStorage from "@/hooks/useStorage";
 
 export default function Test() {
