@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ImArrowUpRight2 } from "react-icons/im";
 import styles from "@/styles/TitleWithTabs.module.scss";
 
 export default function TitleWithTabs({
@@ -83,7 +82,7 @@ function LinkWithHref({ href, icon, text }) {
       {text}
       {external && (
         <span className="icon is-small">
-          <ImArrowUpRight2 />
+          E
         </span>
       )}
     </Link>

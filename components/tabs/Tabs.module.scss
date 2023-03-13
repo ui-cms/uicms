@@ -18,6 +18,7 @@
     text-decoration: none;
     text-align: center;
     border: 1px solid transparent;
+    font-size: 1rem;
   }
   li.active {
     color: $darker;
@@ -28,4 +29,8 @@
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
   }
+}
+
+.content {
+  padding: 15px;
 }

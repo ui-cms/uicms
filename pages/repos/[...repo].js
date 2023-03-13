@@ -8,8 +8,6 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FaGithub, FaGlobe, FaRegSun, FaRegListAlt } from "react-icons/fa";
-import { FcPlus, FcSettings } from "react-icons/fc";
 import { Select, TextInput } from "@/components/form";
 import TitleWithTabs from "@/components/titleWithTabs";
 import Link from "next/link";
@@ -111,7 +109,6 @@ export default function Repo() {
                 saveConfig={saveConfig}
               />
             ),
-            icon: <FaRegListAlt />,
             skip: !config || !sha,
           },
           {
@@ -119,19 +116,16 @@ export default function Repo() {
             content: (
               <RepoConfiguration config={config} saveConfig={saveConfig} />
             ),
-            icon: <FaRegSun />,
             skip: !config,
           },
           {
             text: "Website",
             href: config?.websiteUrl,
-            icon: <FaGlobe />,
             skip: !config?.websiteUrl,
           },
           {
             text: "GitHub",
             href: `https://github.com/${repoOwner}/${repoName}`,
-            icon: <FaGithub />,
           },
         ]}
       />
@@ -201,9 +195,6 @@ function Collections({ config, repoOwner, repoName, saveConfig }) {
         <div className="is-flex is-align-items-center mb-2">
           <p className="uc-w-100 title is-5 m-0">Collections</p>
           <button className="button is-primary is-light">
-            <span className="icon mr-1">
-              <FcPlus />
-            </span>
             New collection
           </button>
         </div>
@@ -247,18 +238,12 @@ function Collections({ config, repoOwner, repoName, saveConfig }) {
                   {selectedCollection.name}
                 </p>
                 <button className="button is-primary is-light mr-2">
-                  <span className="icon mr-1">
-                    <FcPlus />
-                  </span>
                   New item
                 </button>
                 <button
                   className="button is-light"
                   onClick={() => setShowSettings(true)}
                 >
-                  <span className="icon mr-1">
-                    <FcSettings />
-                  </span>
                   Settings
                 </button>
               </div>

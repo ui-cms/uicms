@@ -8,7 +8,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { FaGithub } from "react-icons/fa";
 import { displayError } from "@/helpers/utilities";
 
 /**
@@ -47,7 +46,7 @@ export default function SigninWithGitHubButton({ setToken }) {
       className={`button ${loading ? "loading" : ""} `}
     >
       <span className="">
-        <FaGithub />
+        G
       </span>
       <span className="">
         {loading

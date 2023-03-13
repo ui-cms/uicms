@@ -20,7 +20,7 @@ export default function Tabs({ tabs }) {
             );
           })}
         </ul>
-        {tabs[active].content}
+        <div className={styles.content}>{tabs[active].content}</div>
       </div>
     )
   );

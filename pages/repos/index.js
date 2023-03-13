@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { FaDatabase, FaGithub, FaGlobe, FaStar, FaPlay, FaSearch } from "react-icons/fa";
-import { MdLock, MdLockOpen, MdSearch, MdUpdate } from "react-icons/md";
 import { CheckBox, TextInput } from "@/components/form";
 import Page from "@/components/layout/page";
 import { displayError } from "@/helpers/utilities";
@@ -43,12 +41,10 @@ export default function Repos() {
           {
             text: "Tagged",
             content: <TaggedRepos repos={repos} />,
-            icon: <FaStar />,
           },
           {
             text: "All",
             content: <AllRepos repos={repos} />,
-            icon: <FaDatabase />,
           },
         ]}
       />
@@ -74,9 +70,9 @@ function TaggedRepos({ repos }) {
                     <div className="media-left">
                       <span className="panel-icon mt-2 has-text-primary-dark">
                         {repo.private ? (
-                          <MdLock size={24} title="Private repo" />
+                          "R"
                         ) : (
-                          <MdLockOpen size={24} title="Public repo" />
+                          "U"
                         )}
                       </span>
                     </div>
@@ -102,7 +98,6 @@ function TaggedRepos({ repos }) {
                   className="card-footer-item icon-text p-2"
                 >
                   <span className="icon">
-                    <FaGithub size={18} />
                   </span>
                   <span>GitHub</span>
                 </Link>
@@ -110,15 +105,9 @@ function TaggedRepos({ repos }) {
                   href={repo.homepage || "#"}
                   target={repo.homepage ? "_blank" : ""}
                 >
-                  <span className="icon">
-                    <FaGlobe size={18} />
-                  </span>
                   <span>Website</span>
                 </Link>
                 <Link href={url} className="card-footer-item icon-text p-2">
-                  <span className="icon">
-                    <FaSearch size={18} />
-                  </span>
                   <span>View</span>
                 </Link>
               </footer>
@@ -169,7 +158,6 @@ function AllRepos({ repos }) {
                 placeholder="Search"
               />
               <span className="icon is-left">
-                <MdSearch className=" is-size-3" />
               </span>
             </p>
           </div>
@@ -213,9 +201,8 @@ function AllRepos({ repos }) {
             >
               <span className="panel-icon is-size-5">
                 {repo.private ? (
-                  <MdLock />
-                ) : (
-                  <MdLockOpen className="has-text-grey-light" />
+                 "R"
+                ) : ("U"
                 )}
               </span>
               {repo.name}
