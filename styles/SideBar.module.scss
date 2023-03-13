@@ -31,6 +31,7 @@
 
 .user {
   position: relative;
+  z-index: $zIndex3;
 
   &:hover {
     cursor: pointer;
@@ -67,7 +68,7 @@
     width: 100%;
     height: auto;
     border: none;
-    z-index: 10;
+    z-index: $zIndex2;
   }
 
   .header {
