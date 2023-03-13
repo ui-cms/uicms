@@ -10,6 +10,8 @@ import {
   mdiFolderOutline,
   mdiFileDocumentOutline,
   mdiFileCabinet,
+  mdiMenu,
+  mdiClose,
 } from "@mdi/js";
 
 export default function SideBar({}) {
@@ -21,7 +23,12 @@ export default function SideBar({}) {
     <Suspense fallback={<Loader />}>
       <aside className={styles.sidebar}>
         <nav className={styles.header}>
-          <i onClick={() => setOpen(!open)}>{open ? "✕" : "☰"}</i>
+          <Icon
+            className={styles.menuToggle}
+            onClick={() => setOpen(!open)}
+            path={open ? mdiClose : mdiMenu}
+            size={1}
+          />
           <span className={styles.brand}>UI CMS</span>
 
           <details className={styles.user}>
