@@ -67,7 +67,7 @@ export default function SideBar({}) {
               {
                 title: (
                   <>
-                    <Icon path={mdiFileCabinet} size={0.8} className="mr-4" />
+                    <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
                     Repos
                   </>
                 ),
@@ -76,7 +76,7 @@ export default function SideBar({}) {
               {
                 title: (
                   <>
-                    <Icon path={mdiFolderOutline} size={0.8} className="mr-4" />
+                    <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
                     Collections
                   </>
                 ),
@@ -88,7 +88,7 @@ export default function SideBar({}) {
                     <Icon
                       path={mdiFileDocumentOutline}
                       size={0.8}
-                      className="mr-4"
+                      className="mr-1"
                     />
                     Items
                   </>

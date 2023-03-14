@@ -2,10 +2,11 @@
 
 .brand {
   font-size: 6rem;
+  margin-bottom: 1.5rem;
 }
 
 @media screen and (max-width: $smallScreenBreakpoint) {
   .brand {
-    font-size: 3rem;
+    font-size: 4rem;
   }
 }

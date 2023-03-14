@@ -22,6 +22,11 @@ h6 {
   margin: 0;
 }
 
+
+/*
+***** GENERAL & UTILITY CLASSES *****
+*/
+
 button,
 .button {
   background-color: $light;
@@ -32,7 +37,7 @@ button,
   border-radius: 5px;
   text-decoration: none;
   -webkit-user-select: none;
-  -ms-user-select: none; 
+  -ms-user-select: none;
   user-select: none;
 }
 button.primary,
@@ -49,6 +54,9 @@ button.primary.light,
 .d-flex {
   display: flex;
 }
+.d-inline-flex {
+  display: inline-flex;
+}
 .d-block {
   display: block;
 }
@@ -56,8 +64,24 @@ button.primary.light,
   display: none;
 }
 
+.align-items-center {
+  align-items: center;
+}
+
 .text-center {
   text-align: center;
+}
+
+.center-y {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.position-relative {
+  position: relative;
 }
 
 .w-100 {
@@ -77,13 +101,22 @@ button.primary.light,
   background-color: $regular;
 }
 
-.mr-4 {
+.mr-1 {
   margin-right: $space1;
+}
+.ml-1 {
+  margin-left: $space1;
+}
+.mt-1 {
+  margin-top: $space1;
+}
+.mb-6 {
+  margin-bottom: $space6;
 }
 
 .unselectable {
   -webkit-user-select: none;
-  -ms-user-select: none; 
+  -ms-user-select: none;
   user-select: none;
 }
 

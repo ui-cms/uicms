@@ -27,7 +27,7 @@
   font-weight: 700;
   color: $darker;
   -webkit-user-select: none;
-  -ms-user-select: none;
+  -ms-user-select: none; 
   user-select: none;
 }
 
@@ -80,8 +80,11 @@
   .brand {
     font-size: 1.5rem;
   }
-
+  
   .user {
+    summary {
+      width: 24px;  // or in mobile brand will float when loading
+    }
     img {
       width: 22px;
       height: 22px;
