@@ -31,6 +31,9 @@ button,
   color: $darker;
   border-radius: 5px;
   text-decoration: none;
+  -webkit-user-select: none;
+  -ms-user-select: none; 
+  user-select: none;
 }
 button.primary,
 .button.primary {
@@ -76,6 +79,12 @@ button.primary.light,
 
 .mr-4 {
   margin-right: $space1;
+}
+
+.unselectable {
+  -webkit-user-select: none;
+  -ms-user-select: none; 
+  user-select: none;
 }
 
 .uc-text-overflow {

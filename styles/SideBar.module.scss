@@ -26,6 +26,9 @@
   font-size: 1.75rem;
   font-weight: 700;
   color: $darker;
+  -webkit-user-select: none;
+  -ms-user-select: none; 
+  user-select: none;
 }
 
 .user {
