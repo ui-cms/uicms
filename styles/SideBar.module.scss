@@ -27,7 +27,7 @@
   font-weight: 700;
   color: $darker;
   -webkit-user-select: none;
-  -ms-user-select: none; 
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -77,13 +77,14 @@
     display: block;
   }
 
+  .brand {
+    font-size: 1.5rem;
+  }
+
   .user {
-    summary {
-      width: 26px;
-    }
     img {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
     }
   }
 
