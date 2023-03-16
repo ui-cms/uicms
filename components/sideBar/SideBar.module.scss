@@ -1,0 +1,146 @@
+@use "@/styles/_variables.scss" as *;
+
+.sidebar {
+  height: 100vh;
+  width: 30%;
+  min-width: 350px;
+  background-color: $lighter;
+  border-right: 1px solid $regular;
+}
+
+.header {
+  background-color: $light;
+  border-bottom: 1px solid $regular;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .menuToggle {
+    display: none;
+    cursor: pointer;
+  }
+
+  .brand {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $darker;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .user {
+    position: relative;
+    z-index: $zIndex3;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    summary {
+      display: flex;
+    }
+
+    img {
+      border: 1px solid $regular;
+      border-radius: 1rem;
+    }
+
+    ul {
+      position: absolute;
+      right: -15px;
+      top: 32px;
+      background-color: $light;
+      border-radius: 5px;
+      list-style: none;
+      width: 200px;
+      text-align: right;
+      box-shadow: 0 3px 10px 2px $regular;
+
+      li {
+        padding: 10px 10px;
+      }
+    }
+  }
+}
+
+.repos {
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    input[type="text"] {
+      background-color: $light;
+    }
+    input[type="checkbox"] {
+      background-color: $light;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      a {
+        border-radius: 3px;
+        text-decoration: none;
+        padding: 7px 0;
+        color: $dark;
+        font-size: 1rem;
+        display: flex;
+
+        &:hover {
+          background-color: $light;
+          color: $darker;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $smallScreenBreakpoint) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border: none;
+    z-index: $zIndex2;
+  }
+
+  .header {
+    .menuToggle {
+      display: block;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+    }
+
+    .user {
+      summary {
+        width: 24px; // or in mobile brand will float when loading
+      }
+      img {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+
+  .main {
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    left: -100%;
+    background-color: $lighter;
+    height: 100%;
+    transition: all 0.1s ease-in;
+
+    &.open {
+      visibility: visible;
+      left: 0;
+    }
+  }
+}

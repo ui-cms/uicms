@@ -1,10 +1,10 @@
 import { Suspense, useState } from "react";
 import { useRouter } from "next/router";
-import { Loader } from "./layout/page";
-import styles from "@/styles/SideBar.module.scss";
+import { Loader } from "../layout/page";
+import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import Tabs from "./tabs/tabs";
+import Tabs from "../tabs/tabs";
 import Icon from "@mdi/react";
 import {
   mdiFolderOutline,
@@ -13,13 +13,14 @@ import {
   mdiMenu,
   mdiClose,
 } from "@mdi/js";
+import { Repos } from "./repos";
 
 export default function SideBar({}) {
   const [open, setOpen] = useState(false);
   const { state } = useStateManagement();
   const { currentUser } = state;
   const router = useRouter();
-  
+
   return (
     <Suspense fallback={<Loader />}>
       <aside className={styles.sidebar}>
@@ -72,7 +73,7 @@ export default function SideBar({}) {
                     Repos
                   </>
                 ),
-                content: <h1>Repos list</h1>,
+                content: <Repos />,
               },
               {
                 title: (
@@ -98,17 +99,6 @@ export default function SideBar({}) {
               },
             ]}
           />
-          <ul>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-            <li>Test</li>
-          </ul>
         </secion>
       </aside>
     </Suspense>

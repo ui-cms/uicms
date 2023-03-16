@@ -5,8 +5,8 @@
   list-style-type: none;
   margin: 0;
   padding-top: 15px;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: $parentXPadding;
+  padding-left: $parentXPadding;
   border-bottom: 1px solid $regular;
   background-color: $light;
 
@@ -37,5 +37,5 @@
 }
 
 .content {
-  padding: 15px;
+  padding: $parentXPadding;
 }

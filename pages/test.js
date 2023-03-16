@@ -1,5 +1,4 @@
 import Page, { Loader } from "@/components/layout/page";
-import Tabs from "@/components/tabs/tabs";
 import useStorage from "@/hooks/useStorage";
 
 export default function Test() {
@@ -26,6 +25,9 @@ export default function Test() {
         Primary
       </button>
 
+
+      <input placeholder="Enter name here" type="text"/>
+    <input placeholder="Enter name here" type="checkbox"/>
       <Loader />
     </Page>
   );

@@ -40,10 +40,10 @@ export default function Home({ token }) {
     }
   }, [authToken, currentUser, dispatchAction, githubApi.rest.users]);
 
-  // Redirect to previous page or repos page when authorized user
+  // Redirect to previous page or start page when authorized user
   useEffect(() => {
     if (currentUser) {
-      const redirectTo = router.query.redirect || "/repos"; // see pages.js for redirection
+      const redirectTo = router.query.redirect || "/start"; // see pages.js for redirection
       router.push(redirectTo);
     }
   }, [currentUser, router]);

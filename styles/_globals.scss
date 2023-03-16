@@ -12,6 +12,15 @@ i {
 }
 a {
   color: $link;
+  outline: none;
+}
+input[type="text"] {
+  border: 1px solid $regular;
+  background-color: $lighter;
+  font-size: 1rem;
+  padding: 6px 12px;
+  border-radius: 5px;
+  outline: none;
 }
 h1,
 h2,
@@ -21,7 +30,6 @@ h5,
 h6 {
   margin: 0;
 }
-
 
 /*
 ***** GENERAL & UTILITY CLASSES *****
@@ -39,6 +47,7 @@ button,
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  outline: none;
 }
 button.primary,
 .button.primary {
@@ -120,13 +129,14 @@ button.primary.light,
   user-select: none;
 }
 
-.uc-text-overflow {
-  flex: 1;
+.text-overflow {
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: initial !important;
+  text-overflow: ellipsis;
+  width: 100px;
 }
+
+
 .uc-overflow-hidden {
   overflow: hidden;
 }
