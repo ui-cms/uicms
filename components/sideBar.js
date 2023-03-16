@@ -19,6 +19,7 @@ export default function SideBar({}) {
   const { state } = useStateManagement();
   const { currentUser } = state;
   const router = useRouter();
+  
   return (
     <Suspense fallback={<Loader />}>
       <aside className={styles.sidebar}>

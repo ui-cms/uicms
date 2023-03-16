@@ -98,11 +98,11 @@
     left: -100%;
     background-color: $lighter;
     height: 100%;
+    transition: all 0.1s ease-in;
   }
 
   .main.open {
     visibility: visible;
-    transition: all 0.1s ease-in;
     left: 0;
   }
 }
