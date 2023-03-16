@@ -73,9 +73,12 @@
 
     input[type="text"] {
       background-color: $light;
+      margin-right: 5px;
+      flex-grow: 1;
     }
     input[type="checkbox"] {
       background-color: $light;
+      flex-grow: 1;
     }
   }
 
