@@ -5,7 +5,7 @@ import { displayError, orderBy } from "@/helpers/utilities";
 import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
-import { mdiLock, mdiLockOpenOutline, mdiStarOutline } from "@mdi/js";
+import { mdiLock, mdiLockOpenOutline, mdiStar } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
 
@@ -99,20 +99,19 @@ export function Repos({}) {
                 <a href={`repos/${repo.owner}/${repo.name}`}>
                   {hasUICMSTopic(repo) && (
                     <Icon
-                      path={mdiStarOutline}
-                      size={0.8}
+                      path={mdiStar}
+                      size={0.75}
                       className="text-primary mr-1"
-                      title="Has UICMS topic"
+                      title="Starred (has UICMS topic)"
                     />
                   )}
                   <Icon
                     path={repo.private ? mdiLock : mdiLockOpenOutline}
                     title={repo.private ? "Private repo" : "Public repo"}
-                    size={0.8}
+                    size={0.75}
                     className="mr-1"
                   />
-
-                  {repo.name}
+                  <span title={repo.full_name}>{repo.name}</span>
                 </a>
               </li>
             );

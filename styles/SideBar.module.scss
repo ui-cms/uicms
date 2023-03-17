@@ -84,23 +84,25 @@
     padding: 0;
 
     li {
-      display: flex;
-
       a {
+        display: flex;
         border-radius: 4px;
-        font-size: 1rem;
+        font-size: .9rem;
         padding: 7px 0;
         text-decoration: none;
         color: $dark;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-width: 0;
-        width: 100%;
 
         &:hover {
           background-color: $light;
           color: $darker;
+        }
+
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          min-width: 0;
+          width: 100%;
         }
       }
     }
