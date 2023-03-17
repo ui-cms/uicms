@@ -1,4 +1,4 @@
-import Layout from "@/components/layout/layout";
+import Layout from "@/components/layout";
 import { StateManagement } from "@/services/stateManagement/stateManagement";
 import "@/styles/_globals.scss";
 

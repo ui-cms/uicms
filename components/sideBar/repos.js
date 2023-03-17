@@ -6,8 +6,8 @@ import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
 import { mdiLock, mdiLockOpenOutline, mdiStarOutline } from "@mdi/js";
-import styles from "./SideBar.module.scss";
-import Loader from "@/components/loader/loader";
+import styles from "@/styles/SideBar.module.scss";
+import Loader from "@/components/loader";
 
 export function Repos({}) {
   const [loading, setLoading] = useState(false);

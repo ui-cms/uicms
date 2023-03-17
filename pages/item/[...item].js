@@ -2,7 +2,7 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Page from "@/components/page/page";
+import Page from "@/components/page";
 import Script from "next/script";
 
 export default function CollectionItem() {

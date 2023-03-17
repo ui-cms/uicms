@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./Tabs.module.scss";
+import styles from "@/styles/Tabs.module.scss";
 
 // <Tabs tabs={[{title: "", content:  jsx}]} />
 export default function Tabs({ tabs }) {

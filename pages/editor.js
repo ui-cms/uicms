@@ -1,4 +1,4 @@
-import Page from "@/components/page/page";
+import Page from "@/components/page";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Script from "next/script";
 

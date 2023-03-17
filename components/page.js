@@ -2,8 +2,8 @@ import Head from "next/head";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Suspense, useEffect } from "react";
 import { useRouter } from "next/router";
-import styles from "./Page.module.scss";
-import Loader from "@/components/loader/loader";
+import styles from "@/styles/Page.module.scss";
+import Loader from "@/components/loader";
 
 export default function Page({
   children,

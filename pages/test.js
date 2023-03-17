@@ -1,5 +1,5 @@
-import Loader from "@/components/loader/loader";
-import Page from "@/components/page/page";
+import Loader from "@/components/loader";
+import Page from "@/components/page";
 import useStorage from "@/hooks/useStorage";
 
 export default function Test() {

@@ -1,6 +1,6 @@
 import { Suspense, useState } from "react";
 import { useRouter } from "next/router";
-import styles from "./SideBar.module.scss";
+import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import Icon from "@mdi/react";
@@ -12,8 +12,8 @@ import {
   mdiClose,
 } from "@mdi/js";
 import { Repos } from "./repos";
-import Loader from "@/components/loader/loader";
-import Tabs from "@/components/tabs/tabs";
+import Loader from "@/components/loader";
+import Tabs from "@/components/tabs";
 
 export default function SideBar({}) {
   const [open, setOpen] = useState(false);

@@ -1,4 +1,4 @@
-import Page from "@/components/page/page";
+import Page from "@/components/page";
 import Link from "next/link";
 
 export default function Start() {

@@ -1,4 +1,4 @@
-import Page from "@/components/page/page";
+import Page from "@/components/page";
 import {
   UICMS_CONFIGS,
   UICMS_CONFIG_STARTER_TEMPLATE,

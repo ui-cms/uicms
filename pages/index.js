@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { withIronSessionSsr } from "iron-session/next";
 import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import Page from "@/components/page/page";
+import Page from "@/components/page";
 import styles from "@/styles/Home.module.scss";
 import SigninWithGitHubButton from "@/components/signinWithGitHubButton";
 import { displayError } from "@/helpers/utilities";
