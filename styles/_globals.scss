@@ -229,7 +229,8 @@ button.primary.light,
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 100px;
+  width: 100px;  
+  min-width: 0;
 }
 
 .uc-overflow-hidden {
