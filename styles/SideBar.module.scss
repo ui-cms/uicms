@@ -85,25 +85,21 @@
 
     li {
       display: flex;
-      color: $dark;
-      border-radius: 4px;
-      padding: 7px 0;
-      font-size: 1rem;
 
       a {
+        border-radius: 4px;
+        font-size: 1rem;
+        padding: 7px 0;
         text-decoration: none;
         color: $dark;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         min-width: 0;
-      }
+        width: 100%;
 
-      &:hover {
-        background-color: $light;
-        color: $darker;
-
-        a {
+        &:hover {
+          background-color: $light;
           color: $darker;
         }
       }

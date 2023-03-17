@@ -98,7 +98,12 @@ export function Repos({}) {
               <li key={repo.id}>
                 <a href={`repos/${repo.owner}/${repo.name}`}>
                   {hasUICMSTopic(repo) && (
-                    <Icon path={mdiStarOutline} size={0.8} className="text-primary mr-1" title="Has UICMS topic"/>
+                    <Icon
+                      path={mdiStarOutline}
+                      size={0.8}
+                      className="text-primary mr-1"
+                      title="Has UICMS topic"
+                    />
                   )}
                   <Icon
                     path={repo.private ? mdiLock : mdiLockOpenOutline}
