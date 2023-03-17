@@ -114,31 +114,6 @@ export function Repos({}) {
           })
         )}
       </ul>
-      <ul>
-        {filteredRepos.length === 0 ? (
-          <li>No repos found</li>
-        ) : (
-          filteredRepos.map((repo) => {
-            return (
-              <li key={repo.id}>
-                <a href={`repos/${repo.owner}/${repo.name}`}>
-                  {hasUICMSTopic(repo) && (
-                    <Icon path={mdiStarOutline} size={0.8} className="text-primary mr-1" title="Has UICMS topic"/>
-                  )}
-                  <Icon
-                    path={repo.private ? mdiLock : mdiLockOpenOutline}
-                    title={repo.private ? "Private repo" : "Public repo"}
-                    size={0.8}
-                    className="mr-1"
-                  />
-
-                  {repo.name}
-                </a>
-              </li>
-            );
-          })
-        )}
-      </ul>
     </section>
   );
 }

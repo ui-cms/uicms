@@ -2,19 +2,21 @@
 
 .loader {
   color: $darker;
-  display: inline-block;
-  position: relative;
   font-size: 18px;
   box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
 
   &:after {
     content: "";
     width: 4px;
     height: 4px;
     background: $darker;
-    position: absolute;
-    bottom: 4px;
-    right: -7px;
+    margin-left: 5px;
+    margin-top: 5px;
     box-sizing: border-box;
     animation: animloader 1s linear infinite;
     border-radius: 3px;
