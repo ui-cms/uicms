@@ -72,8 +72,8 @@
     align-items: center;
     justify-content: space-between;
 
-    input[type="text"] {
-      max-width: 50%;
+    input {
+      max-width: 45%;
     }
   }
 
@@ -135,6 +135,7 @@
     background-color: $lighter;
     height: 100%;
     transition: all 0.1s ease-in;
+    overflow: hidden;
 
     &.open {
       visibility: visible;
