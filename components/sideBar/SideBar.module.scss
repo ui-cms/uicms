@@ -32,7 +32,7 @@
   }
 
   .user {
-    position: relative;
+    // position: relative;
     z-index: $zIndex3;
 
     &:hover {
@@ -50,11 +50,13 @@
 
     ul {
       position: absolute;
-      right: -15px;
-      top: 32px;
+      right: .5rem;
+      top: 2.5rem;
       background-color: $light;
       border-radius: 5px;
       list-style: none;
+      margin: 0;
+      padding: 0;
       width: 200px;
       text-align: right;
       box-shadow: 0 3px 10px 2px $regular;
