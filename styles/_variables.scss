@@ -7,6 +7,7 @@ $darker: #24292f;
 $darkest: #000;
 
 $smallScreenBreakpoint: 768px;
+$largeScreenBreakpoint: 769px; // has to be +1px
 
 $primary: #00d1b2;
 $primaryLight: #ebfffc;
@@ -22,6 +23,18 @@ $space6: 2rem;
 
 $parentXPadding: 15px;
 
-$zIndex1: 5;    // below sidebar
-$zIndex2: 10;   // sidebar
-$zIndex3: 15;   // above sidebar
+$zIndex1: 5; // below sidebar
+$zIndex2: 10; // sidebar
+$zIndex3: 15; // above sidebar
+
+@mixin at-small-screen {
+  @media screen and (max-width: $smallScreenBreakpoint) {
+    @content;
+  }
+}
+
+@mixin at-large-screen {
+  @media screen and (min-width: $largeScreenBreakpoint) {
+    @content;
+  }
+}

@@ -50,7 +50,7 @@
 
     ul {
       position: absolute;
-      right: .5rem;
+      right: 0.5rem;
       top: 2.5rem;
       background-color: $light;
       border-radius: 5px;
@@ -101,7 +101,7 @@
   }
 }
 
-@media screen and (max-width: $smallScreenBreakpoint) {
+@include at-small-screen {
   .sidebar {
     width: 100%;
     height: auto;

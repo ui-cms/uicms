@@ -38,12 +38,10 @@
 
 .content {
   padding: $parentXPadding;
-  height: calc(100% - 8.5rem);
   overflow-y: auto;
-}
+  height: calc(100% - 8.5rem);
 
-@media screen and (max-width: $smallScreenBreakpoint) {
-  .content {
+  @include at-small-screen {
     height: calc(100% - 6rem);
   }
 }

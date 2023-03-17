@@ -2,10 +2,8 @@
 
 .layout {
   display: flex;
-}
 
-@media screen and (max-width: $smallScreenBreakpoint) {
-  .layout {
+  @include at-small-screen {
     display: block;
     max-height: 100vh;
     overflow: hidden;
