@@ -41,3 +41,9 @@
   height: calc(100% - 8.5rem);
   overflow-y: auto;
 }
+
+@media screen and (max-width: $smallScreenBreakpoint) {
+  .content {
+    height: calc(100% - 6rem);
+  }
+}
