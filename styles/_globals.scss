@@ -7,13 +7,16 @@
 body {
   margin: 0;
 }
+
 i {
   font-style: normal;
 }
+
 a {
   color: $link;
   outline: none;
 }
+
 h1,
 h2,
 h3,
@@ -22,6 +25,22 @@ h5,
 h6 {
   margin: 0;
 }
+
+::-webkit-scrollbar {
+  width: .7rem;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 1px $darker;
+  background: $regular;
+}
+::-webkit-scrollbar-thumb {
+  background: darken($regular, 20%); 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: darken($regular, 35%); 
+}
+
 input[type="text"] {
   border: 1px solid $regular;
   background-color: $lighter;
@@ -36,6 +55,7 @@ input[type="text"] {
     border-color: $primary;
   }
 }
+
 label:has(input[type="checkbox"]) {
   color: $darker;
   font-size: 1rem;
@@ -156,6 +176,7 @@ button.primary.light,
 .bg-regular {
   background-color: $regular !important;
 }
+
 .text-dark {
   color: $dark;
 }
