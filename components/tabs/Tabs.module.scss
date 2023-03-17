@@ -38,4 +38,6 @@
 
 .content {
   padding: $parentXPadding;
+  height: calc(100% - 8.5rem);
+  overflow-y: auto;
 }

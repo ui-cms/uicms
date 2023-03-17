@@ -7,5 +7,7 @@
 @media screen and (max-width: $smallScreenBreakpoint) {
   .layout {
     display: block;
+    max-height: 100vh;
+    overflow: hidden;
   }
 }

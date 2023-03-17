@@ -6,7 +6,7 @@ export default function Tabs({ tabs }) {
   const [active, setActive] = useState(0); // index
   return (
     tabs.length > 0 && (
-      <div>
+      <>
         <div className={styles.tabs}>
           {tabs.map((tab, index) => {
             return (
@@ -21,7 +21,7 @@ export default function Tabs({ tabs }) {
           })}
         </div>
         <div className={styles.content}>{tabs[active].content}</div>
-      </div>
+      </>
     )
   );
 }
