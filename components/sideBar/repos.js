@@ -74,6 +74,7 @@ export function Repos({}) {
           value={filters.search}
           onChange={changeFilter}
           placeholder="Search"
+          className="bg-light"
         />
         <CheckBox
           name="public"
@@ -90,14 +91,14 @@ export function Repos({}) {
       </form>
       <ul>
         {filteredRepos.length === 0 ? (
-          <li>You don&apos;t have a repo</li>
+          <li>No repos found</li>
         ) : (
           filteredRepos.map((repo) => {
             return (
               <li key={repo.id}>
                 <a href={`repos/${repo.owner}/${repo.name}`}>
                   {hasUICMSTopic(repo) && (
-                    <Icon path={mdiStarOutline} size={0.8} className="mr-1" title="Has UICMS topic"/>
+                    <Icon path={mdiStarOutline} size={0.8} className="text-primary mr-1" title="Has UICMS topic"/>
                   )}
                   <Icon
                     path={repo.private ? mdiLock : mdiLockOpenOutline}

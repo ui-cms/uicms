@@ -5,30 +5,44 @@ export default function Test() {
   const [testVal, setTestVal] = useStorage("test", "localStorage");
   return (
     <Page authProtected={false}>
-      <h1>Test page</h1>
-      {testVal && <p>{testVal}</p>}
-      <button onClick={() => setTestVal(new Date().getTime())}>
-        Set time in localStorage
-      </button>
+      <div className="p-4">
+        <h1>Test page</h1>
+        {testVal && <p>{testVal}</p>}
+        <p>
+          <button onClick={() => setTestVal(new Date().getTime())}>
+            Set time in localStorage
+          </button>
+        </p>
 
-      <button
-        className="primary"
-        onClick={() => setTestVal(new Date().getTime())}
-      >
-        Primary
-      </button>
+        <p>
+          <button
+            className="primary"
+            onClick={() => setTestVal(new Date().getTime())}
+          >
+            Primary
+          </button>
+        </p>
 
-      <button
-        className="primary light"
-        onClick={() => setTestVal(new Date().getTime())}
-      >
-        Primary
-      </button>
+        <p>
+          <button
+            className="primary light"
+            onClick={() => setTestVal(new Date().getTime())}
+          >
+            Primary
+          </button>
+        </p>
 
-
-      <input placeholder="Enter name here" type="text"/>
-    <input placeholder="Enter name here" type="checkbox"/>
-      <Loader />
+        <p>
+          <input placeholder="Enter name here" type="text" />
+        </p>
+        <p>
+          <label>
+            <input placeholder="Enter name here" type="checkbox" />
+            check
+          </label>
+          <Loader />
+        </p>
+      </div>
     </Page>
   );
 }

@@ -1,7 +1,7 @@
 @use "variables" as *;
 
 /*
-***** RESETTING *****
+***** RESETTING/CUSTOMIZING *****
 */
 
 body {
@@ -14,14 +14,6 @@ a {
   color: $link;
   outline: none;
 }
-input[type="text"] {
-  border: 1px solid $regular;
-  background-color: $lighter;
-  font-size: 1rem;
-  padding: 6px 12px;
-  border-radius: 5px;
-  outline: none;
-}
 h1,
 h2,
 h3,
@@ -29,6 +21,60 @@ h4,
 h5,
 h6 {
   margin: 0;
+}
+input[type="text"] {
+  border: 1px solid $regular;
+  background-color: $lighter;
+  font-size: 1rem;
+  color: $darker;
+  padding: 6px 12px;
+  border-radius: 5px;
+  outline: none;
+
+  &:focus {
+    background-color: $primaryLight;
+    border-color: $primary;
+  }
+}
+label:has(input[type="checkbox"]) {
+  color: $darker;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  input {
+    appearance: none;
+    border: 1px solid $regular;
+    background-color: $light;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+    margin: 0 5px 0 0;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primaryLight;
+      border-color: $primary;
+    }
+    &:checked {
+      background-color: $primary !important;
+      border-color: $primaryLight !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:after {
+        content: "";
+        height: 0.25rem;
+        width: 0.5rem;
+        border-left: 2px solid $lightest;
+        border-bottom: 2px solid $lightest;
+        transform: rotate(-50deg);
+        margin-bottom: 2px;
+      }
+    }
+  }
 }
 
 /*
@@ -48,6 +94,7 @@ button,
   -ms-user-select: none;
   user-select: none;
   outline: none;
+  cursor: pointer;
 }
 button.primary,
 .button.primary {
@@ -101,13 +148,22 @@ button.primary.light,
 }
 
 .bg-light {
-  background-color: $light;
+  background-color: $light !important;
 }
 .bg-dark {
-  background-color: $dark;
+  background-color: $dark !important;
 }
 .bg-regular {
-  background-color: $regular;
+  background-color: $regular !important;
+}
+.text-dark {
+  color: $dark;
+}
+.text-regular {
+  color: $regular;
+}
+.text-primary {
+  color: $primary;
 }
 
 .mr-1 {
@@ -123,6 +179,10 @@ button.primary.light,
   margin-bottom: $space6;
 }
 
+.p-4 {
+  padding: $space4;
+}
+
 .unselectable {
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -136,16 +196,11 @@ button.primary.light,
   width: 100px;
 }
 
-
 .uc-overflow-hidden {
   overflow: hidden;
 }
 .uc-x-scrollable {
   overflow-x: auto;
-}
-
-.uc-d-inline-block {
-  display: inline-block !important;
 }
 
 .uc-float-right {

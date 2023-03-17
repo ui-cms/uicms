@@ -17,21 +17,14 @@ export function TextInput({
       value={value}
       onChange={change}
       type="text"
-      className={`has-background-white-bis ${className}`}
+      className={className}
       placeholder={placeholder}
-      autoComplete={false}
+      autoComplete="off"
     />
   );
 }
 
-export function CheckBox({
-  name,
-  value,
-  onChange,
-  className = "",
-  label,
-  labelClassName = "",
-}) {
+export function CheckBox({ name, value, onChange, className = "", label }) {
   function change(e) {
     if (!e || !e.target) return null;
     const { name, checked } = e.target;
@@ -39,15 +32,9 @@ export function CheckBox({
   }
 
   return (
-    <label className={`checkbox ${labelClassName || ""}`}>
-      <input
-        name={name}
-        checked={value}
-        onChange={change}
-        type="checkbox"
-        className={className}
-      />
-      &nbsp;{label}
+    <label className={className}>
+      <input name={name} checked={value} onChange={change} type="checkbox" />
+      {label}
     </label>
   );
 }
@@ -65,7 +52,7 @@ export function Select({ children, name, value, onChange, className = "" }) {
       onChange={change}
       name={name}
       className={className}
-      autoComplete={false}
+      autoComplete="off"
     >
       {children}
     </select>
