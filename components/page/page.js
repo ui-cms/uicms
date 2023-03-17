@@ -2,7 +2,8 @@ import Head from "next/head";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Suspense, useEffect } from "react";
 import { useRouter } from "next/router";
-import styles from "@/styles/Page.module.scss";
+import styles from "./Page.module.scss";
+import Loader from "@/components/loader/loader";
 
 export default function Page({
   children,
@@ -36,8 +37,4 @@ export default function Page({
       </Suspense>
     </>
   );
-}
-
-export function Loader() {
-  return <div className={styles.loader}>Loading</div>;
 }

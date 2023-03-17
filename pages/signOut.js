@@ -1,6 +1,6 @@
 import { withIronSessionSsr } from "iron-session/next";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import Page from "@/components/layout/page";
+import Page from "@/components/page/page";
 import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import { useEffect } from "react";
 import Link from "next/link";

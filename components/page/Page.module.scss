@@ -1,0 +1,23 @@
+@use "@/styles/_variables.scss" as *;
+
+.absolute {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: $lightest;
+  overflow: hidden;
+}
+.content {
+  width: 100%;
+  background-color: $lightest;
+  height: 100vh;
+  overflow: auto;
+  // padding-right: $parentXPadding;
+  // padding-left: $parentXPadding;
+}

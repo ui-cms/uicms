@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { withIronSessionSsr } from "iron-session/next";
 import { IRON_SESSION_OPTIONS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import Page from "@/components/layout/page";
+import Page from "@/components/page/page";
 import styles from "@/styles/Home.module.scss";
-import SigninWithGitHubButton from "@/components/layout/signinWithGitHubButton";
+import SigninWithGitHubButton from "@/components/signinWithGitHubButton";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 

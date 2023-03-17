@@ -4,10 +4,10 @@ import useStateManagement from "@/services/stateManagement/stateManagement";
 import { displayError, orderBy } from "@/helpers/utilities";
 import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
-import { Loader } from "../layout/page";
 import Icon from "@mdi/react";
 import { mdiLock, mdiLockOpenOutline, mdiStarOutline } from "@mdi/js";
 import styles from "./SideBar.module.scss";
+import Loader from "@/components/loader/loader";
 
 export function Repos({}) {
   const [loading, setLoading] = useState(false);
