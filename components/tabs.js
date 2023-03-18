@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "@/styles/Tabs.module.scss";
 
-// <Tabs tabs={[{title: "", content:  jsx}]} />
+// <Tabs tabs={[{title: "", content:  jsx, disabled=false}]} />
 export default function Tabs({ tabs }) {
   const [active, setActive] = useState(0); // index
   return (
@@ -14,6 +14,7 @@ export default function Tabs({ tabs }) {
                 key={index}
                 className={index === active ? styles.active : ""}
                 onClick={() => setActive(index)}
+                disabled={tab.disabled}
               >
                 {tab.title}
               </button>

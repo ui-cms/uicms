@@ -1,9 +1,12 @@
+import { Button } from "@/components/button";
 import Loader from "@/components/loader";
 import Page from "@/components/page";
 import useStorage from "@/hooks/useStorage";
+import { useState } from "react";
 
 export default function Test() {
   const [testVal, setTestVal] = useStorage("test", "localStorage");
+  const [loading, setLoading] = useState(false);
   return (
     <Page authProtected={true}>
       <div className="p-4">
@@ -43,6 +46,30 @@ export default function Test() {
           </label>
           <Loader />
         </div>
+
+        <Button
+          loading={loading}
+          className=""
+          onClick={() => setLoading(!loading)}
+        >
+          Test me
+        </Button>
+
+        <Button
+          loading={loading}
+          className=""
+          onClick={() => setLoading(!loading)}
+        >
+          Anoe more bigger button
+        </Button>
+
+        <Button
+          loading={loading}
+          className="primary"
+          onClick={() => setLoading(!loading)}
+        >
+          why
+        </Button>
       </div>
     </Page>
   );

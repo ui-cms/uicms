@@ -1,0 +1,37 @@
+@use "variables" as *;
+
+.button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:disabled {
+    .children {
+      visibility: hidden;
+    }
+
+    .loader {
+      width: 4px;
+      height: 4px;
+      background: $darker;
+      box-sizing: border-box;
+      animation: animloader 1s linear infinite;
+      border-radius: 3px;
+      position: absolute;
+      margin-left: -1rem;
+
+      @keyframes animloader {
+        0% {
+          box-shadow: 10px 0 $lighter, 20px 0 $lighter;
+        }
+        50% {
+          box-shadow: 10px 0 $darker, 20px 0 $lighter;
+        }
+        100% {
+          box-shadow: 10px 0 $darker, 20px 0 $darker;
+        }
+      }
+    }
+  }
+}

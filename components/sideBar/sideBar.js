@@ -1,5 +1,4 @@
 import { Suspense, useState } from "react";
-import { useRouter } from "next/router";
 import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -14,12 +13,13 @@ import {
 import { Repos } from "./repos";
 import Loader from "@/components/loader";
 import Tabs from "@/components/tabs";
+import Link from "next/link";
 
 export default function SideBar({}) {
-  const [open, setOpen] = useState(false);
+  const [selectedRepo, setSelectedRepo]=useState(null);
+  const [open, setOpen] = useState(false);  // used in mobile
   const { state } = useStateManagement();
   const { currentUser } = state;
-  const router = useRouter();
 
   return (
     <Suspense fallback={<Loader />}>
@@ -57,7 +57,7 @@ export default function SideBar({}) {
                   </a>
                 </li>
                 <li>
-                  <a onClick={() => router.push("/signOut")}>Sign out</a>
+                  <Link href="/signOut">Sign out</Link>
                 </li>
               </ul>
             )}
@@ -83,6 +83,7 @@ export default function SideBar({}) {
                   </>
                 ),
                 content: <h1>Collections list</h1>,
+                disabled: true
               },
               {
                 title: (
