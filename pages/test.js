@@ -1,4 +1,5 @@
 import { Button } from "@/components/button";
+import { CheckBox, TextInput } from "@/components/form";
 import Loader from "@/components/loader";
 import Page from "@/components/page";
 import useStorage from "@/hooks/useStorage";
@@ -37,13 +38,10 @@ export default function Test() {
         </div>
 
         <div>
-          <input placeholder="Enter name here" type="text" />
+          <TextInput placeholder="Enter name here" type="text" />
         </div>
         <div>
-          <label>
-            <input placeholder="Enter name here" type="checkbox" />
-            check
-          </label>
+          <CheckBox>Testing checkbox here</CheckBox>
           <Loader />
         </div>
 

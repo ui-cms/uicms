@@ -76,18 +76,16 @@ export function Repos({}) {
           placeholder="Search"
           className="bg-light"
         />
-        <CheckBox
-          name="public"
-          value={filters.public}
-          onChange={changeFilter}
-          label="Public"
-        />
+        <CheckBox name="public" value={filters.public} onChange={changeFilter}>
+          Public
+        </CheckBox>
         <CheckBox
           name="private"
           value={filters.private}
           onChange={changeFilter}
-          label="Private"
-        />
+        >
+          Private
+        </CheckBox>
       </form>
       <ul>
         {filteredRepos.length === 0 ? (

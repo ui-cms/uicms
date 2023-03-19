@@ -1,9 +1,12 @@
+import styles from "@/styles/Form.module.scss";
+
 export function TextInput({
   name,
   value,
   onChange,
-  className = "",
   placeholder,
+  className = "",
+  style = {},
 }) {
   function change(e) {
     if (!e || !e.target) return null;
@@ -17,14 +20,15 @@ export function TextInput({
       value={value}
       onChange={change}
       type="text"
-      className={className}
+      className={`${styles.textInput} ${className}`}
+      style={style}
       placeholder={placeholder}
       autoComplete="off"
     />
   );
 }
 
-export function CheckBox({ name, value, onChange, className = "", label }) {
+export function CheckBox({ children, name, value, onChange, className = ""}) {
   function change(e) {
     if (!e || !e.target) return null;
     const { name, checked } = e.target;
@@ -32,9 +36,9 @@ export function CheckBox({ name, value, onChange, className = "", label }) {
   }
 
   return (
-    <label className={className}>
+    <label className={`${styles.checkbox} ${className}`}>
       <input name={name} checked={value} onChange={change} type="checkbox" />
-      {label}
+      {children}
     </label>
   );
 }
@@ -51,7 +55,7 @@ export function Select({ children, name, value, onChange, className = "" }) {
       value={value}
       onChange={change}
       name={name}
-      className={className}
+      className={`${styles.select} ${className}`}
       autoComplete="off"
     >
       {children}
