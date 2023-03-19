@@ -7,6 +7,7 @@ export function Button({
   loading = false,
   disabled = false,
   type = "", // primary | primaryLight | danger | dangerLight
+  ...rest
 }) {
   let _className = styles.button;
   if (loading) _className += " " + styles.loading;
@@ -18,6 +19,7 @@ export function Button({
       onClick={onClick}
       disabled={disabled || loading}
       className={_className}
+      {...rest}
     >
       {children}
     </button>

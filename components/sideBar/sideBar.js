@@ -14,12 +14,20 @@ import { Repos } from "./repos";
 import Loader from "@/components/loader";
 import Tabs from "@/components/tabs";
 import Link from "next/link";
+import { Collections } from "./collections";
+import { Items } from "./items";
 
 export default function SideBar({}) {
   const [selectedRepo, setSelectedRepo] = useState(null);
+  const [selectedCollection, setSelectedCollection] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
   const { state } = useStateManagement();
   const { currentUser } = state;
+
+  function selectRepo(repo){
+    setSelectedCollection(null);
+    setSelectedRepo(repo);
+  }
 
   return (
     <Suspense fallback={<Loader />}>
@@ -63,7 +71,7 @@ export default function SideBar({}) {
             )}
           </details>
         </nav>
-        <secion className={`${styles.main} ${open ? styles.open : ""}`}>
+        <section className={`${styles.main} ${open ? styles.open : ""}`}>
           <Tabs
             tabs={[
               {
@@ -73,7 +81,7 @@ export default function SideBar({}) {
                     Repos
                   </>
                 ),
-                content: <Repos />,
+                content: <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />,
               },
               {
                 title: (
@@ -82,8 +90,8 @@ export default function SideBar({}) {
                     Collections
                   </>
                 ),
-                content: <h1>Collections list</h1>,
-                // loading: true,
+                content: <Collections/>,
+                disabled: !selectedRepo,
               },
               {
                 title: (
@@ -96,12 +104,12 @@ export default function SideBar({}) {
                     Items
                   </>
                 ),
-                content: <h1>Items list</h1>,
-                // disabled: true,
+                content: <Items/>,
+                disabled: !selectedCollection,
               },
             ]}
           />
-        </secion>
+        </section>
       </aside>
     </Suspense>
   );

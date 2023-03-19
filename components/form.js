@@ -1,13 +1,6 @@
 import styles from "@/styles/Form.module.scss";
 
-export function TextInput({
-  name,
-  value,
-  onChange,
-  placeholder,
-  className = "",
-  style = {},
-}) {
+export function TextInput({ name, value, onChange, className = "", ...rest }) {
   function change(e) {
     if (!e || !e.target) return null;
     const { name, value } = e.target;
@@ -21,14 +14,13 @@ export function TextInput({
       onChange={change}
       type="text"
       className={`${styles.textInput} ${className}`}
-      style={style}
-      placeholder={placeholder}
       autoComplete="off"
+      {...rest}
     />
   );
 }
 
-export function CheckBox({ children, name, value, onChange, className = ""}) {
+export function CheckBox({ children, name, value, onChange, className = "" }) {
   function change(e) {
     if (!e || !e.target) return null;
     const { name, checked } = e.target;

@@ -70,6 +70,40 @@
 }
 
 .repos {
+  .selected {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // background-color: $regular;
+    border-bottom: 1px solid $regular;
+    color: $darker;
+    padding-bottom: $space2;
+    margin-bottom: $space4;
+
+    p {
+      display: flex;
+      align-items: center;
+      margin-bottom: $space1;
+    }
+    small {
+      display: flex;
+      align-items: center;
+      color: $dark;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      margin-left: $space2;
+
+      button {
+        line-height: 0;
+        padding: $space1;
+        color: $dark;
+      }
+    }
+  }
+
   form {
     display: flex;
     align-items: center;
@@ -88,7 +122,7 @@
       a {
         display: flex;
         border-radius: 4px;
-        font-size: .9rem;
+        font-size: 0.9rem;
         padding: 7px 0;
         text-decoration: none;
         color: $dark;
@@ -119,6 +153,8 @@
   }
 
   .header {
+    position: unset;
+
     .menuToggle {
       display: block;
     }
@@ -147,6 +183,7 @@
     height: 100%;
     transition: all 0.1s ease-in;
     overflow: hidden;
+    z-index: $zIndex2;
 
     &.open {
       visibility: visible;

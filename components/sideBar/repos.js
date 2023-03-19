@@ -5,11 +5,20 @@ import { displayError, orderBy } from "@/helpers/utilities";
 import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
-import { mdiLock, mdiLockOpenOutline, mdiStar } from "@mdi/js";
+import {
+  mdiAt,
+  mdiClose,
+  mdiDotsVertical,
+  mdiGit,
+  mdiLock,
+  mdiLockOpenOutline,
+  mdiStar,
+} from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
+import { Button } from "../button";
 
-export function Repos({}) {
+export function Repos({ selectedRepo, selectRepo }) {
   const [loading, setLoading] = useState(false);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -59,7 +68,7 @@ export function Repos({}) {
     // display starred (having UICMS topic) ones first
     result = result.map((r) => ({
       ...r,
-      starred: r.topics.includes(UICMS_TOPIC),
+      starred: hasUICMSTopic(r),
     }));
     return orderBy(result, "starred", false);
   }, [filters, repos]);
@@ -68,6 +77,33 @@ export function Repos({}) {
     <Loader />
   ) : (
     <section className={styles.repos}>
+      {selectedRepo && (
+        <div className={styles.selected}>
+          <h3>
+            <p className="mb-1">
+              <Icon path={mdiGit} size={0.9} className="mr-1 text-dark" />
+              <span>{selectedRepo.name}</span>
+            </p>
+            <small className="text-dark">
+              <Icon
+                path={mdiAt}
+                size={0.75}
+                className="mr-1"
+                style={{ marginLeft: "2px" }}
+              />
+              <span>{selectedRepo.owner}</span>
+            </small>
+          </h3>
+          <div className={styles.buttons}>
+            <Button onClick={() => selectRepo(null)} title="Unselect">
+              <Icon path={mdiClose} size={0.8} />
+            </Button>
+            <Button onClick={() => {}} title="More options">
+              <Icon path={mdiDotsVertical} size={0.95} />
+            </Button>
+          </div>
+        </div>
+      )}
       <form>
         <TextInput
           name="search"
@@ -94,7 +130,7 @@ export function Repos({}) {
           filteredRepos.map((repo) => {
             return (
               <li key={repo.id}>
-                <a href={`repos/${repo.owner}/${repo.name}`}>
+                <a onClick={() => selectRepo(repo)} href="#">
                   {hasUICMSTopic(repo) && (
                     <Icon
                       path={mdiStar}
