@@ -1,14 +1,25 @@
 import styles from "@/styles/Button.module.scss";
 
-export function Button({ children, className = "", loading = false, onClick }) {
+export function Button({
+  children,
+  onClick,
+  className = "",
+  loading = false,
+  disabled = false,
+  type = "", // primary | primaryLight | danger | dangerLight
+}) {
+  let _className = styles.button;
+  if (loading) _className += " " + styles.loading;
+  if (type) _className += " " + styles[type];
+  if (className) _className += " " + className;
+
   return (
     <button
       onClick={onClick}
-      disabled={loading}
-      className={`${styles.button} ${className}`}
+      disabled={disabled || loading}
+      className={_className}
     >
-      <span className={styles.children}>{children}</span>
-      {loading && <span className={styles.loader}></span>}
+      {children}
     </button>
   );
 }

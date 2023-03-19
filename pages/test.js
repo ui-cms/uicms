@@ -14,27 +14,27 @@ export default function Test() {
         <h1>Test page</h1>
         {testVal && <div>{testVal}</div>}
         <div>
-          <button onClick={() => setTestVal(new Date().getTime())}>
+          <Button onClick={() => setTestVal(new Date().getTime())}>
             Set time in localStorage
-          </button>
+          </Button>
         </div>
 
         <div>
-          <button
+          <Button
             className="primary"
             onClick={() => setTestVal(new Date().getTime())}
           >
             Primary
-          </button>
+          </Button>
         </div>
 
         <div>
-          <button
+          <Button
             className="primary light"
             onClick={() => setTestVal(new Date().getTime())}
           >
             Primary
-          </button>
+          </Button>
         </div>
 
         <div>
@@ -63,10 +63,17 @@ export default function Test() {
 
         <Button
           loading={loading}
-          className="primary"
+          type="primary"
           onClick={() => setLoading(!loading)}
         >
-          why
+          Primary
+        </Button>
+        <Button
+          loading={loading}
+          type="primaryLight"
+          onClick={() => setLoading(!loading)}
+        >
+          Primary light
         </Button>
       </div>
     </Page>

@@ -1,37 +1,75 @@
 @use "variables" as *;
 
 .button {
+  background-color: $light;
+  border: none;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  color: $darker;
+  border-radius: 5px;
+  text-decoration: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+  &:hover {
+    background-color: darken($light, 3%);
+  }
 
   &:disabled {
-    .children {
-      visibility: hidden;
-    }
+    pointer-events: none; // will disable events like cursor and bg changes on hover
+    opacity: 0.7;
+  }
+}
 
-    .loader {
-      width: 4px;
-      height: 4px;
-      background: $darker;
-      box-sizing: border-box;
-      animation: animloader 1s linear infinite;
-      border-radius: 3px;
-      position: absolute;
-      margin-left: -1rem;
+.loading {
+  color: transparent !important; // hide text (while preserving button size)
 
-      @keyframes animloader {
-        0% {
-          box-shadow: 10px 0 $lighter, 20px 0 $lighter;
-        }
-        50% {
-          box-shadow: 10px 0 $darker, 20px 0 $lighter;
-        }
-        100% {
-          box-shadow: 10px 0 $darker, 20px 0 $darker;
-        }
+  &::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: $darker;
+    box-sizing: border-box;
+    animation: animloader 1s linear infinite;
+    border-radius: 3px;
+    position: absolute;
+    margin-left: -0.6rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    @keyframes animloader {
+      0% {
+        box-shadow: 10px 0 $lighter, 20px 0 $lighter;
+      }
+      50% {
+        box-shadow: 10px 0 $darker, 20px 0 $lighter;
+      }
+      100% {
+        box-shadow: 10px 0 $darker, 20px 0 $darker;
       }
     }
+  }
+}
+
+.primary {
+  background-color: $primary;
+  color: $lightest;
+
+  &:hover {
+    background-color: darken($primary, 3%);
+  }
+}
+
+.primaryLight {
+  background-color: $primaryLight;
+  color: $primary;
+
+  &:hover {
+    background-color: darken($primaryLight, 3%);
   }
 }

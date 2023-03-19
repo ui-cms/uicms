@@ -36,7 +36,7 @@ export function orderBy(list, propertyName = null, asc = true) {
 
 /**
  * Will generate a random string of lower case characters of given length
- * @param {Number} length
+ * @param {number} length
  */
 export function generateRandomString(length) {
   return [...Array(length)].reduce(

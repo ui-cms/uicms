@@ -16,8 +16,8 @@ import Tabs from "@/components/tabs";
 import Link from "next/link";
 
 export default function SideBar({}) {
-  const [selectedRepo, setSelectedRepo]=useState(null);
-  const [open, setOpen] = useState(false);  // used in mobile
+  const [selectedRepo, setSelectedRepo] = useState(null);
+  const [open, setOpen] = useState(false); // used in mobile
   const { state } = useStateManagement();
   const { currentUser } = state;
 
@@ -83,7 +83,7 @@ export default function SideBar({}) {
                   </>
                 ),
                 content: <h1>Collections list</h1>,
-                disabled: true
+                // loading: true,
               },
               {
                 title: (
@@ -97,6 +97,7 @@ export default function SideBar({}) {
                   </>
                 ),
                 content: <h1>Items list</h1>,
+                // disabled: true,
               },
             ]}
           />
