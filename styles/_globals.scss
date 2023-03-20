@@ -139,11 +139,11 @@ h6 {
 }
 
 .text-overflow {
-  overflow: hidden;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
-  width: 100px;
   min-width: 0;
+  width: 100%;
 }
 
 .uc-overflow-hidden {

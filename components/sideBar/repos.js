@@ -7,6 +7,7 @@ import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
 import {
   mdiAt,
+  mdiCheck,
   mdiClose,
   mdiDotsVertical,
   mdiGit,
@@ -20,6 +21,11 @@ import { Button } from "../button";
 
 export function Repos({ selectedRepo, selectRepo }) {
   const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState({
+    search: "",
+    private: true,
+    public: true,
+  });
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { repos, currentUser } = state;
@@ -46,16 +52,79 @@ export function Repos({ selectedRepo, selectRepo }) {
     repos.length,
   ]);
 
-  const [filters, setFilters] = useState({
-    search: "",
-    private: true,
-    public: true,
-  });
+  return loading ? (
+    <Loader />
+  ) : (
+    <section className={styles.repos}>
+      <SelectedRepoDetails repo={selectedRepo} />
+      <SearchArea filters={filters} setFilters={setFilters} />
+      <RepoList
+        repos={repos}
+        filters={filters}
+        onSelect={selectRepo}
+        selectedRepoId={selectedRepo?.id}
+      />
+    </section>
+  );
+}
 
-  function changeFilter({ name, value }) {
+function SelectedRepoDetails({ repo }) {
+  return (
+    repo && (
+      <div className={styles.selected}>
+        <h3>
+          <p className="mb-1">
+            <Icon path={mdiGit} size={0.9} className="mr-1 text-dark" />
+            <span className="text-overflow">{repo.name}</span>
+          </p>
+          <small className="text-dark">
+            <Icon
+              path={mdiAt}
+              size={0.75}
+              className="mr-1"
+              style={{ marginLeft: "2px" }}
+            />
+            <span className="text-overflow">{repo.owner}</span>
+          </small>
+        </h3>
+        <div className={styles.buttons}>
+          <Button onClick={() => selectRepo(null)} title="Unselect">
+            <Icon path={mdiClose} size={0.8} />
+          </Button>
+          <Button onClick={() => {}} title="More options">
+            <Icon path={mdiDotsVertical} size={0.95} />
+          </Button>
+        </div>
+      </div>
+    )
+  );
+}
+
+function SearchArea({ filters, setFilters }) {
+  function onChange({ name, value }) {
     setFilters({ ...filters, [name]: value });
   }
 
+  return (
+    <form className={styles.search}>
+      <TextInput
+        name="search"
+        value={filters.search}
+        onChange={onChange}
+        placeholder="Search"
+        className="bg-light"
+      />
+      <CheckBox name="public" value={filters.public} onChange={onChange}>
+        Public
+      </CheckBox>
+      <CheckBox name="private" value={filters.private} onChange={onChange}>
+        Private
+      </CheckBox>
+    </form>
+  );
+}
+
+function RepoList({ repos, filters, onSelect, selectedRepoId }) {
   const filteredRepos = useMemo(() => {
     let result = repos.filter(
       (r) =>
@@ -73,86 +142,49 @@ export function Repos({ selectedRepo, selectRepo }) {
     return orderBy(result, "starred", false);
   }, [filters, repos]);
 
-  return loading ? (
-    <Loader />
-  ) : (
-    <section className={styles.repos}>
-      {selectedRepo && (
-        <div className={styles.selected}>
-          <h3>
-            <p className="mb-1">
-              <Icon path={mdiGit} size={0.9} className="mr-1 text-dark" />
-              <span>{selectedRepo.name}</span>
-            </p>
-            <small className="text-dark">
-              <Icon
-                path={mdiAt}
-                size={0.75}
-                className="mr-1"
-                style={{ marginLeft: "2px" }}
-              />
-              <span>{selectedRepo.owner}</span>
-            </small>
-          </h3>
-          <div className={styles.buttons}>
-            <Button onClick={() => selectRepo(null)} title="Unselect">
-              <Icon path={mdiClose} size={0.8} />
-            </Button>
-            <Button onClick={() => {}} title="More options">
-              <Icon path={mdiDotsVertical} size={0.95} />
-            </Button>
-          </div>
-        </div>
-      )}
-      <form>
-        <TextInput
-          name="search"
-          value={filters.search}
-          onChange={changeFilter}
-          placeholder="Search"
-          className="bg-light"
-        />
-        <CheckBox name="public" value={filters.public} onChange={changeFilter}>
-          Public
-        </CheckBox>
-        <CheckBox
-          name="private"
-          value={filters.private}
-          onChange={changeFilter}
-        >
-          Private
-        </CheckBox>
-      </form>
-      <ul>
-        {filteredRepos.length === 0 ? (
-          <li>No repos found</li>
-        ) : (
-          filteredRepos.map((repo) => {
-            return (
-              <li key={repo.id}>
-                <a onClick={() => selectRepo(repo)} href="#">
-                  {hasUICMSTopic(repo) && (
-                    <Icon
-                      path={mdiStar}
-                      size={0.75}
-                      className="text-primary mr-1"
-                      title="Starred (has UICMS topic)"
-                    />
-                  )}
+  return (
+    <ul className={styles.list}>
+      {filteredRepos.length === 0 ? (
+        <li>No repos found</li>
+      ) : (
+        filteredRepos.map((r) => {
+          return (
+            <li key={r.id}>
+              <a
+                onClick={() => onSelect(r.id === selectedRepoId ? null : r)}
+                href="#"
+              >
+                {selectedRepoId === r.id && (
                   <Icon
-                    path={repo.private ? mdiLock : mdiLockOpenOutline}
-                    title={repo.private ? "Private repo" : "Public repo"}
+                    path={mdiCheck}
                     size={0.75}
-                    className="mr-1"
+                    className="text-primary mr-1"
+                    title="Selected repo"
                   />
-                  <span title={repo.full_name}>{repo.name}</span>
-                </a>
-              </li>
-            );
-          })
-        )}
-      </ul>
-    </section>
+                )}
+                {hasUICMSTopic(r) && (
+                  <Icon
+                    path={mdiStar}
+                    size={0.75}
+                    className="text-primary mr-1"
+                    title="Starred (has UICMS topic)"
+                  />
+                )}
+                <Icon
+                  path={r.private ? mdiLock : mdiLockOpenOutline}
+                  title={r.private ? "Private repo" : "Public repo"}
+                  size={0.75}
+                  className="mr-1"
+                />
+                <span className="text-overflow" title={r.full_name}>
+                  {r.name}
+                </span>
+              </a>
+            </li>
+          );
+        })
+      )}
+    </ul>
   );
 }
 

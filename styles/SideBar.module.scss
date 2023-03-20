@@ -7,63 +7,63 @@
   background-color: $lighter;
   border-right: 1px solid $regular;
   overflow: hidden;
-}
 
-.header {
-  background-color: $light;
-  border-bottom: 1px solid $regular;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
+  .header {
+    background-color: $light;
+    border-bottom: 1px solid $regular;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
 
-  .menuToggle {
-    display: none;
-    cursor: pointer;
-  }
-
-  .brand {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: $darker;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  .user {
-    // position: relative;
-    z-index: $zIndex3;
-
-    &:hover {
+    .menuToggle {
+      display: none;
       cursor: pointer;
     }
 
-    summary {
-      display: flex;
+    .brand {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $darker;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
-    img {
-      border: 1px solid $regular;
-      border-radius: 1rem;
-    }
+    .user {
+      // position: relative;
+      z-index: $zIndex3;
 
-    ul {
-      position: absolute;
-      right: 0.5rem;
-      top: 2.5rem;
-      background-color: $light;
-      border-radius: 5px;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      width: 200px;
-      text-align: right;
-      box-shadow: 0 3px 10px 2px $regular;
+      &:hover {
+        cursor: pointer;
+      }
 
-      li {
-        padding: 10px 10px;
+      summary {
+        display: flex;
+      }
+
+      img {
+        border: 1px solid $regular;
+        border-radius: 1rem;
+      }
+
+      ul {
+        position: absolute;
+        right: 0.5rem;
+        top: 2.5rem;
+        background-color: $light;
+        border-radius: 5px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        text-align: right;
+        box-shadow: 0 3px 10px 2px $regular;
+
+        li {
+          padding: 10px 10px;
+        }
       }
     }
   }
@@ -74,21 +74,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // background-color: $regular;
     border-bottom: 1px solid $regular;
     color: $darker;
     padding-bottom: $space2;
     margin-bottom: $space4;
 
-    p {
-      display: flex;
-      align-items: center;
-      margin-bottom: $space1;
-    }
-    small {
-      display: flex;
-      align-items: center;
-      color: $dark;
+    h3 {
+      overflow: hidden;
+
+      p {
+        display: flex;
+        align-items: center;
+        margin-bottom: $space1;
+      }
+      small {
+        display: flex;
+        align-items: center;
+        color: $dark;
+      }
     }
 
     .buttons {
@@ -104,7 +107,7 @@
     }
   }
 
-  form {
+  .search {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -114,7 +117,7 @@
     }
   }
 
-  ul {
+  .list {
     list-style: none;
     padding: 0;
 
@@ -131,14 +134,6 @@
           background-color: $light;
           color: $darker;
         }
-
-        span {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          min-width: 0;
-          width: 100%;
-        }
       }
     }
   }
@@ -150,44 +145,44 @@
     height: auto;
     border: none;
     z-index: $zIndex2;
-  }
 
-  .header {
-    position: unset;
+    .header {
+      position: unset;
 
-    .menuToggle {
-      display: block;
-    }
-
-    .brand {
-      font-size: 1.5rem;
-    }
-
-    .user {
-      summary {
-        width: 24px; // or in mobile brand will float when loading
+      .menuToggle {
+        display: block;
       }
-      img {
-        width: 22px;
-        height: 22px;
+
+      .brand {
+        font-size: 1.5rem;
+      }
+
+      .user {
+        summary {
+          width: 24px; // or in mobile brand will float when loading
+        }
+        img {
+          width: 22px;
+          height: 22px;
+        }
       }
     }
-  }
 
-  .main {
-    visibility: hidden;
-    position: absolute;
-    width: 100%;
-    left: -100%;
-    background-color: $lighter;
-    height: 100%;
-    transition: all 0.1s ease-in;
-    overflow: hidden;
-    z-index: $zIndex2;
+    .main {
+      visibility: hidden;
+      position: absolute;
+      width: 100%;
+      left: -100%;
+      background-color: $lighter;
+      height: 100%;
+      transition: all 0.1s ease-in;
+      overflow: hidden;
+      z-index: $zIndex2;
 
-    &.open {
-      visibility: visible;
-      left: 0;
+      &.open {
+        visibility: visible;
+        left: 0;
+      }
     }
   }
 }
