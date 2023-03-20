@@ -23,7 +23,19 @@ export default function Tabs({ tabs }) {
             );
           })}
         </div>
-        <div className={styles.content}>{tabs[active].content}</div>
+
+        {tabs.map((tab, index) => {
+          return (
+            <div
+              key={index}
+              className={`${styles.content} ${
+                index === active ? "d-block" : "d-none"
+              }`}
+            >
+              {tab.content}
+            </div>
+          );
+        })}
       </>
     )
   );
