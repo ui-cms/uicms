@@ -154,14 +154,6 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
                 onClick={() => onSelect(r.id === selectedRepoId ? null : r)}
                 href="#"
               >
-                {selectedRepoId === r.id && (
-                  <Icon
-                    path={mdiCheck}
-                    size={0.75}
-                    className="text-primary mr-1"
-                    title="Selected repo"
-                  />
-                )}
                 {hasUICMSTopic(r) && (
                   <Icon
                     path={mdiStar}
@@ -179,6 +171,14 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
                 <span className="text-overflow" title={r.full_name}>
                   {r.name}
                 </span>
+                {selectedRepoId === r.id && (
+                  <Icon
+                    path={mdiCheck}
+                    size={0.75}
+                    className="ml-1"
+                    title="Selected repo"
+                  />
+                )}
               </a>
             </li>
           );
