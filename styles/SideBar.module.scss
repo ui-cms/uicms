@@ -67,84 +67,8 @@
       }
     }
   }
-}
 
-.repos {
-  .selected {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid $regular;
-    color: $darker;
-    padding-bottom: $space2;
-    margin-bottom: $space4;
-
-    h3 {
-      overflow: hidden;
-
-      p {
-        display: flex;
-        align-items: center;
-        margin-bottom: $space1;
-      }
-      small {
-        display: flex;
-        align-items: center;
-        color: $dark;
-      }
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      margin-left: $space2;
-
-      button {
-        line-height: 0;
-        padding: $space1;
-        color: $dark;
-      }
-    }
-  }
-
-  .search {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    input {
-      max-width: 45%;
-    }
-
-    label {
-      font-size: 0.9rem;
-    }
-  }
-
-  .list {
-    list-style: none;
-    padding: 0;
-
-    li {
-      a {
-        display: flex;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        padding: 7px 0;
-        text-decoration: none;
-        color: $dark;
-
-        &:hover {
-          background-color: $light;
-          color: $darker;
-        }
-      }
-    }
-  }
-}
-
-@include at-small-screen {
-  .sidebar {
+  @include at-small-screen {
     width: 100%;
     height: auto;
     border: none;
@@ -186,6 +110,58 @@
       &.open {
         visibility: visible;
         left: 0;
+      }
+    }
+  }
+}
+
+.repos {
+
+  .addButton{
+    display: flex;
+    justify-content: center;
+    // margin-right: -$space4;
+    // margin-left: -$space4;
+    // width: calc(100% + $space4 + $space4);
+    border-radius: 0;
+    border-top: 1px solid $regular;
+    color: $dark;
+    // position: absolute;
+    // bottom: 0;
+
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    input {
+      max-width: 45%;
+    }
+
+    label {
+      font-size: 0.9rem;
+    }
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+
+    li {
+      a {
+        display: flex;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        padding: 7px 0;
+        text-decoration: none;
+        color: $dark;
+
+        &:hover {
+          background-color: $light;
+          color: $darker;
+        }
       }
     }
   }

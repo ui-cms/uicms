@@ -4,9 +4,9 @@
   display: flex;
   list-style-type: none;
   margin: 0;
-  padding-top: 15px;
-  padding-right: $parentXPadding;
-  padding-left: $parentXPadding;
+  padding-top: $space4;
+  padding-right: $space4;
+  padding-left: $space4;
   border-bottom: 1px solid $regular;
   background-color: $light;
 
@@ -37,7 +37,7 @@
 }
 
 .content {
-  padding: $parentXPadding;
+  padding: $space4;
   overflow-y: auto;
   height: calc(100% - 8.5rem);
 

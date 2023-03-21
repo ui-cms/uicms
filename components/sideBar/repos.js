@@ -13,11 +13,14 @@ import {
   mdiGit,
   mdiLock,
   mdiLockOpenOutline,
+  mdiPlus,
   mdiStar,
 } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
 import { Button } from "../button";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export function Repos({ selectedRepo, selectRepo }) {
   const [loading, setLoading] = useState(false);
@@ -26,6 +29,7 @@ export function Repos({ selectedRepo, selectRepo }) {
     private: true,
     public: true,
   });
+  const router = useRouter();
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { repos, currentUser } = state;
@@ -56,7 +60,6 @@ export function Repos({ selectedRepo, selectRepo }) {
     <Loader />
   ) : (
     <section className={styles.repos}>
-      <SelectedRepoDetails repo={selectedRepo} />
       <SearchArea filters={filters} setFilters={setFilters} />
       <RepoList
         repos={repos}
@@ -64,39 +67,14 @@ export function Repos({ selectedRepo, selectRepo }) {
         onSelect={selectRepo}
         selectedRepoId={selectedRepo?.id}
       />
+      <Button
+        onClick={() => router.push("/repo/new")}
+        className={styles.addButton}
+      >
+        <Icon path={mdiPlus} size={0.75} className="mr-1" />
+        Add new repo
+      </Button>
     </section>
-  );
-}
-
-function SelectedRepoDetails({ repo }) {
-  return (
-    repo && (
-      <div className={styles.selected}>
-        <h3>
-          <p className="mb-1">
-            <Icon path={mdiGit} size={0.9} className="mr-1 text-dark" />
-            <span className="text-overflow">{repo.name}</span>
-          </p>
-          <small className="text-dark">
-            <Icon
-              path={mdiAt}
-              size={0.75}
-              className="mr-1"
-              style={{ marginLeft: "2px" }}
-            />
-            <span className="text-overflow">{repo.owner}</span>
-          </small>
-        </h3>
-        <div className={styles.buttons}>
-          <Button onClick={() => selectRepo(null)} title="Unselect">
-            <Icon path={mdiClose} size={0.8} />
-          </Button>
-          <Button onClick={() => {}} title="More options">
-            <Icon path={mdiDotsVertical} size={0.95} />
-          </Button>
-        </div>
-      </div>
-    )
   );
 }
 
