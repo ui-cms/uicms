@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import Page from "@/components/page";
 import Script from "next/script";
 
-export default function CollectionItem() {
+export default function Item() {
   const router = useRouter();
-  let [repoOwner, repoName, collectionId, itemSlug] = router.query.item || [];
+  let [repoId, collectionId, itemSlug] = router.query.item || [];
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -18,9 +18,9 @@ export default function CollectionItem() {
   // Initial fetch repo from state management
   useEffect(() => {
     let _config = null;
-    if (state.repos.length > 0 && repoOwner && repoName) {
+    if (state.repos.length > 0 && repoId) {
       const _repo = state.repos.find(
-        (r) => r.owner === repoOwner && r.name === repoName
+        (r) => r.id === repoId
       );
       if (_repo) {
         setRepo(_repo);
@@ -31,11 +31,11 @@ export default function CollectionItem() {
       }
     }
 
-    // If landed directly to this page and repos have not been loaded to state management yet, redirect to repos page
-    if (!_config) {
-      router.push("/repos");
-    }
-  }, [collectionId, repoName, repoOwner, router, state.repos]);
+    // // If landed directly to this page and repos have not been loaded to state management yet, redirect to repos page
+    // if (!_config) {
+    //   router.push("/repos");
+    // }
+  }, [collectionId, repoId, router, state.repos]);
 
   // // inital fetch
   // useEffect(() => {
