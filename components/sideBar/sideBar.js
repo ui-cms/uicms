@@ -24,7 +24,7 @@ export default function SideBar({}) {
   const { state } = useStateManagement();
   const { currentUser } = state;
 
-  function selectRepo(repo){
+  function selectRepo(repo) {
     setSelectedCollection(null);
     setSelectedRepo(repo);
   }
@@ -32,85 +32,88 @@ export default function SideBar({}) {
   return (
     <Suspense fallback={<Loader />}>
       <aside className={styles.sidebar}>
-        <nav className={styles.header}>
-          <Icon
-            className={styles.menuToggle}
-            onClick={() => setOpen(!open)}
-            path={open ? mdiClose : mdiMenu}
-            size={1}
-          />
-          <span className={styles.brand}>UI CMS</span>
-
-          <details className={styles.user}>
-            <summary>
-              {currentUser && (
-                <Image
-                  src={currentUser.avatar_url}
-                  width="32"
-                  height="32"
-                  alt="username"
-                />
-              )}
-            </summary>
-            {currentUser && (
-              <ul>
-                <li>{currentUser.login}</li>
-                <li>
-                  <a
-                    href={currentUser.html_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    GitHub profile
-                  </a>
-                </li>
-                <li>
-                  <Link href="/signOut">Sign out</Link>
-                </li>
-              </ul>
-            )}
-          </details>
-        </nav>
-        <section className={`${styles.main} ${open ? styles.open : ""}`}>
-          <Tabs
-            tabs={[
-              {
-                title: (
-                  <>
-                    <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
-                    Repos
-                  </>
-                ),
-                content: <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />,
-              },
-              {
-                title: (
-                  <>
-                    <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
-                    Collections
-                  </>
-                ),
-                content: <Collections/>,
-                disabled: !selectedRepo,
-              },
-              {
-                title: (
-                  <>
-                    <Icon
-                      path={mdiFileDocumentOutline}
-                      size={0.8}
-                      className="mr-1"
-                    />
-                    Items
-                  </>
-                ),
-                content: <Items/>,
-                disabled: !selectedCollection,
-              },
-            ]}
-          />
-        </section>
+        <Header currentUser={currentUser} open={open} setOpen={setOpen} />
+        <Tabs
+          className={`${styles.main} ${open ? styles.open : ""}`}
+          tabs={[
+            {
+              title: (
+                <>
+                  <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
+                  Repos
+                </>
+              ),
+              content: (
+                <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />
+              ),
+            },
+            {
+              title: (
+                <>
+                  <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
+                  Collections
+                </>
+              ),
+              content: <Collections />,
+              disabled: !selectedRepo,
+            },
+            {
+              title: (
+                <>
+                  <Icon
+                    path={mdiFileDocumentOutline}
+                    size={0.8}
+                    className="mr-1"
+                  />
+                  Items
+                </>
+              ),
+              content: <Items />,
+              disabled: !selectedCollection,
+            },
+          ]}
+        />
       </aside>
     </Suspense>
+  );
+}
+
+function Header({ open, setOpen, currentUser }) {
+  return (
+    <nav className={styles.header}>
+      <Icon
+        className={styles.menuToggle}
+        onClick={() => setOpen(!open)}
+        path={open ? mdiClose : mdiMenu}
+        size={1}
+      />
+      <span className={styles.brand}>UI CMS</span>
+
+      <details className={styles.user}>
+        <summary>
+          {currentUser && (
+            <Image
+              src={currentUser.avatar_url}
+              width="32"
+              height="32"
+              alt="username"
+            />
+          )}
+        </summary>
+        {currentUser && (
+          <ul>
+            <li>{currentUser.login}</li>
+            <li>
+              <a href={currentUser.html_url} target="_blank" rel="noreferrer">
+                GitHub profile
+              </a>
+            </li>
+            <li>
+              <Link href="/signOut">Sign out</Link>
+            </li>
+          </ul>
+        )}
+      </details>
+    </nav>
   );
 }
