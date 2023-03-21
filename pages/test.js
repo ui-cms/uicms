@@ -78,11 +78,24 @@ export default function Test() {
         </Button>
 
         <div>
-          <Link href="configuration/repoIdHere">Repo configuratio page</Link>
+          <Link href="repo/new">New repo page</Link>
         </div>
         <div>
-          <Link href="configuration/repoIdHere/collectionIdHere">
-            Collection configuratio page
+          <Link href="repo/repoIdHere">Repo configuration page</Link>
+        </div>
+        <div>
+          <Link href="collection/repoIdHere">
+            New collection page
+          </Link>
+        </div>
+        <div>
+          <Link href="collection/repoIdHere/collectionIdHere">
+            Collection configuration page
+          </Link>
+        </div>
+        <div>
+          <Link href="/repoIdHere/collectionIdHere/itemSlughere">
+            Item page
           </Link>
         </div>
       </div>
