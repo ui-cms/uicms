@@ -3,6 +3,7 @@ import { CheckBox, TextInput } from "@/components/form";
 import Loader from "@/components/loader";
 import Page from "@/components/page";
 import useStorage from "@/hooks/useStorage";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Test() {
@@ -75,6 +76,15 @@ export default function Test() {
         >
           Primary light
         </Button>
+
+        <div>
+          <Link href="configuration/repoIdHere">Repo configuratio page</Link>
+        </div>
+        <div>
+          <Link href="configuration/repoIdHere/collectionIdHere">
+            Collection configuratio page
+          </Link>
+        </div>
       </div>
     </Page>
   );
