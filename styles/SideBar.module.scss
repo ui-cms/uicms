@@ -127,10 +127,10 @@
     .main {
       visibility: hidden;
       position: absolute;
-      top: calc($headerHight + 1px); // 1px for border
       left: -100%;
       width: 100%;
-      height: auto;
+      top: calc($headerHight + 1px); // 1px for border
+      height: calc(100% - $headerHight - 1px); // 1px for border
       background-color: $lighter;
       transition: all 0.1s ease-in;
       overflow: hidden;
