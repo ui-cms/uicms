@@ -13,7 +13,7 @@
   $headerHight: 3rem;
   .header {
     height: $headerHight;
-    padding: 0 1rem;
+    padding: 0 $space4;
     background-color: $light;
     border-bottom: 1px solid $regular;
     display: flex;
@@ -72,6 +72,27 @@
     }
   }
 
+  .main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .tabs {
+      height: 100%;
+      overflow: auto;
+      // overflow: hidden;
+    }
+
+    .footer {
+      background-color: $light;
+      border-top: 1px solid $regular;
+      padding: $space1;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
   @include at-small-screen {
     width: 100%;
     height: auto;
@@ -105,11 +126,11 @@
     .main {
       visibility: hidden;
       position: absolute;
-      top: calc($headerHight + 1px); // 1 px for border
+      top: calc($headerHight + 1px); // 1px for border
       left: -100%;
       width: 100%;
+      height: auto;
       background-color: $lighter;
-      height: 100%;
       transition: all 0.1s ease-in;
       overflow: hidden;
       z-index: $zIndex2;
@@ -123,43 +144,6 @@
 }
 
 .repos {
-  .selected {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid $regular;
-    color: $darker;
-    padding-bottom: $space2;
-    margin-bottom: $space4;
-
-    h3 {
-      overflow: hidden;
-
-      p {
-        display: flex;
-        align-items: center;
-        margin-bottom: $space1;
-      }
-      small {
-        display: flex;
-        align-items: center;
-        color: $dark;
-      }
-    }
-
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      margin-left: $space2;
-
-      button {
-        line-height: 0;
-        padding: $space1;
-        color: $dark;
-      }
-    }
-  }
-
   .search {
     display: flex;
     align-items: center;

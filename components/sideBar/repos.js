@@ -67,13 +67,6 @@ export function Repos({ selectedRepo, selectRepo }) {
         onSelect={selectRepo}
         selectedRepoId={selectedRepo?.id}
       />
-      <Button
-        onClick={() => router.push("/repo/new")}
-        className={styles.addButton}
-      >
-        <Icon path={mdiPlus} size={0.75} className="mr-1" />
-        Add new repo
-      </Button>
     </section>
   );
 }
@@ -125,8 +118,8 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
       {filteredRepos.length === 0 ? (
         <li>No repos found</li>
       ) : (
-        filteredRepos.map((r) => {
-          // filteredRepos.concat(filteredRepos).map((r) => {
+        // filteredRepos.map((r) => {
+          filteredRepos.concat(filteredRepos).map((r) => {
           return (
             <li key={r.id}>
               <a

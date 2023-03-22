@@ -9,6 +9,8 @@ import {
   mdiFileCabinet,
   mdiMenu,
   mdiClose,
+  mdiPlus,
+  mdiHelpCircleOutline,
 } from "@mdi/js";
 import { Repos } from "./repos";
 import Loader from "@/components/loader";
@@ -16,6 +18,7 @@ import Tabs from "@/components/tabs";
 import Link from "next/link";
 import { Collections } from "./collections";
 import { Items } from "./items";
+import { Button } from "../button";
 
 export default function SideBar({}) {
   const [selectedRepo, setSelectedRepo] = useState(null);
@@ -35,6 +38,7 @@ export default function SideBar({}) {
         <Header currentUser={currentUser} open={open} setOpen={setOpen} />
         <section className={`${styles.main} ${open ? styles.open : ""}`}>
           <Tabs
+          className={styles.tabs}
             tabs={[
               {
                 title: (
@@ -73,6 +77,23 @@ export default function SideBar({}) {
               },
             ]}
           />
+          
+        <div className={styles.footer}>          
+          <Button
+          title="About UI CMS"
+            // onClick={() => router.push("/repo/new")}
+            // className={styles.addButton}
+          >
+            <Icon path={mdiHelpCircleOutline} size={0.75} className="mr-1" />
+          </Button>
+          <Button
+            // onClick={() => router.push("/repo/new")}
+            // className={styles.addButton}
+          >
+            <Icon path={mdiPlus} size={0.75} className="mr-1" />
+            New collection
+          </Button>
+        </div>
         </section>
       </aside>
     </Suspense>
@@ -95,8 +116,8 @@ function Header({ open, setOpen, currentUser }) {
           {currentUser && (
             <Image
               src={currentUser.avatar_url}
-              width="32"
-              height="32"
+              width="28"
+              height="28"
               alt="username"
             />
           )}

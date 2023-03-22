@@ -39,9 +39,9 @@
 .content {
   padding: $space4;
   overflow-y: auto;
-  height: calc(100% - 8.5rem);
+  // height: calc(100% - 8.5rem);
 
-  @include at-small-screen {
-    height: calc(100% - 6rem);
-  }
+  // @include at-small-screen {
+  //   height: calc(100% - 6rem);
+  // }
 }
