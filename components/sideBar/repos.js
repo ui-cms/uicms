@@ -6,20 +6,13 @@ import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
 import {
-  mdiAt,
   mdiCheck,
-  mdiClose,
-  mdiDotsVertical,
-  mdiGit,
   mdiLock,
   mdiLockOpenOutline,
-  mdiPlus,
   mdiStar,
 } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
-import { Button } from "../button";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 export function Repos({ selectedRepo, selectRepo }) {
