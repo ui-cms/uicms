@@ -33,70 +33,68 @@ export default function SideBar({}) {
   }
 
   return (
-    <Suspense fallback={<Loader />}>
-      <aside className={styles.sidebar}>
-        <Header currentUser={currentUser} open={open} setOpen={setOpen} />
-        <section className={`${styles.main} ${open ? styles.open : ""}`}>
-          <Tabs
+    <aside className={styles.sidebar}>
+      <Header currentUser={currentUser} open={open} setOpen={setOpen} />
+      <section className={`${styles.main} ${open ? styles.open : ""}`}>
+        <Tabs
           className={styles.tabs}
-            tabs={[
-              {
-                title: (
-                  <>
-                    <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
-                    Repos
-                  </>
-                ),
-                content: (
-                  <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />
-                ),
-              },
-              {
-                title: (
-                  <>
-                    <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
-                    Collections
-                  </>
-                ),
-                content: <Collections />,
-                disabled: !selectedRepo,
-              },
-              {
-                title: (
-                  <>
-                    <Icon
-                      path={mdiFileDocumentOutline}
-                      size={0.8}
-                      className="mr-1"
-                    />
-                    Items
-                  </>
-                ),
-                content: <Items />,
-                disabled: !selectedCollection,
-              },
-            ]}
-          />
-          
-        <div className={styles.footer}>          
+          tabs={[
+            {
+              title: (
+                <>
+                  <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
+                  Repos
+                </>
+              ),
+              content: (
+                <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />
+              ),
+            },
+            {
+              title: (
+                <>
+                  <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
+                  Collections
+                </>
+              ),
+              content: <Collections />,
+              disabled: !selectedRepo,
+            },
+            {
+              title: (
+                <>
+                  <Icon
+                    path={mdiFileDocumentOutline}
+                    size={0.8}
+                    className="mr-1"
+                  />
+                  Items
+                </>
+              ),
+              content: <Items />,
+              disabled: !selectedCollection,
+            },
+          ]}
+        />
+
+        <div className={styles.footer}>
           <Button
-          title="About UI CMS"
+            title="About UI CMS"
             // onClick={() => router.push("/repo/new")}
             // className={styles.addButton}
           >
             <Icon path={mdiHelpCircleOutline} size={0.75} className="mr-1" />
           </Button>
           <Button
-            // onClick={() => router.push("/repo/new")}
-            // className={styles.addButton}
+          // onClick={() => router.push("/repo/new")}
+          // className={styles.addButton}
           >
             <Icon path={mdiPlus} size={0.75} className="mr-1" />
             New collection
           </Button>
         </div>
-        </section>
-      </aside>
-    </Suspense>
+      </section>
+    </aside>
   );
 }
 

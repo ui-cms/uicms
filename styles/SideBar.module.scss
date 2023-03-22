@@ -80,8 +80,9 @@
 
     .tabs {
       height: 100%;
-      overflow: auto;
-      // overflow: hidden;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .footer {
