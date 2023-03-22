@@ -118,8 +118,7 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
       {filteredRepos.length === 0 ? (
         <li>No repos found</li>
       ) : (
-        filteredRepos.concat(repos).map((r) => {
-          // filteredRepos.map((r) => {
+        filteredRepos.map((r) => {
           return (
             <li key={r.id}>
               <a
