@@ -33,46 +33,47 @@ export default function SideBar({}) {
     <Suspense fallback={<Loader />}>
       <aside className={styles.sidebar}>
         <Header currentUser={currentUser} open={open} setOpen={setOpen} />
-        <Tabs
-          className={`${styles.main} ${open ? styles.open : ""}`}
-          tabs={[
-            {
-              title: (
-                <>
-                  <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
-                  Repos
-                </>
-              ),
-              content: (
-                <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />
-              ),
-            },
-            {
-              title: (
-                <>
-                  <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
-                  Collections
-                </>
-              ),
-              content: <Collections />,
-              disabled: !selectedRepo,
-            },
-            {
-              title: (
-                <>
-                  <Icon
-                    path={mdiFileDocumentOutline}
-                    size={0.8}
-                    className="mr-1"
-                  />
-                  Items
-                </>
-              ),
-              content: <Items />,
-              disabled: !selectedCollection,
-            },
-          ]}
-        />
+        <section className={`${styles.main} ${open ? styles.open : ""}`}>
+          <Tabs
+            tabs={[
+              {
+                title: (
+                  <>
+                    <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
+                    Repos
+                  </>
+                ),
+                content: (
+                  <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />
+                ),
+              },
+              {
+                title: (
+                  <>
+                    <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
+                    Collections
+                  </>
+                ),
+                content: <Collections />,
+                disabled: !selectedRepo,
+              },
+              {
+                title: (
+                  <>
+                    <Icon
+                      path={mdiFileDocumentOutline}
+                      size={0.8}
+                      className="mr-1"
+                    />
+                    Items
+                  </>
+                ),
+                content: <Items />,
+                disabled: !selectedCollection,
+              },
+            ]}
+          />
+        </section>
       </aside>
     </Suspense>
   );

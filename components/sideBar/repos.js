@@ -126,6 +126,7 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
         <li>No repos found</li>
       ) : (
         filteredRepos.map((r) => {
+          // filteredRepos.concat(filteredRepos).map((r) => {
           return (
             <li key={r.id}>
               <a

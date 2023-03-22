@@ -7,11 +7,15 @@
   background-color: $lighter;
   border-right: 1px solid $regular;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
+  $headerHight: 3rem;
   .header {
+    height: $headerHight;
+    padding: 0 1rem;
     background-color: $light;
     border-bottom: 1px solid $regular;
-    padding: 0.5rem 1rem 0.5rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -74,7 +78,9 @@
     border: none;
     z-index: $zIndex2;
 
+    $headerHight: 2.5rem;
     .header {
+      height: $headerHight;
       position: unset;
 
       .menuToggle {
@@ -99,8 +105,9 @@
     .main {
       visibility: hidden;
       position: absolute;
-      width: 100%;
+      top: calc($headerHight + 1px); // 1 px for border
       left: -100%;
+      width: 100%;
       background-color: $lighter;
       height: 100%;
       transition: all 0.1s ease-in;
