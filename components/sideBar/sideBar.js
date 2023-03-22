@@ -86,6 +86,8 @@ export default function SideBar({}) {
             <Icon path={mdiHelpCircleOutline} size={0.75} className="mr-1" />
           </Button>
           <Button
+          // pass index of active tab (repo, collection, item)
+          // based on that change button text and content
           // onClick={() => router.push("/repo/new")}
           // className={styles.addButton}
           >
