@@ -67,6 +67,52 @@
       }
     }
   }
+
+  @include at-small-screen {
+    width: 100%;
+    height: auto;
+    border: none;
+    z-index: $zIndex2;
+
+    .header {
+      position: unset;
+
+      .menuToggle {
+        display: block;
+      }
+
+      .brand {
+        font-size: 1.5rem;
+      }
+
+      .user {
+        summary {
+          width: 24px; // or in mobile brand will float when loading
+        }
+        img {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+
+    .main {
+      visibility: hidden;
+      position: absolute;
+      width: 100%;
+      left: -100%;
+      background-color: $lighter;
+      height: 100%;
+      transition: all 0.1s ease-in;
+      overflow: hidden;
+      z-index: $zIndex2;
+
+      &.open {
+        visibility: visible;
+        left: 0;
+      }
+    }
+  }
 }
 
 .repos {
@@ -138,54 +184,6 @@
           background-color: $light;
           color: $darker;
         }
-      }
-    }
-  }
-}
-
-@include at-small-screen {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    border: none;
-    z-index: $zIndex2;
-
-    .header {
-      position: unset;
-
-      .menuToggle {
-        display: block;
-      }
-
-      .brand {
-        font-size: 1.5rem;
-      }
-
-      .user {
-        summary {
-          width: 24px; // or in mobile brand will float when loading
-        }
-        img {
-          width: 22px;
-          height: 22px;
-        }
-      }
-    }
-
-    .main {
-      visibility: hidden;
-      position: absolute;
-      width: 100%;
-      left: -100%;
-      background-color: $lighter;
-      height: 100%;
-      transition: all 0.1s ease-in;
-      overflow: hidden;
-      z-index: $zIndex2;
-
-      &.open {
-        visibility: visible;
-        left: 0;
       }
     }
   }
