@@ -36,7 +36,6 @@
     }
 
     .user {
-      // position: relative;
       z-index: $zIndex3;
 
       &:hover {
@@ -95,12 +94,14 @@
   }
 
   @include at-small-screen {
+    $headerHight: 2.5rem;
+
+    min-height: $headerHight;
     width: 100%;
     height: auto;
     border: none;
     z-index: $zIndex2;
 
-    $headerHight: 2.5rem;
     .header {
       height: $headerHight;
       position: unset;
@@ -129,8 +130,8 @@
       position: absolute;
       left: -100%;
       width: 100%;
-      top: calc($headerHight + 1px); // 1px for border
-      height: calc(100% - $headerHight - 1px); // 1px for border
+      top: $headerHight;
+      height: calc(100% - $headerHight);
       background-color: $lighter;
       transition: all 0.1s ease-in;
       overflow: hidden;

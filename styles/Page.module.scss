@@ -18,4 +18,8 @@
   background-color: $lightest;
   height: 100vh;
   overflow: auto;
+
+  @include at-small-screen {
+    height: 100%;
+  }
 }
