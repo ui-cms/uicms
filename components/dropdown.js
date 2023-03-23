@@ -27,9 +27,21 @@ export default function DropDown({ handle, children }) {
 
 function Content({ children, delay, close }) {
   const content = useRef(null);
+  const [left, setLeft] = useState(0); // absolute left position
+
+  useEffect(() => {
+    // after content binded (appeared) push it to left if it overflows out of window to right
+    if (content.current && left === 0) {
+      const { right } = content.current.getBoundingClientRect();
+      if (right > window.outerWidth) {
+        setLeft(window.outerWidth - right + "px");
+      }
+    }
+  }, [left]);
 
   useEffect(() => {
     function onClickOutside(event) {
+        debugger;
       if (content.current && !content.current.contains(event.target)) {
         delay.current = new Date().getTime();
         close();
@@ -43,7 +55,7 @@ function Content({ children, delay, close }) {
   }, [close, delay]);
 
   return (
-    <div ref={content} className={styles.content}>
+    <div ref={content} className={styles.content} style={{ left }}>
       {children}
     </div>
   );
