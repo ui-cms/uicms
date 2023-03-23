@@ -1,10 +1,11 @@
 import { Button } from "@/components/button";
+import DropDown from "@/components/dropdown";
 import { CheckBox, TextInput } from "@/components/form";
 import Loader from "@/components/loader";
 import Page from "@/components/page";
 import useStorage from "@/hooks/useStorage";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 export default function Test() {
   const [testVal, setTestVal] = useStorage("test", "localStorage");
@@ -84,9 +85,7 @@ export default function Test() {
           <Link href="repo/repoIdHere">Repo configuration page</Link>
         </div>
         <div>
-          <Link href="collection/repoIdHere">
-            New collection page
-          </Link>
+          <Link href="collection/repoIdHere">New collection page</Link>
         </div>
         <div>
           <Link href="collection/repoIdHere/collectionIdHere">
@@ -97,6 +96,17 @@ export default function Test() {
           <Link href="/repoIdHere/collectionIdHere/itemSlughere">
             Item page
           </Link>
+        </div>
+        <div>
+          <DropDown
+            handle={<a href="#">Test DD</a>}
+          >
+            <ul>
+              <li>Text</li>
+              <li><Button>Button</Button></li>
+              <li><a>Button</a></li>
+            </ul>
+          </DropDown>
         </div>
       </div>
     </Page>
