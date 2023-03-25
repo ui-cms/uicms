@@ -5,7 +5,7 @@ import Loader from "@/components/loader";
 import Page from "@/components/page";
 import useStorage from "@/hooks/useStorage";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 export default function Test() {
   const [testVal, setTestVal] = useStorage("test", "localStorage");
