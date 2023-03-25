@@ -13,12 +13,12 @@ import {
   mdiHelpCircleOutline,
 } from "@mdi/js";
 import { Repos } from "./repos";
-import Loader from "@/components/loader";
 import Tabs from "@/components/tabs";
 import Link from "next/link";
 import { Collections } from "./collections";
 import { Items } from "./items";
 import { Button } from "../button";
+import DropDown from "../dropdown";
 
 export default function SideBar({}) {
   const [selectedRepo, setSelectedRepo] = useState(null);
@@ -111,31 +111,39 @@ function Header({ open, setOpen, currentUser }) {
       />
       <span className={styles.brand}>UI CMS</span>
 
-      <details className={styles.user}>
-        <summary>
-          {currentUser && (
-            <Image
-              src={currentUser.avatar_url}
-              width="28"
-              height="28"
-              alt="username"
-            />
-          )}
-        </summary>
-        {currentUser && (
-          <ul>
-            <li>{currentUser.login}</li>
-            <li>
-              <a href={currentUser.html_url} target="_blank" rel="noreferrer">
-                GitHub profile
-              </a>
-            </li>
-            <li>
-              <Link href="/signOut">Sign out</Link>
-            </li>
-          </ul>
-        )}
-      </details>
+      {currentUser && (
+        <div className={styles.user}>
+          <div className="position-absolute">
+            <DropDown
+              direction="right"
+              handle={
+                <Image
+                  src={currentUser.avatar_url}
+                  width="28"
+                  height="28"
+                  alt="username"
+                />
+              }
+            >
+              <ul>
+                <li>{currentUser.login}</li>
+                <li>
+                  <a
+                    href={currentUser.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    GitHub profile
+                  </a>
+                </li>
+                <li>
+                  <Link href="/signOut">Sign out</Link>
+                </li>
+              </ul>
+            </DropDown>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

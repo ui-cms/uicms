@@ -11,6 +11,7 @@
   flex-direction: column;
 
   $headerHight: 3rem;
+  $userImgSize: 28px; // both height and width
   .header {
     height: $headerHight;
     padding: 0 $space4;
@@ -37,6 +38,8 @@
 
     .user {
       z-index: $zIndex3;
+      height: calc($userImgSize + 2px); // 2px for borders
+      width: calc($userImgSize + 2px); // 2px for borders
 
       &:hover {
         cursor: pointer;
@@ -52,16 +55,9 @@
       }
 
       ul {
-        position: absolute;
-        right: 0.5rem;
-        top: 2.5rem;
-        background-color: $light;
-        border-radius: 5px;
         list-style: none;
         padding: 0;
         width: 200px;
-        text-align: right;
-        box-shadow: 0 3px 10px 2px $regular;
 
         li {
           padding: 10px 10px;
@@ -94,6 +90,7 @@
 
   @include at-small-screen {
     $headerHight: 2.5rem;
+    $userImgSize: 22px;
 
     min-height: $headerHight;
     width: 100%;
@@ -114,12 +111,12 @@
       }
 
       .user {
-        summary {
-          width: 24px; // or in mobile brand will float when loading
-        }
+        height: calc($userImgSize + 2px); // 2px for borders
+        width: calc($userImgSize + 2px); // 2px for borders
+
         img {
-          width: 22px;
-          height: 22px;
+          width: $userImgSize;
+          height: $userImgSize;
         }
       }
     }
