@@ -5,10 +5,20 @@ import { displayError, orderBy } from "@/helpers/utilities";
 import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
-import { mdiCheck, mdiLock, mdiLockOpenOutline, mdiStar } from "@mdi/js";
+import {
+  mdiAt,
+  mdiCheck,
+  mdiClose,
+  mdiDotsVertical,
+  mdiGit,
+  mdiLock,
+  mdiLockOpenOutline,
+  mdiStar,
+} from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
 import { useRouter } from "next/router";
+import { Button } from "../button";
 
 export function Repos({ selectedRepo, selectRepo }) {
   const [loading, setLoading] = useState(false);
@@ -48,6 +58,10 @@ export function Repos({ selectedRepo, selectRepo }) {
     <Loader />
   ) : (
     <section className={styles.repos}>
+      <SelectedRepoDetails
+        repo={selectedRepo}
+        currentUserName={currentUser.login}
+      />
       <SearchArea filters={filters} setFilters={setFilters} />
       <RepoList
         repos={repos}
@@ -56,6 +70,32 @@ export function Repos({ selectedRepo, selectRepo }) {
         selectedRepoId={selectedRepo?.id}
       />
     </section>
+  );
+}
+
+function SelectedRepoDetails({ repo, currentUserName }) {
+  return (
+    repo && (
+      <div className={styles.selected}>
+        <h3 title={repo.full_name}>
+          {repo.owner !== currentUserName && (
+            <small className="text-dark">
+              <Icon path={mdiAt} size={0.65} className="mr-1" />
+              <span className="text-overflow">{repo.owner}</span>
+            </small>
+          )}
+          <p className="mb-1">
+            <Icon path={mdiGit} size={0.9} className="mr-1 text-dark" />
+            <span className="text-overflow">{repo.name}</span>
+          </p>
+        </h3>
+        <div className={styles.buttons}>
+          <Button onClick={() => {}} title="More options">
+            <Icon path={mdiDotsVertical} size={0.95} />
+          </Button>
+        </div>
+      </div>
+    )
   );
 }
 

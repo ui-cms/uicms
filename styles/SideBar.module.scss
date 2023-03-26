@@ -142,6 +142,44 @@
 }
 
 .repos {
+  .selected {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid $regular;
+    color: $darker;
+    padding-bottom: $space2;
+    margin-bottom: $space4;
+
+    h3 {
+      overflow: hidden;
+
+      p {
+        display: flex;
+        align-items: center;
+        margin-bottom: $space1;
+      }
+      small {
+        display: flex;
+        align-items: flex-end;
+        color: $dark;
+        font-size: 0.9rem;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      margin-left: $space2;
+
+      button {
+        line-height: 0;
+        padding: $space1;
+        color: $dark;
+      }
+    }
+  }
+
   .search {
     display: flex;
     align-items: center;
