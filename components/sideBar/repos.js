@@ -8,17 +8,21 @@ import Icon from "@mdi/react";
 import {
   mdiAt,
   mdiCheck,
-  mdiClose,
+  mdiCogOutline,
   mdiDotsVertical,
   mdiGit,
+  mdiGithub,
   mdiLock,
   mdiLockOpenOutline,
   mdiStar,
+  mdiWeb,
 } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
 import { useRouter } from "next/router";
 import { Button } from "../button";
+import DropDown from "../dropdown";
+import Link from "next/link";
 
 export function Repos({ selectedRepo, selectRepo }) {
   const [loading, setLoading] = useState(false);
@@ -60,7 +64,7 @@ export function Repos({ selectedRepo, selectRepo }) {
     <section className={styles.repos}>
       <SelectedRepoDetails
         repo={selectedRepo}
-        currentUserName={currentUser.login}
+        currentUserName={currentUser?.login}
       />
       <SearchArea filters={filters} setFilters={setFilters} />
       <RepoList
@@ -89,10 +93,32 @@ function SelectedRepoDetails({ repo, currentUserName }) {
             <span className="text-overflow">{repo.name}</span>
           </p>
         </h3>
-        <div className={styles.buttons}>
-          <Button onClick={() => {}} title="More options">
-            <Icon path={mdiDotsVertical} size={0.95} />
-          </Button>
+        <div className={styles.dropdown}>
+          <DropDown
+            direction="right"
+            handle={
+              <Button onClick={() => {}} title="More options">
+                <Icon path={mdiDotsVertical} size={0.95} />
+              </Button>
+            }
+          >
+            <div className={styles.options}>
+              <Link href={`/repo/${repo.id}`}>
+                <Icon path={mdiCogOutline} size={0.75} className="mr-1" />
+                Configuration
+              </Link>
+              <Link href={repo.html_url} target="_blank">
+                <Icon path={mdiGithub} size={0.75} className="mr-1" />
+                Source code
+              </Link>
+              {repo.homepage && (
+                <Link href={repo.homepage} target="_blank">
+                  <Icon path={mdiWeb} size={0.75} className="mr-1" />
+                  Homepage
+                </Link>
+              )}
+            </div>
+          </DropDown>
         </div>
       </div>
     )

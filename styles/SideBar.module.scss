@@ -167,7 +167,7 @@
       }
     }
 
-    .buttons {
+    .dropdown {
       display: flex;
       flex-direction: column;
       margin-left: $space2;
@@ -176,6 +176,23 @@
         line-height: 0;
         padding: $space1;
         color: $dark;
+      }
+
+      .options {
+        min-width: 6rem;
+        text-align: right;
+
+        a {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: $dark;
+          padding: $space2;
+
+          &:hover {
+            color: $darker;
+          }
+        }
       }
     }
   }
