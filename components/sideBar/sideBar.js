@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -11,6 +11,8 @@ import {
   mdiClose,
   mdiPlus,
   mdiHelpCircleOutline,
+  mdiLogout,
+  mdiGithub,
 } from "@mdi/js";
 import { Repos } from "./repos";
 import Tabs from "@/components/tabs";
@@ -126,18 +128,17 @@ function Header({ open, setOpen, currentUser }) {
               }
             >
               <ul>
-                <li>{currentUser.login}</li>
                 <li>
-                  <a
-                    href={currentUser.html_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    GitHub profile
-                  </a>
+                  <Link href={currentUser.html_url} target="_blank">
+                    <Icon path={mdiGithub} size={0.75} className="mr-1" />
+                    {currentUser.login}
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/signOut">Sign out</Link>
+                  <Link href="/signOut">
+                    <Icon path={mdiLogout} size={0.75} className="mr-1" />
+                    Sign out
+                  </Link>
                 </li>
               </ul>
             </DropDown>

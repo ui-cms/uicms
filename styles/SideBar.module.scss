@@ -57,10 +57,19 @@
       ul {
         list-style: none;
         padding: 0;
-        width: 200px;
+        min-width: 9rem;
+        text-align: right;
 
-        li {
-          padding: 10px 10px;
+        a {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: $dark;
+          padding: $space2;
+
+          &:hover {
+            color: $darker;
+          }
         }
       }
     }
