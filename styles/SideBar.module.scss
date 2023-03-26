@@ -160,16 +160,20 @@
   .list {
     list-style: none;
     padding: 0;
+    margin-left: -$space4;
+    margin-right: -$space4;
+    overflow: hidden;
 
     li {
       a {
         display: flex;
         border-radius: 4px;
         font-size: 0.9rem;
-        padding: 7px 0;
+        padding: 7px $space4;
         text-decoration: none;
         color: $dark;
 
+        &.active,
         &:hover {
           background-color: $light;
           color: $darker;

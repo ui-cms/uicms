@@ -5,12 +5,7 @@ import { displayError, orderBy } from "@/helpers/utilities";
 import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
-import {
-  mdiCheck,
-  mdiLock,
-  mdiLockOpenOutline,
-  mdiStar,
-} from "@mdi/js";
+import { mdiCheck, mdiLock, mdiLockOpenOutline, mdiStar } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
 import { useRouter } from "next/router";
@@ -112,10 +107,12 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
         <li>No repos found</li>
       ) : (
         filteredRepos.map((r) => {
+          const selected = r.id === selectedRepoId;
           return (
             <li key={r.id}>
               <a
-                onClick={() => onSelect(r.id === selectedRepoId ? null : r)}
+                onClick={() => onSelect(selected ? null : r)}
+                className={selected ? styles.active : ""}
                 href="#"
               >
                 {hasUICMSTopic(r) && (
@@ -135,7 +132,7 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
                 <span className="text-overflow" title={r.full_name}>
                   {r.name}
                 </span>
-                {selectedRepoId === r.id && (
+                {selected && (
                   <Icon
                     path={mdiCheck}
                     size={0.75}
