@@ -15,11 +15,11 @@ import {
   mdiLock,
   mdiLockOpenOutline,
   mdiStar,
+  mdiStarOutline,
   mdiWeb,
 } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import Loader from "@/components/loader";
-import { useRouter } from "next/router";
 import { Button } from "../button";
 import DropDown from "../dropdown";
 import Link from "next/link";
@@ -31,7 +31,6 @@ export function Repos({ selectedRepo, selectRepo }) {
     private: true,
     public: true,
   });
-  const router = useRouter();
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
   const { repos, currentUser } = state;
@@ -78,6 +77,7 @@ export function Repos({ selectedRepo, selectRepo }) {
 }
 
 function SelectedRepoDetails({ repo, currentUserName }) {
+  const starred = hasUICMSTopic(repo);
   return (
     repo && (
       <div className={styles.selected}>
@@ -117,6 +117,14 @@ function SelectedRepoDetails({ repo, currentUserName }) {
                   Homepage
                 </Link>
               )}
+              <a onClick={() => alert("todo")} href="">
+                <Icon
+                  path={starred ? mdiStarOutline : mdiStar}
+                  size={0.75}
+                  className="mr-1"
+                />
+                {starred ? "Unstar" : "Star"}
+              </a>
             </div>
           </DropDown>
         </div>
@@ -170,7 +178,7 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
   return (
     <ul className={styles.list}>
       {filteredRepos.length === 0 ? (
-        <li>No repos found</li>
+        <li className="pl-4">No repos found</li>
       ) : (
         filteredRepos.map((r) => {
           const selected = r.id === selectedRepoId;
@@ -216,5 +224,5 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
 }
 
 function hasUICMSTopic(repo) {
-  return repo.topics.includes(UICMS_TOPIC);
+  return repo && repo.topics.includes(UICMS_TOPIC);
 }

@@ -59,7 +59,7 @@ export default function SideBar({}) {
                   Collections
                 </>
               ),
-              content: <Collections />,
+              content: <Collections repo={selectedRepo} setRepo={setSelectedRepo}/>,
               disabled: !selectedRepo,
             },
             {

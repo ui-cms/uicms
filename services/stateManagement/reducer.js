@@ -25,7 +25,7 @@ export default function reducer(state, { type, payload }) {
         html_url: r.html_url,
         homepage: r.homepage,
         pushed_at: r.pushed_at, // last update date (last commit)
-        configFile: { data: null, sha: null }, // SHA blob of config file. Use it to update file content.
+        config: { data: null, sha: null }, // SHA blob of config file. Use it to update file content.
       }));
       return { ...state, repos };
     }
