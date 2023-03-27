@@ -11,7 +11,7 @@ export default function Test() {
   const [testVal, setTestVal] = useStorage("test", "localStorage");
   const [loading, setLoading] = useState(false);
   return (
-    <Page authProtected={true}>
+    <Page title="Test">
       <div className="p-4">
         <h1>Test page</h1>
         {testVal && <div>{testVal}</div>}

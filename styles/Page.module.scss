@@ -14,13 +14,49 @@
   background-color: $lightest;
   overflow: hidden;
 }
+
 .content {
   width: 100%;
-  background-color: $lightest;
   height: 100vh;
   overflow: auto;
+  padding: 0 $space4;
+  background-color: $lightest;
 
   @include at-small-screen {
     height: 100%;
+  }
+}
+
+.heading {
+  display: flex;
+  margin-left: -$space4;
+  margin-right: -$space4;
+  margin-bottom: $space2;
+  padding: $space2 $space4;
+  overflow: hidden;
+  align-items: center;
+
+  h2 {
+    flex-grow: 1;
+    color: $darker;
+    padding-bottom: $space1;
+  }
+  small {
+    flex-grow: 1;
+    text-align: center;
+    color: $dark;
+    font-size: 1rem;
+    padding-bottom: $space2;
+  }
+  menu {
+    flex-grow: 1;
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  @include at-small-screen {
+    border-bottom: 1px solid $light;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

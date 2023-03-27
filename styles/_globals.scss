@@ -21,6 +21,10 @@ p {
 ul {
   margin: 0;
 }
+menu {
+  margin: 0;
+  padding: 0;
+}
 h1,
 h2,
 h3,
@@ -133,6 +137,9 @@ code {
 .ml-1 {
   margin-left: $space1;
 }
+.ml-2 {
+  margin-left: $space2;
+}
 .mt-1 {
   margin-top: $space1;
 }
@@ -144,6 +151,9 @@ code {
 }
 .mb-3 {
   margin-bottom: $space3;
+}
+.mb-5 {
+  margin-bottom: $space5;
 }
 .mb-6 {
   margin-bottom: $space6;

@@ -12,6 +12,7 @@ export default function Page({
   title = "UI CMS",
   description = "Simple yet powerful gitbased CMS",
   absolute = false, // absolute full page (layout) that is covering full screen
+  heading, // {title: "", subtitle: "", extra: jsx}
 }) {
   const router = useRouter();
   const { state } = useStateManagement();
@@ -32,9 +33,26 @@ export default function Page({
       </Head>
       <Suspense fallback={<Loader />}>
         <article className={absolute ? styles.absolute : styles.content}>
-          {loading ? <Loader /> : children}
+          {!absolute && heading && (
+            <Heading title={heading.title} subtitle={heading.subtitle}>
+              {heading.extra}
+            </Heading>
+          )}
+          <section className={styles.body}>
+            {loading ? <Loader /> : children}
+          </section>
         </article>
       </Suspense>
     </>
+  );
+}
+
+function Heading({ title, subtitle, children }) {
+  return (
+    <nav className={styles.heading}>
+      <h2>{title}</h2>
+      <small>{subtitle}</small>
+      <menu className={styles.extra}>{children}</menu>
+    </nav>
   );
 }
