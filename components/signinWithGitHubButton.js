@@ -7,10 +7,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { displayError } from "@/helpers/utilities";
 import Icon from "@mdi/react";
 import { mdiGithub } from "@mdi/js";
+import { Button } from "./button";
 
 /**
  * Do not have more than one instance of this component at the same page
@@ -43,11 +43,14 @@ export default function SigninWithGitHubButton({ setToken }) {
   }, [code, loading, setToken]);
 
   return (
-    <Link
-      href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo`}
-      className={`button d-inline-flex align-items-center ${
-        loading ? "loading" : ""
-      } `}
+    <Button
+      onClick={() =>
+        router.push(
+          `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=repo`
+        )
+      }
+      className="d-inline-flex align-items-center"
+      loading={loading}
     >
       <Icon path={mdiGithub} size={1} />
       <span className="ml-1">
@@ -57,6 +60,6 @@ export default function SigninWithGitHubButton({ setToken }) {
           ? "Try again"
           : "Sign in with GitHub"}
       </span>
-    </Link>
+    </Button>
   );
 }

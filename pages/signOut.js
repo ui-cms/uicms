@@ -18,7 +18,7 @@ export default function SignOut() {
     <Page authProtected={false} absolute={true}>
       <div>
         <h1>Good bye!</h1>
-        <p>
+        <p className="my-3">
           You have been signed out of UICMS now. Note that, this doesn&apos;t
           affect your GitHub authentication.
         </p>
