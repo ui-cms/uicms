@@ -104,9 +104,9 @@ function Header({ open, setOpen, currentUser }) {
       />
       <span className={styles.brand}>UI CMS</span>
 
-      {currentUser && (
-        <div className={styles.user}>
-          <div className="position-absolute">
+      <div className={styles.user}>
+        <div className="position-absolute">
+          {currentUser && (
             <DropDown
               direction="right"
               handle={
@@ -133,9 +133,9 @@ function Header({ open, setOpen, currentUser }) {
                 </li>
               </ul>
             </DropDown>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 }
