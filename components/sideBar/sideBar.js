@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -21,8 +21,10 @@ import { Collections } from "./collections";
 import { Items } from "./items";
 import { Button } from "../button";
 import DropDown from "../dropdown";
+import { useRouter } from "next/router";
 
 export default function SideBar({}) {
+  const [activeTabIndex, setActiveTabIndex] = useState(null);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
@@ -40,6 +42,7 @@ export default function SideBar({}) {
       <section className={`${styles.main} ${open ? styles.open : ""}`}>
         <Tabs
           className={styles.tabs}
+          onTabClick={setActiveTabIndex}
           tabs={[
             {
               title: (
@@ -59,7 +62,9 @@ export default function SideBar({}) {
                   Collections
                 </>
               ),
-              content: <Collections repo={selectedRepo} setRepo={setSelectedRepo}/>,
+              content: (
+                <Collections repo={selectedRepo} setRepo={setSelectedRepo} />
+              ),
               disabled: !selectedRepo,
             },
             {
@@ -78,25 +83,11 @@ export default function SideBar({}) {
             },
           ]}
         />
-
-        <div className={styles.footer}>
-          <Button
-            title="About UI CMS"
-            // onClick={() => router.push("/repo/new")}
-            // className={styles.addButton}
-          >
-            <Icon path={mdiHelpCircleOutline} size={0.75} className="mr-1" />
-          </Button>
-          <Button
-          // pass index of active tab (repo, collection, item)
-          // based on that change button text and content
-          // onClick={() => router.push("/repo/new")}
-          // className={styles.addButton}
-          >
-            <Icon path={mdiPlus} size={0.75} className="mr-1" />
-            New collection
-          </Button>
-        </div>
+        <Footer
+          activeTabIndex={activeTabIndex}
+          repoId={selectedRepo?.id}
+          collectionId={selectedCollection?.id}
+        />
       </section>
     </aside>
   );
@@ -146,5 +137,39 @@ function Header({ open, setOpen, currentUser }) {
         </div>
       )}
     </nav>
+  );
+}
+
+function Footer({ activeTabIndex, repoId, collectionId }) {
+  const router = useRouter();
+
+  const newBtn = useMemo(() => {
+    const result = { text: "New repo", url: "/repo/new" };
+    if (activeTabIndex === 1) {
+      result.text = "Add collection";
+      result.url = `/collection/${repoId}`;
+    } else if (activeTabIndex === 2) {
+      result.text = "Add item";
+      result.url = `/${repoId}/${collectionId}`;
+    }
+    return result;
+  }, [activeTabIndex, collectionId, repoId]);
+
+  return (
+    <div className={styles.footer}>
+      <Button
+        title="About UI CMS"
+        // onClick={() => router.push("/repo/new")}
+        // className={styles.addButton}
+      >
+        <Icon path={mdiHelpCircleOutline} size={0.75} className="mr-1" />
+      </Button>
+      {!isNaN(activeTabIndex) && (
+        <Button onClick={() => router.push(newBtn.url)}>
+          <Icon path={mdiPlus} size={0.75} className="mr-1" />
+          {newBtn.text}
+        </Button>
+      )}
+    </div>
   );
 }
