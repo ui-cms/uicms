@@ -27,6 +27,7 @@ export default function SideBar({}) {
   const [activeTabIndex, setActiveTabIndex] = useState(null);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
   const { state } = useStateManagement();
   const { currentUser } = state;
@@ -34,6 +35,11 @@ export default function SideBar({}) {
   function selectRepo(repo) {
     setSelectedCollection(null);
     setSelectedRepo(repo);
+  }
+
+  function selectCollection(collection) {
+    setSelectedItem(null);
+    setSelectedCollection(collection);
   }
 
   return (
@@ -63,7 +69,12 @@ export default function SideBar({}) {
                 </>
               ),
               content: (
-                <Collections repo={selectedRepo} setRepo={setSelectedRepo} />
+                <Collections
+                  repo={selectedRepo}
+                  setRepo={setSelectedRepo}
+                  selectedCollection={selectedCollection}
+                  selectCollection={selectCollection}
+                />
               ),
               disabled: !selectedRepo,
             },
@@ -118,20 +129,16 @@ function Header({ open, setOpen, currentUser }) {
                 />
               }
             >
-              <ul>
-                <li>
-                  <Link href={currentUser.html_url} target="_blank">
-                    <Icon path={mdiGithub} size={0.75} className="mr-1" />
-                    {currentUser.login}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/signOut">
-                    <Icon path={mdiLogout} size={0.75} className="mr-1" />
-                    Sign out
-                  </Link>
-                </li>
-              </ul>
+              <div className={styles.dropdownOptions}>
+                <Link href={currentUser.html_url} target="_blank">
+                  <Icon path={mdiGithub} size={0.75} className="mr-1" />
+                  {currentUser.login}
+                </Link>
+                <Link href="/signOut">
+                  <Icon path={mdiLogout} size={0.75} className="mr-1" />
+                  Sign out
+                </Link>
+              </div>
             </DropDown>
           )}
         </div>
@@ -146,10 +153,10 @@ function Footer({ activeTabIndex, repoId, collectionId }) {
   const newBtn = useMemo(() => {
     const result = { text: "New repo", url: "/repo/new" };
     if (activeTabIndex === 1) {
-      result.text = "Add collection";
+      result.text = "New collection";
       result.url = `/collection/${repoId}`;
     } else if (activeTabIndex === 2) {
-      result.text = "Add item";
+      result.text = "New item";
       result.url = `/${repoId}/${collectionId}`;
     }
     return result;

@@ -60,7 +60,7 @@ export function Repos({ selectedRepo, selectRepo }) {
   return loading ? (
     <Loader />
   ) : (
-    <section className={styles.repos}>
+    <>
       <SelectedRepoDetails
         repo={selectedRepo}
         currentUserName={currentUser?.login}
@@ -72,7 +72,7 @@ export function Repos({ selectedRepo, selectRepo }) {
         onSelect={selectRepo}
         selectedRepoId={selectedRepo?.id}
       />
-    </section>
+    </>
   );
 }
 
@@ -80,7 +80,7 @@ function SelectedRepoDetails({ repo, currentUserName }) {
   const starred = hasUICMSTopic(repo);
   return (
     repo && (
-      <div className={styles.selected}>
+      <div className={styles.selectedArea}>
         <h3 title={repo.full_name}>
           {repo.owner !== currentUserName && (
             <small className="text-dark">
@@ -89,7 +89,7 @@ function SelectedRepoDetails({ repo, currentUserName }) {
             </small>
           )}
           <p className="mb-1">
-            <Icon path={mdiGit} size={0.9} className="mr-1 text-dark" />
+            <Icon path={mdiGit} size={1} className="mr-1 text-dark" />
             <span className="text-overflow">{repo.name}</span>
           </p>
         </h3>
@@ -102,7 +102,7 @@ function SelectedRepoDetails({ repo, currentUserName }) {
               </Button>
             }
           >
-            <div className={styles.options}>
+            <div className={styles.dropdownOptions}>
               <Link href={`/repo/${repo.id}`}>
                 <Icon path={mdiCogOutline} size={0.75} className="mr-1" />
                 Configuration
@@ -117,7 +117,7 @@ function SelectedRepoDetails({ repo, currentUserName }) {
                   Homepage
                 </Link>
               )}
-              <a onClick={() => alert("todo")} href="">
+              <a onClick={() => alert("todo")} href="#">
                 <Icon
                   path={starred ? mdiStarOutline : mdiStar}
                   size={0.75}
@@ -139,7 +139,7 @@ function SearchArea({ filters, setFilters }) {
   }
 
   return (
-    <form className={styles.search}>
+    <form className={styles.searchArea}>
       <TextInput
         name="search"
         value={filters.search}
@@ -175,50 +175,48 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
     return orderBy(result, "starred", false);
   }, [filters, repos]);
 
-  return (
-    <ul className={styles.list}>
-      {filteredRepos.length === 0 ? (
-        <li className="pl-4">No repos found</li>
-      ) : (
-        filteredRepos.map((r) => {
-          const selected = r.id === selectedRepoId;
-          return (
-            <li key={r.id}>
-              <a
-                onClick={() => onSelect(selected ? null : r)}
-                className={selected ? styles.active : ""}
-                href="#"
-              >
-                {hasUICMSTopic(r) && (
-                  <Icon
-                    path={mdiStar}
-                    size={0.75}
-                    className="text-primary mr-1"
-                    title="Starred (has UICMS topic)"
-                  />
-                )}
+  return filteredRepos.length === 0 ? (
+    <p>No repos found</p>
+  ) : (
+    <ul className={styles.listArea}>
+      {filteredRepos.map((r) => {
+        const selected = r.id === selectedRepoId;
+        return (
+          <li key={r.id}>
+            <a
+              onClick={() => onSelect(selected ? null : r)}
+              className={selected ? styles.active : ""}
+              href="#"
+            >
+              {hasUICMSTopic(r) && (
                 <Icon
-                  path={r.private ? mdiLock : mdiLockOpenOutline}
-                  title={r.private ? "Private repo" : "Public repo"}
+                  path={mdiStar}
                   size={0.75}
-                  className="mr-1"
+                  className="text-primary mr-1"
+                  title="Starred (has UICMS topic)"
                 />
-                <span className="text-overflow" title={r.full_name}>
-                  {r.name}
-                </span>
-                {selected && (
-                  <Icon
-                    path={mdiCheck}
-                    size={0.75}
-                    className="ml-1"
-                    title="Selected repo"
-                  />
-                )}
-              </a>
-            </li>
-          );
-        })
-      )}
+              )}
+              <Icon
+                path={r.private ? mdiLock : mdiLockOpenOutline}
+                title={r.private ? "Private repo" : "Public repo"}
+                size={0.75}
+                className="mr-1"
+              />
+              <span className="text-overflow" title={r.full_name}>
+                {r.name}
+              </span>
+              {selected && (
+                <Icon
+                  path={mdiCheck}
+                  size={0.75}
+                  className="ml-1"
+                  title="Selected repo"
+                />
+              )}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }

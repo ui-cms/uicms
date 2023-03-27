@@ -10,10 +10,10 @@
   display: flex;
   flex-direction: column;
 
-  $headerHight: 3rem;
+  $headerHeight: 3rem;
   $userImgSize: 28px; // both height and width
   .header {
-    height: $headerHight;
+    height: $headerHeight;
     padding: 0 $space4;
     background-color: $light;
     border-bottom: 1px solid $regular;
@@ -45,32 +45,9 @@
         cursor: pointer;
       }
 
-      summary {
-        display: flex;
-      }
-
       img {
         border: 1px solid $regular;
         border-radius: 1rem;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-        min-width: 9rem;
-        text-align: right;
-
-        a {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          color: $dark;
-          padding: $space2;
-
-          &:hover {
-            color: $darker;
-          }
-        }
       }
     }
   }
@@ -135,8 +112,8 @@
       position: absolute;
       left: -100%;
       width: 100%;
-      top: calc($headerHight + 1px);            //1 px for bottom border
-      height: calc(100% - $headerHight - 1px);  //1 px for bottom border
+      top: calc($headerHight + 1px); //1 px for bottom border
+      height: calc(100% - $headerHight - 1px); //1 px for bottom border
       background-color: $lighter;
       transition: all 0.1s ease-in;
       overflow: hidden;
@@ -150,99 +127,94 @@
   }
 }
 
-.repos {
-  .selected {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid $regular;
-    color: $darker;
-    padding-bottom: $space2;
-    margin-bottom: $space4;
+.selectedArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $regular;
+  color: $darker;
+  padding-bottom: $space2;
+  margin-bottom: $space4;
 
-    h3 {
-      overflow: hidden;
+  h3 {
+    overflow: hidden;
 
-      p {
-        display: flex;
-        align-items: center;
-        margin-bottom: $space1;
-      }
-      small {
-        display: flex;
-        align-items: flex-end;
-        color: $dark;
-        font-size: 0.9rem;
-      }
-    }
-
-    .dropdown {
+    p {
       display: flex;
-      flex-direction: column;
-      margin-left: $space2;
-
-      button {
-        line-height: 0;
-        padding: $space1;
-        color: $dark;
-      }
-
-      .options {
-        min-width: 6rem;
-        text-align: right;
-
-        a {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          color: $dark;
-          padding: $space2;
-
-          &:hover {
-            color: $darker;
-          }
-        }
-      }
+      align-items: center;
+      margin-bottom: $space1;
     }
-  }
-
-  .search {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: $space4;
-
-    input {
-      max-width: 45%;
-    }
-
-    label {
+    small {
+      display: flex;
+      align-items: flex-end;
+      color: $dark;
       font-size: 0.9rem;
     }
   }
 
-  .list {
-    list-style: none;
-    padding: 0;
-    margin-left: -$space4;
-    margin-right: -$space4;
-    overflow: hidden;
+  .dropdown {
+    margin-left: $space2;
 
-    li {
-      a {
-        display: flex;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        padding: 7px $space4;
-        text-decoration: none;
-        color: $dark;
+    button {
+      line-height: 0;
+      padding: $space1;
+      color: $dark;
+    }
+  }
+}
 
-        &.active,
-        &:hover {
-          background-color: $light;
-          color: $darker;
-        }
+.searchArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space4;
+
+  input {
+    max-width: 45%;
+  }
+
+  label {
+    font-size: 0.9rem;
+  }
+}
+
+.listArea {
+  list-style: none;
+  padding: 0;
+  margin-left: -$space4;
+  margin-right: -$space4;
+  overflow: hidden;
+
+  li {
+    a {
+      display: flex;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      padding: 7px $space4;
+      text-decoration: none;
+      color: $dark;
+
+      &.active,
+      &:hover {
+        background-color: $light;
+        color: $darker;
       }
+    }
+  }
+}
+
+.dropdownOptions {
+  min-width: 8rem;
+
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: $dark;
+    padding: $space2;
+
+    &:hover {
+      color: $darker;
     }
   }
 }

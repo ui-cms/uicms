@@ -30,6 +30,12 @@ h6 {
   margin: 0;
   font-weight: 500;
 }
+code {
+  background-color: $light;
+  padding: $space1 $space1;
+  border-radius: 3px;
+  border: 1px solid $regular;
+}
 
 @include at-large-screen {
   ::-webkit-scrollbar {
@@ -130,8 +136,14 @@ h6 {
 .mt-1 {
   margin-top: $space1;
 }
+.mt-4 {
+  margin-top: $space4;
+}
 .mb-1 {
   margin-bottom: $space1;
+}
+.mb-3 {
+  margin-bottom: $space3;
 }
 .mb-6 {
   margin-bottom: $space6;
@@ -140,7 +152,7 @@ h6 {
 .p-1 {
   padding: $space1;
 }
-.pl-4{
+.pl-4 {
   padding-left: $space4;
 }
 .p-4 {
