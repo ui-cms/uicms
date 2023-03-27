@@ -135,8 +135,8 @@
       position: absolute;
       left: -100%;
       width: 100%;
-      top: $headerHight;
-      height: calc(100% - $headerHight);
+      top: calc($headerHight + 1px);            //1 px for bottom border
+      height: calc(100% - $headerHight - 1px);  //1 px for bottom border
       background-color: $lighter;
       transition: all 0.1s ease-in;
       overflow: hidden;
