@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "@/styles/SideBar.module.scss";
 import Image from "next/image";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -24,13 +24,14 @@ import DropDown from "../dropdown";
 import { useRouter } from "next/router";
 
 export default function SideBar({}) {
+  const router = useRouter();
   const [activeTabIndex, setActiveTabIndex] = useState(null);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
   const { state } = useStateManagement();
-  const { currentUser } = state;
+  const { currentUser, repos } = state;
 
   function selectRepo(repo) {
     setSelectedCollection(null);
@@ -154,21 +155,17 @@ function Footer({ activeTabIndex, repoId, collectionId }) {
     const result = { text: "New repo", url: "/repo/new" };
     if (activeTabIndex === 1) {
       result.text = "New collection";
-      result.url = `/collection/${repoId}`;
+      result.url = `/${repoId}/collection/new`;
     } else if (activeTabIndex === 2) {
       result.text = "New item";
-      result.url = `/${repoId}/${collectionId}`;
+      result.url = `/${repoId}/${collectionId}/item/new`;
     }
     return result;
   }, [activeTabIndex, collectionId, repoId]);
 
   return (
     <div className={styles.footer}>
-      <Button
-        title="About UI CMS"
-        // onClick={() => router.push("/repo/new")}
-        // className={styles.addButton}
-      >
+      <Button title="About UI CMS" onClick={() => alert("todo")}>
         <Icon path={mdiHelpCircleOutline} size={0.75} className="mr-1" />
       </Button>
       {!isNaN(activeTabIndex) && (

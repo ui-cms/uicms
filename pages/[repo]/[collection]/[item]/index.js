@@ -8,6 +8,7 @@ import Script from "next/script";
 export default function Item() {
   const router = useRouter();
   let [repoId, collectionId, itemSlug] = router.query.item || [];
+  debugger;
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();

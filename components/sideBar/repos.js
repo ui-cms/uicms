@@ -23,6 +23,7 @@ import Loader from "@/components/loader";
 import { Button } from "../button";
 import DropDown from "../dropdown";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export function Repos({ selectedRepo, selectRepo }) {
   const [loading, setLoading] = useState(false);
@@ -103,7 +104,7 @@ function SelectedRepoDetails({ repo, currentUserName }) {
             }
           >
             <div className={styles.dropdownOptions}>
-              <Link href={`/repo/${repo.id}`}>
+              <Link href={`/${repo.id}/settings`}>
                 <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
                 Configuration
               </Link>
@@ -158,6 +159,9 @@ function SearchArea({ filters, setFilters }) {
 }
 
 function RepoList({ repos, filters, onSelect, selectedRepoId }) {
+  const router = useRouter();
+  const repoId = router.query.repo;
+
   const filteredRepos = useMemo(() => {
     let result = repos.filter(
       (r) =>
@@ -175,6 +179,14 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
     return orderBy(result, "starred", false);
   }, [filters, repos]);
 
+  function onClick(repo) {
+    const selected = repo.id === selectedRepoId;
+    onSelect(selected ? null : repo);
+    if (repoId) {
+      router.push("/start"); // reset url (of repoId)
+    }
+  }
+
   return filteredRepos.length === 0 ? (
     <p>No repos found</p>
   ) : (
@@ -184,7 +196,7 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
         return (
           <li key={r.id}>
             <a
-              onClick={() => onSelect(selected ? null : r)}
+              onClick={() => onClick(r)}
               className={selected ? styles.active : ""}
               href="#"
             >

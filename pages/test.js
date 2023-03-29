@@ -79,32 +79,30 @@ export default function Test() {
         </Button>
 
         <div>
-          <Link href="repo/new">New repo page</Link>
+          <Link href="123/new">New repo page</Link>
         </div>
         <div>
-          <Link href="repo/repoIdHere">Repo configuration page</Link>
+          <Link href="123/settings">Repo settings page</Link>
         </div>
         <div>
-          <Link href="collection/repoIdHere">New collection page</Link>
+          <Link href="123/456/new">New collection page</Link>
         </div>
         <div>
-          <Link href="collection/repoIdHere/collectionIdHere">
-            Collection configuration page
-          </Link>
+          <Link href="123/456/settings">Collection settings page</Link>
         </div>
         <div>
-          <Link href="/repoIdHere/collectionIdHere/itemSlughere">
-            Item page
-          </Link>
+          <Link href="123/456/item_slug">Item page</Link>
         </div>
         <div>
-          <DropDown
-            handle={<a href="#">Test DD</a>}
-          >
+          <DropDown handle={<a href="#">Test DD</a>}>
             <ul>
               <li>Text</li>
-              <li><Button>Button</Button></li>
-              <li><a>Button</a></li>
+              <li>
+                <Button>Button</Button>
+              </li>
+              <li>
+                <a>Button</a>
+              </li>
             </ul>
           </DropDown>
         </div>

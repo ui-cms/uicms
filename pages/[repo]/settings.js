@@ -5,9 +5,9 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 
-export default function RepoConfiguration() {
+export default function RepoSettings() {
   const router = useRouter();
-  const repoId = router.query.configuration;
+  const repoId = router.query.repo;
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [repo, setRepo] = useState(null);

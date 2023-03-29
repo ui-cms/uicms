@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Page from "@/components/page";
 
-export default function CollectionConfiguration() {
+export default function CollectionSettings() {
   const router = useRouter();
   const [repoId, collectionId] = router.query.configuration || [];
 

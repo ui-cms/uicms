@@ -79,7 +79,7 @@ function SelectedCollectionDetails({ collection, repoId }) {
             }
           >
             <div className={styles.dropdownOptions}>
-              <Link href={`/collection/${repoId}/${collection.id}`}>
+              <Link href={`/${repoId}/${collection.id}/settings`}>
                 <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
                 Configuration
               </Link>
@@ -104,7 +104,7 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
       with UICMS.
       <p className="mt-4">
         Would you like to set UICMS up in this repo ?
-        <Link href={`/repo/${repoId}`} className="d-block mt-1">
+        <Link href={`/${repoId}/settings`} className="d-block mt-1">
           Let&apos;s do it!
         </Link>
       </p>
