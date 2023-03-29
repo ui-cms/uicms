@@ -104,23 +104,23 @@ function SelectedRepoDetails({ repo, currentUserName }) {
           >
             <div className={styles.dropdownOptions}>
               <Link href={`/repo/${repo.id}`}>
-                <Icon path={mdiCogOutline} size={0.75} className="mr-1" />
+                <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
                 Configuration
               </Link>
               <Link href={repo.html_url} target="_blank">
-                <Icon path={mdiGithub} size={0.75} className="mr-1" />
+                <Icon path={mdiGithub} size={0.7} className="mr-1" />
                 Source code
               </Link>
               {repo.homepage && (
                 <Link href={repo.homepage} target="_blank">
-                  <Icon path={mdiWeb} size={0.75} className="mr-1" />
+                  <Icon path={mdiWeb} size={0.7} className="mr-1" />
                   Homepage
                 </Link>
               )}
               <a onClick={() => alert("todo")} href="#">
                 <Icon
                   path={starred ? mdiStarOutline : mdiStar}
-                  size={0.75}
+                  size={0.7}
                   className="mr-1"
                 />
                 {starred ? "Unstar" : "Star"}

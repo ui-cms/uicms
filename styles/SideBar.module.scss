@@ -211,7 +211,8 @@
     align-items: center;
     text-decoration: none;
     color: $dark;
-    padding: $space2;
+    padding: $space2 $space1;
+    font-size: 0.9rem;
 
     &:hover {
       color: $darker;

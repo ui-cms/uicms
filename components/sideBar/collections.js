@@ -80,11 +80,11 @@ function SelectedCollectionDetails({ collection, repoId }) {
           >
             <div className={styles.dropdownOptions}>
               <Link href={`/collection/${repoId}/${collection.id}`}>
-                <Icon path={mdiCogOutline} size={0.75} className="mr-1" />
+                <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
                 Configuration
               </Link>
               <a onClick={() => alert("todo")} href="#">
-                <Icon path={mdiDeleteOutline} size={0.75} className="mr-1" />
+                <Icon path={mdiDeleteOutline} size={0.7} className="mr-1" />
                 Delete
               </a>
             </div>
