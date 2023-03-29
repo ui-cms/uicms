@@ -15,12 +15,12 @@ export default function RepoConfiguration() {
   const { state, dispatchAction } = useStateManagement();
 
   useEffect(() => {
-    if (!repo && repoId && state.repos.length > 0 && loading) {
+    if (repoId && state.repos.length > 0) {
       const _repo = state.repos.find((r) => r.id === Number(repoId));
       setRepo(_repo);
       setLoading(false);
     }
-  }, [loading, repo, repoId, state.repos]);
+  }, [repoId, state.repos]);
 
   return (
     <Page
@@ -31,12 +31,21 @@ export default function RepoConfiguration() {
         extra: (
           <>
             <Button type="primaryLight">Save</Button>
-            <Button type="primary" className="ml-2">Publish</Button>
+            <Button type="primary" className="ml-2">
+              Publish
+            </Button>
           </>
         ),
       }}
     >
       <pre>{JSON.stringify(repo, null, 4)}</pre>
+
+      {repo?.pushed_at && (
+        <small className="text-dark mt-4">
+          The last push (update) to this repo was made on{" "}
+          {new Date(repo.pushed_at).toLocaleString()}.
+        </small>
+      )}
     </Page>
   );
 }
