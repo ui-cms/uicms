@@ -1,6 +1,6 @@
 import Loader from "../loader";
 import styles from "@/styles/SideBar.module.scss";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { UICMS_CONFIGS } from "@/helpers/constants";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import useGitHubApi from "@/hooks/useGitHubApi";
@@ -24,13 +24,13 @@ export function Collections({
   selectCollection,
 }) {
   const [loading, setLoading] = useState(false);
-  const getRepoConfig = useGetRepoConfig(setLoading);
+  const getRepoConfig = useGetRepoConfig();
 
   // Fetch config of repo if not present
   useEffect(() => {
     if (!repo.config.data) {
       (async () => {
-        const _repo = await getRepoConfig(repo);
+        const _repo = await getRepoConfig(repo, setLoading);
         setRepo(_repo);
       })();
     }
@@ -142,11 +142,11 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
   );
 }
 
-export function useGetRepoConfig(loadingCallback) {
+export function useGetRepoConfig() {
   const { dispatchAction } = useStateManagement();
   const githubApi = useGitHubApi();
 
-  async function getRepoConfig(repo) {
+  const getRepoConfig = useCallback(async (repo, loadingCallback) => {
     const _repo = { ...repo };
     loadingCallback && loadingCallback(true);
     try {
@@ -166,7 +166,7 @@ export function useGetRepoConfig(loadingCallback) {
       loadingCallback && loadingCallback(false);
     }
     return _repo;
-  }
+  }, [dispatchAction, githubApi.customRest]);
 
   return getRepoConfig;
 }
