@@ -104,6 +104,9 @@ code {
 .w-100 {
   width: 100%;
 }
+.w-50 {
+  width: 50%;
+}
 .h-100 {
   height: 100%;
 }
@@ -130,6 +133,9 @@ code {
 .text-primary {
   color: $primary;
 }
+.text-danger {
+  color: $danger;
+}
 
 .mr-1 {
   margin-right: $space1;
@@ -146,6 +152,12 @@ code {
 .mt-4 {
   margin-top: $space4;
 }
+.mt-5 {
+  margin-top: $space5;
+}
+.mt-6 {
+  margin-top: $space6;
+}
 .mb-1 {
   margin-bottom: $space1;
 }
@@ -157,6 +169,14 @@ code {
 }
 .mb-6 {
   margin-bottom: $space6;
+}
+.mx-1 {
+  margin-right: $space1;
+  margin-left: $space1;
+}
+.my-2 {
+  margin-top: $space2;
+  margin-bottom: $space2;
 }
 .my-3 {
   margin-top: $space3;
@@ -171,6 +191,9 @@ code {
 }
 .p-4 {
   padding: $space4;
+}
+.pt-6 {
+  padding-top: $space6;
 }
 
 .unselectable {

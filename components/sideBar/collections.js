@@ -16,6 +16,7 @@ import {
   mdiFolderOutline,
 } from "@mdi/js";
 import DropDown from "../dropdown";
+import { displayError } from "@/helpers/utilities";
 
 export function Collections({
   repo,
@@ -97,18 +98,13 @@ function SelectedCollectionDetails({ collection, repoId }) {
 
 function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
   return !data ? (
-    <p>
+    <>
       <h4 className="mb-3">Incompatible repo!</h4>
-      This repo is missing <code>{UICMS_CONFIGS.fileName}</code> file in the
-      root directory. That means this repo hasn&apos;t been configured to work
-      with UICMS.
       <p className="mt-4">
-        Would you like to set UICMS up in this repo ?
-        <Link href={`/${repoId}/settings`} className="d-block mt-1">
-          Let&apos;s do it!
-        </Link>
+        See <Link href={`/${repoId}/settings`}>configuration page</Link> of this
+        repo for more details.
       </p>
-    </p>
+    </>
   ) : data.collections.length === 0 ? (
     <p>No collections found</p>
   ) : (
@@ -146,27 +142,30 @@ export function useGetRepoConfig() {
   const { dispatchAction } = useStateManagement();
   const githubApi = useGitHubApi();
 
-  const getRepoConfig = useCallback(async (repo, loadingCallback) => {
-    const _repo = { ...repo };
-    loadingCallback && loadingCallback(true);
-    try {
-      const res = await githubApi.customRest.getFileContentAndSha(
-        repo.owner,
-        repo.name,
-        UICMS_CONFIGS.fileName
-      );
-      _repo.config = { sha: res.sha, data: JSON.parse(res.content) };
-      dispatchAction.updateRepo(_repo);
-    } catch (e) {
-      // when 404, no config file, incompatible repo
-      if (e.status !== 404) {
-        displayError("Error fetching config file!", e);
+  const getRepoConfig = useCallback(
+    async (repo, loadingCallback) => {
+      const _repo = { ...repo };
+      loadingCallback && loadingCallback(true);
+      try {
+        const res = await githubApi.customRest.getFileContentAndSha(
+          repo.owner,
+          repo.name,
+          UICMS_CONFIGS.fileName
+        );
+        _repo.config = { sha: res.sha, data: JSON.parse(res.content) };
+        dispatchAction.updateRepo(_repo);
+      } catch (e) {
+        // when 404, no config file, incompatible repo
+        if (e.status !== 404) {
+          displayError("Error fetching config file!", e);
+        }
+      } finally {
+        loadingCallback && loadingCallback(false);
       }
-    } finally {
-      loadingCallback && loadingCallback(false);
-    }
-    return _repo;
-  }, [dispatchAction, githubApi.customRest]);
+      return _repo;
+    },
+    [dispatchAction, githubApi.customRest]
+  );
 
   return getRepoConfig;
 }
