@@ -7,7 +7,6 @@ import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
 import Icon from "@mdi/react";
 import { mdiCircleSmall } from "@mdi/js";
-import { useGetRepoConfig } from "@/components/sideBar/collections";
 import {
   UICMS_CONFIGS,
   UICMS_CONFIG_STARTER_TEMPLATE,
@@ -22,18 +21,9 @@ export default function RepoSettings() {
   const [repo, setRepo] = useState(null);
   const githubApi = useGitHubApi();
   const { state } = useStateManagement();
-  const getRepoConfig = useGetRepoConfig();
   const [configData, setConfigData] = useState(null); // local one
 
-  // Fetch config data and update repo
-  const fetchConfigAndUpdateRepo = useCallback(
-    async (_repo) => {
-      const repoWithConfig = await getRepoConfig(_repo, setLoading);
-      setRepo(repoWithConfig);
-      setConfigData(repoWithConfig.config.data);
-    },
-    [getRepoConfig]
-  );
+
 
   // Fetch repo from state management and if it doesn't have config data fetch it from GitHub Api
   useEffect(() => {
@@ -41,15 +31,11 @@ export default function RepoSettings() {
       const _repo = state.repos.find((r) => r.id === Number(repoId));
       if (_repo) {
         setRepo(_repo);
-        if (_repo.config.data) {
-          setConfigData(_repo.config.data);
-          setLoading(false);
-        } else {
-          fetchConfigAndUpdateRepo(_repo); // If repo doesn't have config file data yet, fetch it
-        }
+        setConfigData(_repo.config.data);
+        setLoading(false);
       }
     }
-  }, [fetchConfigAndUpdateRepo, repo, repoId, state.repos]);
+  }, [repo, repoId, state.repos]);
 
   const save = async () => {
     if (confirm("Are you sure ? ")) {

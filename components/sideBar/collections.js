@@ -25,19 +25,7 @@ export function Collections({
   selectCollection,
 }) {
   const [loading, setLoading] = useState(false);
-  const getRepoConfig = useGetRepoConfig();
-
-  // Fetch config of repo if not present
-  useEffect(() => {
-    if (!repo.config.data) {
-      (async () => {
-        const _repo = await getRepoConfig(repo, setLoading);
-        setRepo(_repo);
-      })();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // need to run only once
-
+  
   return loading ? (
     <Loader />
   ) : (
@@ -138,34 +126,3 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
   );
 }
 
-export function useGetRepoConfig() {
-  const { dispatchAction } = useStateManagement();
-  const githubApi = useGitHubApi();
-
-  const getRepoConfig = useCallback(
-    async (repo, loadingCallback) => {
-      const _repo = { ...repo };
-      loadingCallback && loadingCallback(true);
-      try {
-        const res = await githubApi.customRest.getFileContentAndSha(
-          repo.owner,
-          repo.name,
-          UICMS_CONFIGS.fileName
-        );
-        _repo.config = { sha: res.sha, data: JSON.parse(res.content) };
-        dispatchAction.updateRepo(_repo);
-      } catch (e) {
-        // when 404, no config file, incompatible repo
-        if (e.status !== 404) {
-          displayError("Error fetching config file!", e);
-        }
-      } finally {
-        loadingCallback && loadingCallback(false);
-      }
-      return _repo;
-    },
-    [dispatchAction, githubApi.customRest]
-  );
-
-  return getRepoConfig;
-}

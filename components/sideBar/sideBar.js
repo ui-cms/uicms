@@ -22,15 +22,24 @@ import { Items } from "./items";
 import { Button } from "../button";
 import DropDown from "../dropdown";
 import { useRouter } from "next/router";
+import { UICMS_CONFIGS } from "@/helpers/constants";
+import { displayError } from "@/helpers/utilities";
+import useGitHubApi from "@/hooks/useGitHubApi";
 
 export default function SideBar({}) {
   const router = useRouter();
+  const url = {
+    repoId: router.query.repo,
+    collectionId: router.query.collection,
+    itemSlug: router.query.item,
+  };
+  const githubApi = useGitHubApi();
   const [activeTabIndex, setActiveTabIndex] = useState(null);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
-  const { state } = useStateManagement();
+  const { state, dispatchAction } = useStateManagement();
   const { currentUser, repos } = state;
 
   function selectRepo(repo) {
@@ -42,6 +51,69 @@ export default function SideBar({}) {
     setSelectedItem(null);
     setSelectedCollection(collection);
   }
+
+  // Initial setting selected repo if a repoId is in url (when landed from url)
+  useEffect(() => {
+    if (!selectedRepo && url.repoId && repos.length) {
+      debugger;
+      const repo = repos.find((r) => r.id === Number(url.repoId));
+      selectRepo(repo);
+      // if (
+      //   url.collectionId &&
+      //   repo.config.data &&
+      //   repo.config.data.collections.length
+      // ) {
+      //   const collection = repo.config.data.collections.find(
+      //     (c) => c.id === url.collectionId
+      //   );
+      //   setSelectedCollection(collection);
+      // } else {
+      //   setSelectedCollection(null);
+      // }
+    }
+  }, [repos, url.repoId]);
+
+  // state.repos updated, so update selected repo as well (as it might be updated in state.repos)
+  useEffect(()=>{
+    if(selectedRepo && repos.length){
+      debugger;
+      const repo = repos.find((r) => r.id === selectedRepo.id);
+      selectRepo(repo);
+    }
+  }, [repos])
+
+  // whenever there is a repoId present in url, selected repo's config must be fetched. That is how fetching config is triggered.
+  useEffect(() => {
+    if (
+      selectedRepo &&
+      url.repoId &&
+      selectedRepo.id === Number(url.repoId) &&
+      !selectedRepo.config.data
+    ) {
+      debugger;
+      (async () => {
+        const repo = { ...selectedRepo };
+        // loadingCallback && loadingCallback(true);
+        try {
+          const res = await githubApi.customRest.getFileContentAndSha(
+            repo.owner,
+            repo.name,
+            UICMS_CONFIGS.fileName
+          );
+          repo.config = { sha: res.sha, data: JSON.parse(res.content) };
+          dispatchAction.updateRepo(repo);
+        } catch (e) {
+          // when 404, no config file, incompatible repo
+          if (e.status !== 404) {
+            displayError("Error fetching config file!", e);
+          }
+        }
+        // finally {
+        //   loadingCallback && loadingCallback(false);
+        // }
+      })();
+    }
+  }, [selectedRepo, url.repoId]);
 
   return (
     <aside className={styles.sidebar}>
