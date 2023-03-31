@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { displayError, orderBy } from "@/helpers/utilities";
@@ -25,8 +25,8 @@ import DropDown from "../dropdown";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export function Repos({ selectedRepo, selectRepo }) {
-  const [loading, setLoading] = useState(false);
+export function Repos({ selectedRepo, selectRepo, setLoading }) {
+  const loaded = useRef(false);
   const [filters, setFilters] = useState({
     search: "",
     private: true,
@@ -37,9 +37,10 @@ export function Repos({ selectedRepo, selectRepo }) {
   const { repos, currentUser } = state;
 
   useEffect(() => {
-    if (currentUser && repos.length === 0 && !loading) {
+    if (currentUser && repos.length === 0 && !loaded.current) {
       (async () => {
         setLoading(true);
+        loaded.current = true;
         try {
           const res = await githubApi.customRest.listAuthenticatedUsersRepos();
           dispatchAction.setRepos(res.data);
@@ -54,26 +55,26 @@ export function Repos({ selectedRepo, selectRepo }) {
     currentUser,
     dispatchAction,
     githubApi.customRest,
-    loading,
     repos.length,
+    setLoading,
   ]);
 
-  return loading ? (
-    <Loader />
-  ) : (
-    <>
-      <SelectedRepoDetails
-        repo={selectedRepo}
-        currentUserName={currentUser?.login}
-      />
-      <SearchArea filters={filters} setFilters={setFilters} />
-      <RepoList
-        repos={repos}
-        filters={filters}
-        onSelect={selectRepo}
-        selectedRepoId={selectedRepo?.id}
-      />
-    </>
+  return (
+    loaded && (
+      <>
+        <SelectedRepoDetails
+          repo={selectedRepo}
+          currentUserName={currentUser?.login}
+        />
+        <SearchArea filters={filters} setFilters={setFilters} />
+        <RepoList
+          repos={repos}
+          filters={filters}
+          onSelect={selectRepo}
+          selectedRepoId={selectedRepo?.id}
+        />
+      </>
+    )
   );
 }
 

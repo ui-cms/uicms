@@ -39,6 +39,7 @@ export default function SideBar({}) {
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
+  const [loading, setLoading]=useState(false);
   const { state, dispatchAction } = useStateManagement();
   const { currentUser, repos } = state;
 
@@ -107,6 +108,7 @@ export default function SideBar({}) {
         <Tabs
           className={styles.tabs}
           tabClickCallback={setActiveTabIndex}
+          loading={loading}
           tabs={[
             {
               title: (
@@ -122,6 +124,7 @@ export default function SideBar({}) {
                     setSelectedRepo(repo);
                     setSelectedCollection(null);
                   }}
+                  setLoading={setLoading}
                 />
               ),
             },

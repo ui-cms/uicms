@@ -1,12 +1,14 @@
 import { useState } from "react";
 import styles from "@/styles/Tabs.module.scss";
 import { Button } from "./button";
+import Loader from "./loader";
 
 export default function Tabs({
   className = "",
-  tabs, // e.g [{title: "", content: jsx, disabled: false, loading: false, onClick: func}]
+  tabs, // e.g [{title: "", content: jsx, disabled: false, onClick: func}]
   prerender = false, // when true will render all tabs' contents and will hide/show them when requested, otherwise will only render when requested
   tabClickCallback, // callback to pass clicked tabs's index
+  loading = false,
 }) {
   const [active, setActive] = useState(0); // index
 
@@ -27,7 +29,6 @@ export default function Tabs({
                 className={index === active ? styles.active : ""}
                 onClick={() => onTabClick(index, tab.onClick)}
                 disabled={tab.disabled}
-                loading={tab.loading}
               >
                 {tab.title}
               </Button>
@@ -35,7 +36,9 @@ export default function Tabs({
           })}
         </div>
 
-        {prerender ? (
+        {loading ? (
+          <Loader />
+        ) : prerender ? (
           tabs.map((tab, index) => {
             return (
               <div
