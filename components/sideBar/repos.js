@@ -19,7 +19,6 @@ import {
   mdiWeb,
 } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
-import Loader from "@/components/loader";
 import { Button } from "../button";
 import DropDown from "../dropdown";
 import Link from "next/link";

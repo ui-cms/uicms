@@ -1,9 +1,4 @@
-import Loader from "../loader";
 import styles from "@/styles/SideBar.module.scss";
-import { useCallback, useEffect, useState } from "react";
-import { UICMS_CONFIGS } from "@/helpers/constants";
-import useStateManagement from "@/services/stateManagement/stateManagement";
-import useGitHubApi from "@/hooks/useGitHubApi";
 import { Button } from "../button";
 import Link from "next/link";
 import Icon from "@mdi/react";
@@ -17,17 +12,8 @@ import {
 } from "@mdi/js";
 import DropDown from "../dropdown";
 
-export function Collections({
-  repo,
-  setRepo,
-  selectedCollection,
-  selectCollection,
-}) {
-  const [loading, setLoading] = useState(false);
-
-  return loading ? (
-    <Loader />
-  ) : (
+export function Collections({ repo, selectedCollection, selectCollection }) {
+  return (
     <>
       <SelectedCollectionDetails
         repoId={repo.id}
@@ -124,4 +110,3 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
     </ul>
   );
 }
-

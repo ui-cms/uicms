@@ -16,24 +16,20 @@ import { displayError } from "@/helpers/utilities";
 export default function RepoSettings() {
   const router = useRouter();
   const repoId = router.query.repo;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [repo, setRepo] = useState(null);
   const githubApi = useGitHubApi();
   const { state } = useStateManagement();
   const [configData, setConfigData] = useState(null); // local one
 
-
-
-  // Fetch repo from state management and if it doesn't have config data fetch it from GitHub Api
+  // Load the repo from state management
   useEffect(() => {
     if (repoId && state.repos.length) {
-      debugger;
       const _repo = state.repos.find((r) => r.id === Number(repoId));
       if (_repo) {
         setRepo(_repo);
         setConfigData(_repo.config.data);
-        setLoading(false);
       }
     }
   }, [repoId, state.repos]);
