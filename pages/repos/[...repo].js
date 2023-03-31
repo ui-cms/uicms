@@ -9,8 +9,8 @@ import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Select, TextInput } from "@/components/form";
-import TitleWithTabs from "@/components/titleWithTabs";
 import Link from "next/link";
+import Tabs from "@/components/tabs";
 
 export default function Repo() {
   const router = useRouter();
@@ -95,7 +95,7 @@ export default function Repo() {
 
   return (
     <Page loading={loading} title={repoName || "Repo"}>
-      <TitleWithTabs
+      <Tabs
         title={config?.websiteName}
         subtitle={`${repoOwner}/${repoName}`}
         tabs={[
