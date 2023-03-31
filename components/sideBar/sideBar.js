@@ -27,21 +27,49 @@ import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 
 export default function SideBar({}) {
+  const [activeTabIndex, setActiveTabIndex] = useState(null);
+  const [selectedRepo, setSelectedRepo] = useState(null);
+  const [selectedCollection, setSelectedCollection] = useState(null);
+  const [open, setOpen] = useState(false); // used in mobile
+
+  return (
+    <aside className={styles.sidebar}>
+      <Header open={open} setOpen={setOpen} />
+      <section className={`${styles.main} ${open ? styles.open : ""}`}>
+        <MainWithTabs
+          setActiveTabIndex={setActiveTabIndex}
+          selectedRepo={selectedRepo}
+          setSelectedRepo={setSelectedRepo}
+          selectedCollection={selectedCollection}
+          setSelectedCollection={setSelectedCollection}
+        />
+        <Footer
+          activeTabIndex={activeTabIndex}
+          repoId={selectedRepo?.id}
+          collectionId={selectedCollection?.id}
+        />
+      </section>
+    </aside>
+  );
+}
+
+function MainWithTabs({
+  setActiveTabIndex,
+  selectedRepo,
+  setSelectedRepo,
+  selectedCollection,
+  setSelectedCollection,
+}) {
   const router = useRouter();
   const url = {
     repoId: router.query.repo,
     collectionId: router.query.collection,
     itemSlug: router.query.item,
   };
-  const githubApi = useGitHubApi();
-  const [activeTabIndex, setActiveTabIndex] = useState(null);
-  const [selectedRepo, setSelectedRepo] = useState(null);
-  const [selectedCollection, setSelectedCollection] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [open, setOpen] = useState(false); // used in mobile
   const [loading, setLoading] = useState(false);
+  const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const { currentUser, repos } = state;
+  const { repos } = state;
 
   // Repos in state is updated, so update selected repo as well (as it might be updated in state.repos)
   useEffect(() => {
@@ -100,79 +128,68 @@ export default function SideBar({}) {
   }, [selectedRepo, url.repoId]); // trigger only when selected repo or repoId in url changes
 
   return (
-    <aside className={styles.sidebar}>
-      <Header currentUser={currentUser} open={open} setOpen={setOpen} />
-      <section className={`${styles.main} ${open ? styles.open : ""}`}>
-        <Tabs
-          className={styles.tabs}
-          tabClickCallback={setActiveTabIndex}
-          loading={loading}
-          tabs={[
-            {
-              title: (
-                <>
-                  <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
-                  Repos
-                </>
-              ),
-              content: (
-                <Repos
-                  selectedRepo={selectedRepo}
-                  selectRepo={(repo) => {
-                    setSelectedRepo(repo);
-                    setSelectedCollection(null);
-                  }}
-                  setLoading={setLoading}
-                />
-              ),
-            },
-            {
-              title: (
-                <>
-                  <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
-                  Collections
-                </>
-              ),
-              content: (
-                <Collections
-                  repo={selectedRepo}
-                  selectedCollection={selectedCollection}
-                  selectCollection={(collection) => {
-                    setSelectedCollection(collection);
-                    setSelectedItem(null);
-                  }}
-                />
-              ),
-              disabled: !selectedRepo,
-              onClick: () => router.push(`/${selectedRepo?.id}`),
-            },
-            {
-              title: (
-                <>
-                  <Icon
-                    path={mdiFileDocumentOutline}
-                    size={0.8}
-                    className="mr-1"
-                  />
-                  Items
-                </>
-              ),
-              content: <Items />,
-              disabled: !selectedCollection,
-            },
-          ]}
-        />
-        <Footer
-          activeTabIndex={activeTabIndex}
-          repoId={selectedRepo?.id}
-          collectionId={selectedCollection?.id}
-        />
-      </section>
-    </aside>
+    <Tabs
+      className={styles.tabs}
+      tabClickCallback={setActiveTabIndex}
+      loading={loading}
+      tabs={[
+        {
+          title: (
+            <>
+              <Icon path={mdiFileCabinet} size={0.8} className="mr-1" />
+              Repos
+            </>
+          ),
+          content: (
+            <Repos
+              selectedRepo={selectedRepo}
+              selectRepo={(repo) => {
+                setSelectedRepo(repo);
+                setSelectedCollection(null);
+              }}
+              setLoading={setLoading}
+            />
+          ),
+        },
+        {
+          title: (
+            <>
+              <Icon path={mdiFolderOutline} size={0.8} className="mr-1" />
+              Collections
+            </>
+          ),
+          content: (
+            <Collections
+              repo={selectedRepo}
+              selectedCollection={selectedCollection}
+              selectCollection={(collection) => {
+                setSelectedCollection(collection);
+                // setSelectedItem(null);
+              }}
+            />
+          ),
+          disabled: !selectedRepo,
+          onClick: () => router.push(`/${selectedRepo?.id}`),
+        },
+        {
+          title: (
+            <>
+              <Icon path={mdiFileDocumentOutline} size={0.8} className="mr-1" />
+              Items
+            </>
+          ),
+          content: <Items />,
+          disabled: !selectedCollection,
+        },
+      ]}
+    />
   );
 }
 
-function Header({ open, setOpen, currentUser }) {
+function Header({ open, setOpen }) {
+  const { state } = useStateManagement();
+  const { currentUser } = state;
+
   return (
     <nav className={styles.header}>
       <Icon
