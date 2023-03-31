@@ -16,7 +16,6 @@ import {
   mdiFolderOutline,
 } from "@mdi/js";
 import DropDown from "../dropdown";
-import { displayError } from "@/helpers/utilities";
 
 export function Collections({
   repo,
@@ -25,7 +24,7 @@ export function Collections({
   selectCollection,
 }) {
   const [loading, setLoading] = useState(false);
-  
+
   return loading ? (
     <Loader />
   ) : (

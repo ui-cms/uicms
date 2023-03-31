@@ -42,16 +42,6 @@ export default function SideBar({}) {
   const { state, dispatchAction } = useStateManagement();
   const { currentUser, repos } = state;
 
-  function selectRepo(repo) {
-    setSelectedCollection(null);
-    setSelectedRepo(repo);
-  }
-
-  function selectCollection(collection) {
-    setSelectedItem(null);
-    setSelectedCollection(collection);
-  }
-
   // Repos in state is updated, so update selected repo as well (as it might be updated in state.repos)
   useEffect(() => {
     if (repos.length) {
@@ -116,7 +106,7 @@ export default function SideBar({}) {
       <section className={`${styles.main} ${open ? styles.open : ""}`}>
         <Tabs
           className={styles.tabs}
-          onTabClick={setActiveTabIndex}
+          tabClickCallback={setActiveTabIndex}
           tabs={[
             {
               title: (
@@ -126,7 +116,13 @@ export default function SideBar({}) {
                 </>
               ),
               content: (
-                <Repos selectedRepo={selectedRepo} selectRepo={selectRepo} />
+                <Repos
+                  selectedRepo={selectedRepo}
+                  selectRepo={(repo) => {
+                    setSelectedRepo(repo);
+                    setSelectedCollection(null);
+                  }}
+                />
               ),
             },
             {
@@ -141,10 +137,14 @@ export default function SideBar({}) {
                   repo={selectedRepo}
                   setRepo={setSelectedRepo}
                   selectedCollection={selectedCollection}
-                  selectCollection={selectCollection}
+                  selectCollection={(collection) => {
+                    setSelectedCollection(collection);
+                    setSelectedItem(null);
+                  }}
                 />
               ),
               disabled: !selectedRepo,
+              onClick: () => router.push(`/${selectedRepo?.id}`),
             },
             {
               title: (

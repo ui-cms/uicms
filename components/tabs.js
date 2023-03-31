@@ -4,15 +4,16 @@ import { Button } from "./button";
 
 export default function Tabs({
   className = "",
-  tabs, // e.g [{title: "", content:  jsx, disabled=false, loading}]
+  tabs, // e.g [{title: "", content: jsx, disabled: false, loading: false, onClick: func}]
   prerender = false, // when true will render all tabs' contents and will hide/show them when requested, otherwise will only render when requested
-  onTabClick, // callback to pass clicked tabs's index
+  tabClickCallback, // callback to pass clicked tabs's index
 }) {
   const [active, setActive] = useState(0); // index
 
-  function onClick(index) {
+  function onTabClick(index, onClick) {
     setActive(index);
-    onTabClick && onTabClick(index);
+    tabClickCallback && tabClickCallback(index);
+    onClick && onClick();
   }
 
   return (
@@ -24,7 +25,7 @@ export default function Tabs({
               <Button
                 key={index}
                 className={index === active ? styles.active : ""}
-                onClick={() => onClick(index)}
+                onClick={() => onTabClick(index, tab.onClick)}
                 disabled={tab.disabled}
                 loading={tab.loading}
               >
