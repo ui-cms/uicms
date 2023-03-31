@@ -169,7 +169,8 @@ function MainWithTabs({
             />
           ),
           disabled: !selectedRepo,
-          onClick: () => router.push(`/${selectedRepo?.id}`),
+          onClick: () =>
+            !selectedRepo.config.data && router.push(`/${selectedRepo?.id}`), // have repoId in url so that it would trigger fetching of repos's config
         },
         {
           title: (
