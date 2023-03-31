@@ -27,7 +27,8 @@ export default function RepoSettings() {
 
   // Fetch repo from state management and if it doesn't have config data fetch it from GitHub Api
   useEffect(() => {
-    if (!repo && repoId && state.repos.length > 0) {
+    if (repoId && state.repos.length) {
+      debugger;
       const _repo = state.repos.find((r) => r.id === Number(repoId));
       if (_repo) {
         setRepo(_repo);
@@ -35,7 +36,7 @@ export default function RepoSettings() {
         setLoading(false);
       }
     }
-  }, [repo, repoId, state.repos]);
+  }, [repoId, state.repos]);
 
   const save = async () => {
     if (confirm("Are you sure ? ")) {

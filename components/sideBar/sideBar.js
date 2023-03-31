@@ -52,37 +52,31 @@ export default function SideBar({}) {
     setSelectedCollection(collection);
   }
 
-  // Initial setting selected repo if a repoId is in url (when landed from url)
+  // Repos in state is updated, so update selected repo as well (as it might be updated in state.repos)
   useEffect(() => {
-    if (!selectedRepo && url.repoId && repos.length) {
-      debugger;
-      const repo = repos.find((r) => r.id === Number(url.repoId));
-      selectRepo(repo);
-      // if (
-      //   url.collectionId &&
-      //   repo.config.data &&
-      //   repo.config.data.collections.length
-      // ) {
-      //   const collection = repo.config.data.collections.find(
-      //     (c) => c.id === url.collectionId
-      //   );
-      //   setSelectedCollection(collection);
-      // } else {
-      //   setSelectedCollection(null);
-      // }
+    if (repos.length) {
+      const repoId = selectedRepo ? selectedRepo.id : url.repoId; // when landed from url, will use repoId from url initially as there won't be a selected repo
+      if (repoId) {
+        const repo = repos.find((r) => r.id === Number(repoId));
+        if (repo) {
+          let collection = null;
+          if (url.collectionId && repo.config.data) {
+            const collectionId = selectedCollection
+              ? selectedCollection.id
+              : url.collectionId; // when landed from url, will use collectionId from url initially to set selected collection
+            collection = repo.config.data.collections.find(
+              (c) => c.id === collectionId
+            );
+          }
+          setSelectedRepo(repo);
+          setSelectedCollection(collection); // if none, will clear selected collection
+        }
+      }
     }
-  }, [repos, url.repoId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repos]); // trigger only when repos in state gets updated
 
-  // state.repos updated, so update selected repo as well (as it might be updated in state.repos)
-  useEffect(()=>{
-    if(selectedRepo && repos.length){
-      debugger;
-      const repo = repos.find((r) => r.id === selectedRepo.id);
-      selectRepo(repo);
-    }
-  }, [repos])
-
-  // whenever there is a repoId present in url, selected repo's config must be fetched. That is how fetching config is triggered.
+  // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched. That is how fetching config is triggered.
   useEffect(() => {
     if (
       selectedRepo &&
@@ -113,7 +107,8 @@ export default function SideBar({}) {
         // }
       })();
     }
-  }, [selectedRepo, url.repoId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRepo, url.repoId]); // trigger only when selected repo or repoId in url changes
 
   return (
     <aside className={styles.sidebar}>
