@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Page from "@/components/page";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
@@ -19,9 +19,9 @@ export default function RepoSettings() {
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [repo, setRepo] = useState(null);
-  const githubApi = useGitHubApi();
-  const { state } = useStateManagement();
   const [configData, setConfigData] = useState(null); // local one
+  const githubApi = useGitHubApi();
+  const { state, dispatchAction } = useStateManagement();
 
   // Load the repo from state management
   useEffect(() => {
@@ -38,7 +38,6 @@ export default function RepoSettings() {
     if (confirm("Are you sure ? ")) {
       try {
         setLoading(true);
-        debugger;
         await githubApi.rest.repos.createOrUpdateFileContents({
           owner: repo.owner,
           repo: repo.name,
@@ -49,10 +48,14 @@ export default function RepoSettings() {
           content: window.btoa(JSON.stringify(configData)), // base64 encode
           sha: repo.config.sha,
         });
-        await fetchConfigAndUpdateRepo(repo); // re-fetch config as sha has been changed
+        dispatchAction.updateRepo({
+          ...repo,
+          config: { sha: null, data: null },
+        }); // reset config, so that it will be fetched again in sidebar as sha has been changed
         setEditMode(false);
       } catch (e) {
         displayError("Error saving config file!", e);
+      } finally {
         setLoading(false);
       }
     }
@@ -79,9 +82,8 @@ export default function RepoSettings() {
       heading={{
         title: repo?.name,
         subtitle: "Configuration",
-        extra:
-          configData &&
-          (editMode ? (
+        extra: configData ? (
+          editMode ? (
             <>
               <Button onClick={() => setEditMode(false)}>Cancel</Button>
               <Button
@@ -95,12 +97,15 @@ export default function RepoSettings() {
             </>
           ) : (
             <Button onClick={() => setEditMode(true)}>Edit</Button>
-          )),
+          )
+        ) : (
+          <Button type="primaryLight" onClick={initConfig}>
+            Configure
+          </Button>
+        ),
       }}
     >
-      {!configData && <NotFound initConfig={initConfig} />}
-
-      {configData && (
+      {configData ? (
         <fieldset disabled={!editMode}>
           <TextInputWithLabel
             name="websiteName"
@@ -142,6 +147,8 @@ export default function RepoSettings() {
             required={true}
           />
         </fieldset>
+      ) : (
+        <NotFound initConfig={initConfig} />
       )}
 
       <br />
@@ -155,7 +162,7 @@ export default function RepoSettings() {
   );
 }
 
-function NotFound({ initConfig }) {
+function NotFound() {
   return (
     <div>
       <h3 className="mb-3">Incompatible repo!</h3>
@@ -165,10 +172,8 @@ function NotFound({ initConfig }) {
         with UICMS.
         <br />
         <br />
-        Would you like to set UICMS up in this repo ?
-        <Button type="primaryLight" className="ml-2" onClick={initConfig}>
-          Let&apos;s do it!
-        </Button>
+        Click the configure button above if you wish to set UICMS up in this
+        repo.
       </p>
     </div>
   );
