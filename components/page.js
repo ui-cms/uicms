@@ -33,7 +33,7 @@ export default function Page({
       </Head>
       <Suspense fallback={<Loader />}>
         <article className={absolute ? styles.absolute : styles.content}>
-          {!absolute && heading && (
+          {!absolute && !loading && heading && (
             <Heading title={heading.title} subtitle={heading.subtitle}>
               {heading.extra}
             </Heading>
