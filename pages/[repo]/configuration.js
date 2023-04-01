@@ -65,6 +65,11 @@ export default function RepoConfiguration() {
     setConfigData({ ...configData, [name]: value });
   }
 
+  function cancel() {
+    setConfigData(repo.config.data);
+    setEditMode(false);
+  }
+
   function hasChanges() {
     return JSON.stringify(repo.config.data) !== JSON.stringify(configData);
   }
@@ -84,7 +89,7 @@ export default function RepoConfiguration() {
         extra: configData ? (
           editMode ? (
             <>
-              <Button onClick={() => setEditMode(false)}>Cancel</Button>
+              <Button onClick={cancel}>Cancel</Button>
               <Button
                 type="primary"
                 className="ml-2"
