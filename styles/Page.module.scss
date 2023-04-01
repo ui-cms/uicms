@@ -19,11 +19,14 @@
   width: 100%;
   height: 100vh;
   overflow: auto;
+  overflow-x: hidden;
   padding: 0 $space4;
   background-color: $lightest;
 
   @include at-small-screen {
+    width: auto;
     height: 100%;
+    padding: 0 $space2;
   }
 }
 

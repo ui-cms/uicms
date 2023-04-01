@@ -40,6 +40,9 @@ code {
   border-radius: 3px;
   border: 1px solid $regular;
 }
+fieldset {
+  margin: 0;
+}
 
 @include at-large-screen {
   ::-webkit-scrollbar {
