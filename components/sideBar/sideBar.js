@@ -197,7 +197,7 @@ function Header({ open, setOpen }) {
         className={styles.menuToggle}
         onClick={() => setOpen(!open)}
         path={open ? mdiClose : mdiMenu}
-        size={1.125}
+        size={1.1}
       />
       <span className={styles.brand}>UI CMS</span>
 
