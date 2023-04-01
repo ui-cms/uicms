@@ -10,8 +10,7 @@
   display: flex;
   flex-direction: column;
 
-  $headerHeight: 3rem;
-  $userImgSize: 28px; // both height and width
+  $headerHeight: 2.5rem;
   .header {
     height: $headerHeight;
     padding: 0 $space4;
@@ -38,8 +37,8 @@
 
     .user {
       z-index: $zIndex3;
-      height: calc($userImgSize + 2px); // 2px for borders
-      width: calc($userImgSize + 2px); // 2px for borders
+      height: 26px; // img height (24) + borders (2)
+      width: 26px; // img width (24) + borders (2)
 
       &:hover {
         cursor: pointer;
@@ -75,17 +74,13 @@
   }
 
   @include at-small-screen {
-    $headerHight: 2.5rem;
-    $userImgSize: 22px;
-
-    min-height: $headerHight;
+    min-height: $headerHeight;
     width: 100%;
     height: auto;
     border: none;
     z-index: $zIndex2;
 
     .header {
-      height: $headerHight;
       position: unset;
 
       .menuToggle {
@@ -95,16 +90,6 @@
       .brand {
         font-size: 1.5rem;
       }
-
-      .user {
-        height: calc($userImgSize + 2px); // 2px for borders
-        width: calc($userImgSize + 2px); // 2px for borders
-
-        img {
-          width: $userImgSize;
-          height: $userImgSize;
-        }
-      }
     }
 
     .main {
@@ -112,8 +97,8 @@
       position: absolute;
       left: -100%;
       width: 100%;
-      top: calc($headerHight + 1px); //1 px for bottom border
-      height: calc(100% - $headerHight - 1px); //1 px for bottom border
+      top: calc($headerHeight + 1px); //1 px for bottom border
+      height: calc(100% - $headerHeight - 1px); //1 px for bottom border
       background-color: $lighter;
       transition: all 0.1s ease-in;
       overflow: hidden;

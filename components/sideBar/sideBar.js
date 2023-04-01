@@ -209,8 +209,8 @@ function Header({ open, setOpen }) {
               handle={
                 <Image
                   src={currentUser.avatar_url}
-                  width="28"
-                  height="28"
+                  width="24"
+                  height="24"
                   alt="username"
                 />
               }
