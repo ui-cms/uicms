@@ -53,7 +53,7 @@ function SelectedCollectionDetails({ collection, repoId }) {
             }
           >
             <div className={styles.dropdownOptions}>
-              <Link href={`/${repoId}/${collection.id}/settings`}>
+              <Link href={`/${repoId}/${collection.id}/configuration`}>
                 <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
                 Configuration
               </Link>
@@ -74,7 +74,7 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
     <>
       <h4 className="mb-3">Incompatible repo!</h4>
       <p className="mt-4">
-        See <Link href={`/${repoId}/settings`}>configuration page</Link> of this
+        See <Link href={`/${repoId}/configuration`}>configuration page</Link> of this
         repo for more details.
       </p>
     </>

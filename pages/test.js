@@ -82,13 +82,13 @@ export default function Test() {
           <Link href="123/new">New repo page</Link>
         </div>
         <div>
-          <Link href="123/settings">Repo settings page</Link>
+          <Link href="123/configuration">Repo configuration page</Link>
         </div>
         <div>
           <Link href="123/456/new">New collection page</Link>
         </div>
         <div>
-          <Link href="123/456/settings">Collection settings page</Link>
+          <Link href="123/456/configuration">Collection configuration page</Link>
         </div>
         <div>
           <Link href="123/456/item_slug">Item page</Link>

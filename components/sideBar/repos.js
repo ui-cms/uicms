@@ -104,7 +104,7 @@ function SelectedRepoDetails({ repo, currentUserName }) {
             }
           >
             <div className={styles.dropdownOptions}>
-              <Link href={`/${repo.id}/settings`}>
+              <Link href={`/${repo.id}/configuration`}>
                 <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
                 Configuration
               </Link>

@@ -12,7 +12,7 @@ import {
 import { displayError } from "@/helpers/utilities";
 import styles from "@/styles/Repo.module.scss";
 
-export default function RepoSettings() {
+export default function RepoConfiguration() {
   const router = useRouter();
   const repoId = router.query.repo;
   const [loading, setLoading] = useState(false);
@@ -105,7 +105,7 @@ export default function RepoSettings() {
       }}
     >
       {configData ? (
-        <fieldset disabled={!editMode} className={styles.settings}>
+        <fieldset disabled={!editMode}>
           <TextInputWithLabel
             name="websiteName"
             value={configData.websiteName}
