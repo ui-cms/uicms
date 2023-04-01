@@ -36,12 +36,14 @@ h6 {
 }
 code {
   background-color: $light;
-  padding: $space1 $space1;
+  padding: 3px;
   border-radius: 3px;
   border: 1px solid $regular;
 }
 fieldset {
   margin: 0;
+  padding: 0;
+  border: none;
 }
 
 @include at-large-screen {
@@ -152,6 +154,9 @@ fieldset {
 .mt-1 {
   margin-top: $space1;
 }
+.mt-2 {
+  margin-top: $space2;
+}
 .mt-4 {
   margin-top: $space4;
 }
@@ -176,6 +181,10 @@ fieldset {
 .mx-1 {
   margin-right: $space1;
   margin-left: $space1;
+}
+.my-1 {
+  margin-top: $space1;
+  margin-bottom: $space1;
 }
 .my-2 {
   margin-top: $space2;
@@ -213,101 +222,53 @@ fieldset {
   width: 100%;
 }
 
-.uc-overflow-hidden {
-  overflow: hidden;
+.fs-default {
+  font-size: $fontSize1;
 }
-.uc-x-scrollable {
-  overflow-x: auto;
+.fs-medium {
+  font-size: $fontSize095;
 }
-
-.uc-float-right {
-  float: right;
+.fs-smaller {
+  font-size: $fontSize09;
 }
-
-.uc-opacity-25 {
-  opacity: 25%;
+.fs-small {
+  font-size: $fontSize08;
 }
 
-.uc-cursor-default {
-  cursor: default;
-}
-
-.uc-w-25 {
-  width: 25% !important;
-}
-.uc-w-50 {
-  width: 50% !important;
-}
-.uc-w-75 {
-  width: 75% !important;
-}
-.uc-w-100 {
-  width: 100% !important;
-}
-
-.uc-mt-n4 {
-  margin-top: -1rem !important;
-}
-
-.uc-parts {
-  .uc-part {
-    border-style: solid;
-    border-color: hsl(0, 0%, 90%);
-    border-width: 1px;
-    border-bottom-width: 0;
-    padding: 1rem;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    display: block;
-  }
-  .uc-part:first-of-type {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-  .uc-part:last-of-type {
-    border-bottom-width: 1px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-  }
-  a.uc-part {
-    color: black;
-  }
-  a.uc-part.active,
-  a.uc-part:hover {
-    background-color: hsl(0, 0%, 98%);
-  }
-  a.uc-part.active {
-    font-weight: 500;
-  }
-}
+// .uc-parts {
+//   .uc-part {
+//     border-style: solid;
+//     border-color: hsl(0, 0%, 90%);
+//     border-width: 1px;
+//     border-bottom-width: 0;
+//     padding: 1rem;
+//     margin-top: 0 !important;
+//     margin-bottom: 0 !important;
+//     display: block;
+//   }
+//   .uc-part:first-of-type {
+//     border-top-left-radius: 10px;
+//     border-top-right-radius: 10px;
+//   }
+//   .uc-part:last-of-type {
+//     border-bottom-width: 1px;
+//     border-bottom-left-radius: 10px;
+//     border-bottom-right-radius: 10px;
+//   }
+//   a.uc-part {
+//     color: black;
+//   }
+//   a.uc-part.active,
+//   a.uc-part:hover {
+//     background-color: hsl(0, 0%, 98%);
+//   }
+//   a.uc-part.active {
+//     font-weight: 500;
+//   }
+// }
 
 @include at-small-screen {
-  .uc-flex-dir-col-sm {
-    flex-direction: column;
-  }
-
-  .uc-pt-2-sm {
-    padding-top: 0.5rem !important;
-  }
-
-  .uc-mt-3-sm {
-    margin-top: 0.75rem !important;
-  }
-
-  .uc-mx-n2-sm {
-    margin-left: -0.5rem !important;
-    margin-right: -0.5rem !important;
-  }
-
-  .uc-w-100-sm {
-    width: 100% !important;
-  }
-
-  .uc-d-block-sm {
-    display: block !important;
-  }
-
-  .uc-float-left-sm {
-    float: left !important;
+  .w-100-sm {
+    width: 100%;
   }
 }

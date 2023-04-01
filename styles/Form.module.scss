@@ -13,6 +13,11 @@
     background-color: $primaryLight;
     border-color: $primary;
   }
+  &:disabled,
+  &:read-only {
+    border-color: $light;
+    color: $dark;
+  }
 }
 
 .checkbox {

@@ -5,13 +5,12 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
-import Icon from "@mdi/react";
-import { mdiCircleSmall } from "@mdi/js";
 import {
   UICMS_CONFIGS,
   UICMS_CONFIG_STARTER_TEMPLATE,
 } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
+import styles from "@/styles/Repo.module.scss";
 
 export default function RepoSettings() {
   const router = useRouter();
@@ -51,7 +50,7 @@ export default function RepoSettings() {
         dispatchAction.updateRepo({
           ...repo,
           config: { sha: null, data: null },
-        }); // reset config, so that it will be fetched again in sidebar as sha has been changed
+        }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
         setEditMode(false);
       } catch (e) {
         displayError("Error saving config file!", e);
@@ -106,7 +105,7 @@ export default function RepoSettings() {
       }}
     >
       {configData ? (
-        <fieldset disabled={!editMode}>
+        <fieldset disabled={!editMode} className={styles.settings}>
           <TextInputWithLabel
             name="websiteName"
             value={configData.websiteName}
@@ -191,16 +190,9 @@ function TextInputWithLabel({
   return (
     <div className="mb-5">
       {label && (
-        <label>
+        <label className="fs-medium">
           {label}
-          {required && (
-            <Icon
-              path={mdiCircleSmall}
-              size={1}
-              className="text-danger"
-              title="Required field"
-            />
-          )}
+          {required && <span className="text-danger ml-1">*</span>}
         </label>
       )}
       <TextInput
@@ -209,7 +201,7 @@ function TextInputWithLabel({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="d-block mt-1 mb-1"
+        className="d-block w-50 w-100-sm my-1"
       />
       {help && <small>{help}</small>}
     </div>

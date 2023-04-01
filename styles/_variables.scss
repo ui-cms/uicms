@@ -25,6 +25,11 @@ $zIndex1: 5; // below sidebar
 $zIndex2: 10; // sidebar
 $zIndex3: 15; // above sidebar
 
+$fontSize1: 1rem;
+$fontSize095: 0.95rem;
+$fontSize09: 0.9rem;
+$fontSize08: 0.8rem;
+
 @mixin at-small-screen {
   @media screen and (max-width: $smallScreenBreakpoint) {
     @content;
