@@ -14,9 +14,9 @@ import { displayError } from "@/helpers/utilities";
 export default function RepoConfiguration() {
   const router = useRouter();
   const repoId = router.query.repo;
-  const [loading, setLoading] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [repo, setRepo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
   const [configData, setConfigData] = useState(null); // local one
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -28,6 +28,7 @@ export default function RepoConfiguration() {
       if (_repo) {
         setRepo(_repo);
         setConfigData(_repo.config.data);
+        setLoading(false);
       } else {
         router.push("/404");
       }

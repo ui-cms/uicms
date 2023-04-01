@@ -79,10 +79,10 @@ function MainWithTabs({
         const repo = repos.find((r) => r.id === Number(repoId));
         if (repo) {
           let collection = null;
-          if (url.collectionId && repo.config.data) {
-            const collectionId = selectedCollection
-              ? selectedCollection.id
-              : url.collectionId; // when landed from url, will use collectionId from url initially to set selected collection
+          const collectionId = selectedCollection
+            ? selectedCollection.id
+            : url.collectionId; // when landed from url, will use collectionId from url initially to set selected collection
+          if (collectionId && repo.config.data) {
             collection = repo.config.data.collections.find(
               (c) => c.id === collectionId
             );

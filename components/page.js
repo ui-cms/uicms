@@ -33,14 +33,18 @@ export default function Page({
       </Head>
       <Suspense fallback={<Loader />}>
         <article className={absolute ? styles.absolute : styles.content}>
-          {!absolute && !loading && heading && (
-            <Heading title={heading.title} subtitle={heading.subtitle}>
-              {heading.extra}
-            </Heading>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              {!absolute && heading && (
+                <Heading title={heading.title} subtitle={heading.subtitle}>
+                  {heading.extra}
+                </Heading>
+              )}
+              <section>{children}</section>
+            </>
           )}
-          <section className={styles.body}>
-            {loading ? <Loader /> : children}
-          </section>
         </article>
       </Suspense>
     </>
