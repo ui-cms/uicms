@@ -133,7 +133,7 @@
       display: flex;
       align-items: flex-end;
       color: $dark;
-      font-size: 0.9rem;
+      font-size: $fontSize09;
     }
   }
 
@@ -159,7 +159,7 @@
   }
 
   label {
-    font-size: 0.9rem;
+    font-size: $fontSize09;
   }
 }
 
@@ -174,7 +174,7 @@
     a {
       display: flex;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: $fontSize09;
       padding: 7px $space4;
       text-decoration: none;
       color: $dark;
@@ -197,7 +197,7 @@
     text-decoration: none;
     color: $dark;
     padding: $space2 $space1;
-    font-size: 0.9rem;
+    font-size: $fontSize09;
 
     &:hover {
       color: $darker;

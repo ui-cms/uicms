@@ -3,7 +3,7 @@
 .textInput {
   border: 1px solid $regular;
   background-color: $lighter;
-  font-size: 1rem;
+  font-size: $fontSize1;
   color: $darker;
   padding: 6px 12px;
   border-radius: 5px;
@@ -23,7 +23,7 @@
 
 .checkbox {
   color: $darker;
-  font-size: 1rem;
+  font-size: $fontSize1;
   display: flex;
   align-items: center;
   cursor: pointer;
