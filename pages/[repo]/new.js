@@ -1,7 +1,8 @@
 import Page from "@/components/page";
 
 export default function NewRepo() {
-  // the [repo] param will be "repo", url will be for this page /repo/new
+  // Path for this page is /repo/new
+  // Value for [repo] param will be "repo"
   return (
     <Page title="New repo">
       <h1>New repo</h1>

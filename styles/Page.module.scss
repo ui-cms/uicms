@@ -18,7 +18,7 @@
 .content {
   width: 100%;
   height: 100vh;
-  overflow: auto;
+  overflow-y: auto;
   overflow-x: hidden;
   padding: 0 $space4;
   background-color: $lightest;

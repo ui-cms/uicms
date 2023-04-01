@@ -10,7 +10,6 @@ import {
   UICMS_CONFIG_STARTER_TEMPLATE,
 } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
-import styles from "@/styles/Repo.module.scss";
 
 export default function RepoConfiguration() {
   const router = useRouter();
@@ -29,9 +28,12 @@ export default function RepoConfiguration() {
       if (_repo) {
         setRepo(_repo);
         setConfigData(_repo.config.data);
+      } else {
+        router.push("/404");
       }
     }
-  }, [repoId, state.repos]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoId, state.repos]); // only trigger when repoId or repos changes
 
   const save = async () => {
     if (confirm("Are you sure ? ")) {
