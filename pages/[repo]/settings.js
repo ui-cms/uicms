@@ -151,8 +151,9 @@ export default function RepoSettings() {
       )}
 
       <br />
+      <br />
       {repo?.pushed_at && (
-        <small className="text-dark mt-6 d-block">
+        <small className="text-dark mb-2 d-block">
           The last push (update) to this repo was made on{" "}
           {new Date(repo.pushed_at).toLocaleString()}.
         </small>

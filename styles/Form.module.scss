@@ -8,6 +8,7 @@
   padding: 6px 12px;
   border-radius: 5px;
   outline: none;
+  box-sizing: border-box;
 
   &:focus {
     background-color: $primaryLight;
