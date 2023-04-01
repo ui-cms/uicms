@@ -11,7 +11,7 @@ export default function Test() {
   const [testVal, setTestVal] = useStorage("test", "localStorage");
   const [loading, setLoading] = useState(false);
   return (
-    <Page title="Test">
+    <Page title="Test" authProtected={false}>
       <div className="p-4">
         <h1>Test page</h1>
         {testVal && <div>{testVal}</div>}
@@ -88,7 +88,9 @@ export default function Test() {
           <Link href="123/456/new">New collection page</Link>
         </div>
         <div>
-          <Link href="123/456/configuration">Collection configuration page</Link>
+          <Link href="123/456/configuration">
+            Collection configuration page
+          </Link>
         </div>
         <div>
           <Link href="123/456/item_slug">Item page</Link>
