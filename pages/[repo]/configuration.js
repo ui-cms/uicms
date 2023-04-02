@@ -10,6 +10,9 @@ import {
   UICMS_CONFIG_STARTER_TEMPLATE,
 } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
+import Tooltip from "@/components/tooltip";
+import Icon from "@mdi/react";
+import { mdiHelpCircleOutline } from "@mdi/js";
 
 export default function RepoConfiguration() {
   const router = useRouter();
@@ -147,7 +150,7 @@ export default function RepoConfiguration() {
             help={
               <span>
                 The git directory where you would like collection items (
-                <code>.md</code> files) to be stored.
+                <em>.md</em> files) to be stored.
               </span>
             }
             placeholder="_contents/collections"
@@ -197,22 +200,28 @@ function TextInputWithLabel({
   help,
 }) {
   return (
-    <div className="mb-5">
-      {label && (
-        <label className="fs-medium">
-          {label}
-          {required && <span className="text-danger ml-1">*</span>}
-        </label>
-      )}
+    <div className="w-50 w-100-sm mb-5">
+      <div className="d-flex justify-content-space-between">
+        {label && (
+          <label className="fs-medium">
+            {label}
+            {required && <span className="text-danger ml-1">*</span>}
+          </label>
+        )}
+        {help && (
+          <Tooltip content={help} className="text-dark">
+            <Icon path={mdiHelpCircleOutline} size={0.7} className="mr-1" />
+          </Tooltip>
+        )}
+      </div>
       <TextInput
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="d-block w-50 w-100-sm my-1"
+        className="w-100 my-1"
       />
-      {help && <small>{help}</small>}
     </div>
   );
 }

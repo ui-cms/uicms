@@ -1,6 +1,4 @@
 import { useMemo, useState, useRef } from "react";
-import Icon from "@mdi/react";
-import { mdiHelpCircle } from "@mdi/js";
 import styles from "@/styles/Tooltip.module.scss";
 
 export default function Tooltip({ children, content, className }) {
@@ -37,7 +35,7 @@ export default function Tooltip({ children, content, className }) {
       className={`${styles.tooltip} ${className || ""}`}
       onMouseOver={onHover}
     >
-      {children || <Icon path={mdiHelpCircle} size={1} color="#848484" />}
+      {children || <span>&#8505;</span>}
       <div className={styles.content} ref={contentRef} style={position}>
         {content}
       </div>
