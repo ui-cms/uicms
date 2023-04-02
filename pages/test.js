@@ -3,6 +3,7 @@ import DropDown from "@/components/dropdown";
 import { CheckBox, TextInput } from "@/components/form";
 import Loader from "@/components/loader";
 import Page from "@/components/page";
+import Tooltip from "@/components/tooltip";
 import useStorage from "@/hooks/useStorage";
 import Link from "next/link";
 import { useState } from "react";
@@ -107,6 +108,16 @@ export default function Test() {
               </li>
             </ul>
           </DropDown>
+        </div>
+
+        <div>
+          <Tooltip content="Text may go here" />
+        </div>
+        <div>
+          <Tooltip content="Text may go here">Test tooltip</Tooltip>
+        </div>
+        <div>
+          <Tooltip content="Text may go here"><Button>Testing tooltip</Button></Tooltip>
         </div>
       </div>
     </Page>
