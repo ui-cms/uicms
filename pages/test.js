@@ -80,13 +80,13 @@ export default function Test() {
         </Button>
 
         <div>
-          <Link href="123/new">New repo page</Link>
+          <Link href="repo/new">New repo page</Link>
         </div>
         <div>
           <Link href="123/configuration">Repo configuration page</Link>
         </div>
         <div>
-          <Link href="123/456/new">New collection page</Link>
+          <Link href="123/new/configuration">New collection page</Link>
         </div>
         <div>
           <Link href="123/456/configuration">

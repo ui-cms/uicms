@@ -9,8 +9,9 @@ export default function CollectionConfiguration() {
   const router = useRouter();
   const repoId = router.query.repo;
   const collectionId = router.query.collection;
+  const isNew = collectionId?.toLowerCase() === "new"; // when creating new collection. url path: /repoId/new/configuration
   const [loading, setLoading] = useState(true);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(isNew);
   const [collection, setCollection] = useState(null);
   const [configData, setConfigData] = useState(null); // local one
   const githubApi = useGitHubApi();
@@ -22,9 +23,9 @@ export default function CollectionConfiguration() {
       const repo = state.repos.find((r) => r.id === Number(repoId));
       if (repo && collectionId) {
         if (repo.config.data) {
-          const _collection = repo.config.data.collections.find(
-            (c) => c.id === collectionId
-          );
+          const _collection = isNew
+            ? {}
+            : repo.config.data.collections.find((c) => c.id === collectionId);
           if (_collection) {
             setCollection(_collection);
             setConfigData(_collection);
@@ -42,19 +43,19 @@ export default function CollectionConfiguration() {
 
   return (
     <Page
-      title="Collection configuration"
+      title={isNew ? "New collection" : "Collection configuration"}
       loading={loading}
       heading={{
-        title: collection?.name,
-        subtitle: "Configuration",
+        title: isNew ? "New collection" : collection?.name,
+        subtitle: !isNew && "Configuration",
         extra: editMode ? (
           <>
-            <Button onClick={cancel}>Cancel</Button>
+            {!isNew && <Button onClick={cancel}>Cancel</Button>}
             <Button
               type="primary"
               className="ml-2"
-              onClick={save}
-              disabled={!hasChanges()}
+              // onClick={save}
+              // disabled={!hasChanges()}
             >
               Save
             </Button>

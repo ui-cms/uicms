@@ -11,6 +11,7 @@ import {
   mdiFolderOutline,
 } from "@mdi/js";
 import DropDown from "../dropdown";
+import { useRouter } from "next/router";
 
 export function Collections({ repo, selectedCollection, selectCollection }) {
   return (
@@ -69,13 +70,25 @@ function SelectedCollectionDetails({ collection, repoId }) {
   );
 }
 
-function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
+function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {  
+  const router = useRouter();
+  const collectionId = router.query.collection;
+
+  function onClick(collection) {
+    const selected = collection.id === selectedCollectionId;
+    onSelect(selected ? null : collection);
+    
+    if (collectionId) {
+      router.push("/start"); // reset url
+    }
+  }
+
   return !data ? (
     <>
       <h4 className="mb-3">Incompatible repo!</h4>
       <p className="mt-4">
-        See <Link href={`/${repoId}/configuration`}>configuration page</Link> of this
-        repo for more details.
+        See <Link href={`/${repoId}/configuration`}>configuration page</Link> of
+        this repo for more details.
       </p>
     </>
   ) : data.collections.length === 0 ? (
@@ -87,7 +100,7 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
         return (
           <li key={c.id}>
             <a
-              onClick={() => onSelect(selected ? null : c)}
+              onClick={() => onClick(c)}
               className={selected ? styles.active : ""}
               href="#"
             >

@@ -71,7 +71,7 @@ function MainWithTabs({
   const { state, dispatchAction } = useStateManagement();
   const { repos } = state;
 
-  // Repos in state is updated, so update selected repo as well (as it might be updated in state.repos)
+  // Repos in state is updated, so update selected repo as well (as it might be updated in state management)
   useEffect(() => {
     if (repos.length) {
       const repoId = selectedRepo ? selectedRepo.id : url.repoId; // when landed from url, will use repoId from url initially as there won't be a selected repo
@@ -96,6 +96,7 @@ function MainWithTabs({
   }, [repos]); // trigger only when repos in state gets updated
 
   // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched. That is how fetching config is triggered.
+  // Because all pages like repo config, collection config, new collection, item has url that starts with repo id and they all need repo to be loaded.
   useEffect(() => {
     if (
       selectedRepo &&
@@ -240,7 +241,7 @@ function Footer({ activeTabIndex, repoId, collectionId }) {
     const result = { text: "New repo", url: "/repo/new" };
     if (activeTabIndex === 1) {
       result.text = "New collection";
-      result.url = `/${repoId}/collection/new`;
+      result.url = `/${repoId}/new/configuration`;
     } else if (activeTabIndex === 2) {
       result.text = "New item";
       result.url = `/${repoId}/${collectionId}/item/new`;
