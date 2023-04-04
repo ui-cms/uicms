@@ -12,6 +12,8 @@ import {
 } from "@mdi/js";
 import DropDown from "../dropdown";
 import { useRouter } from "next/router";
+import { useMemo } from "react";
+import { orderBy } from "@/helpers/utilities";
 
 export function Collections({ repo, selectedCollection, selectCollection }) {
   return (
@@ -70,18 +72,22 @@ function SelectedCollectionDetails({ collection, repoId }) {
   );
 }
 
-function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {  
+function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
   const router = useRouter();
   const collectionId = router.query.collection;
 
   function onClick(collection) {
     const selected = collection.id === selectedCollectionId;
     onSelect(selected ? null : collection);
-    
+
     if (collectionId) {
       router.push("/start"); // reset url
     }
   }
+
+  const sortedCollections = useMemo(() => {
+    return orderBy(data.collections, "name", true);
+  }, [data.collections]);
 
   return !data ? (
     <>
@@ -95,7 +101,7 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
     <p>No collections found</p>
   ) : (
     <ul className={styles.listArea}>
-      {data.collections.map((c) => {
+      {sortedCollections.map((c) => {
         const selected = c.id === selectedCollectionId;
         return (
           <li key={c.id}>
