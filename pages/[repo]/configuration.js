@@ -7,7 +7,7 @@ import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
 import {
   UICMS_CONFIGS,
-  UICMS_CONFIG_STARTER_TEMPLATE,
+  UICMS_CONFIG_TEMPLATE,
 } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
@@ -81,7 +81,7 @@ export default function RepoConfiguration() {
   }
 
   function initConfig() {
-    setConfigData({ ...UICMS_CONFIG_STARTER_TEMPLATE });
+    setConfigData({ ...UICMS_CONFIG_TEMPLATE });
     setEditMode(true);
   }
 
@@ -190,7 +190,7 @@ function NotFound() {
   );
 }
 
-function TextInputWithLabel({
+export function TextInputWithLabel({
   name,
   value,
   label,

@@ -86,8 +86,8 @@ function CollectionList({ repoId, data, selectedCollectionId, onSelect }) {
   }
 
   const sortedCollections = useMemo(() => {
-    return orderBy(data.collections, "name", true);
-  }, [data.collections]);
+    return data?.collections ? orderBy(data.collections, "name", true) : [];
+  }, [data?.collections]);
 
   return !data ? (
     <>

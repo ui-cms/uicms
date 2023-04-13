@@ -1,7 +1,7 @@
 import Page from "@/components/page";
 import {
   UICMS_CONFIGS,
-  UICMS_CONFIG_STARTER_TEMPLATE,
+  UICMS_CONFIG_TEMPLATE,
 } from "@/helpers/constants";
 import { displayError, generateRandomString } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
@@ -147,7 +147,7 @@ export default function Repo() {
 
 function NotFound({ setConfig }) {
   function initConfig() {
-    setConfig({ ...UICMS_CONFIG_STARTER_TEMPLATE });
+    setConfig({ ...UICMS_CONFIG_TEMPLATE });
   }
 
   return (

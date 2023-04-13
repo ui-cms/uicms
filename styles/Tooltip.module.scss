@@ -6,12 +6,12 @@
   .content {
     position: fixed;
     display: none;
-    z-index: 1000;
+    z-index: $zIndex3;
     width: 200px;
-    background: #000000cc;
-    color: #efefef;
-    font-size: 14px;
-    padding: 2px 6px;
+    background: rgba($darker, 75%);
+    color: $lighter;
+    font-size: $fontSize09;
+    padding: 3px 6px;
     border-radius: 3px;
     cursor: help;
     text-align: left;

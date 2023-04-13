@@ -26,12 +26,22 @@ export const UICMS_CONFIGS = {
   uniqueKeyLength: 8, // e.g collection ids
 };
 
-export const UICMS_CONFIG_STARTER_TEMPLATE = {
+export const UICMS_CONFIG_TEMPLATE = {
   websiteName: "",
   websiteUrl: "",
   assetsDirectory: UICMS_CONFIGS.defaultAssetsDirectory,
   collectionsDirectory: UICMS_CONFIGS.defaultCollectionsDirectory,
   collections: [],
 };
+
+export const UICMS_CONFIG_COLLECTION_TEMPLATE={
+  id: null,
+  name:"",
+  path:"",
+  item:{
+    name: "",
+    properties:[]
+  }
+}
 
 export const UICMS_TOPIC = "uicms"; // to be used as a topic in GitHub repos
