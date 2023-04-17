@@ -11,17 +11,17 @@ export const UICMS_CONFIGS = {
   defaultAssetsDirectory: "_contents/assets", // has to be a folder that will be present after build
   defaultCollectionsDirectory: "_contents/collections", // has to be a folder that will be present after build
   collectionItemPropertyTypes: {
-    string: "string",
-    richText: "richtext",
-    boolean: "boolean",
-    date: "date",
-    file: "file",
+    string: 1,
+    richText: 2,
+    boolean: 3,
+    date: 4,
+    file: 5,
   },
   collectionItemDefaultProperties: [
-    { name: "Author", id: "author", type: "string", required: true },
-    { name: "Date", id: "date", type: "date", required: true },
-    { name: "Published", id: "published", type: "boolean", required: true },
-    { name: "Body", id: "body", type: "richtext", required: false },
+    { name: "Author", id: "author", type: 1, required: true },
+    { name: "Body", id: "body", type: 2, required: false },
+    { name: "Published", id: "published", type: 3, required: true },
+    { name: "Date", id: "date", type: 4, required: true },
   ],
   uniqueKeyLength: 8, // e.g collection ids
 };

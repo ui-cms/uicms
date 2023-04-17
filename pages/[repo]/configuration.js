@@ -5,10 +5,7 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
-import {
-  UICMS_CONFIGS,
-  UICMS_CONFIG_TEMPLATE,
-} from "@/helpers/constants";
+import { UICMS_CONFIGS, UICMS_CONFIG_TEMPLATE } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
@@ -91,7 +88,7 @@ export default function RepoConfiguration() {
       loading={loading}
       heading={{
         title: repo?.name,
-        subtitle: "Configuration",
+        subtitle: `Configuration (${editMode ? "edit" : "view"} mode)`,
         extra: configData ? (
           editMode ? (
             <>
@@ -116,7 +113,7 @@ export default function RepoConfiguration() {
       }}
     >
       {configData ? (
-        <fieldset disabled={!editMode}>
+        <fieldset disabled={!editMode} className="w-50 w-100-sm">
           <TextInputWithLabel
             name="websiteName"
             value={configData.websiteName}
@@ -158,7 +155,7 @@ export default function RepoConfiguration() {
           />
         </fieldset>
       ) : (
-        <NotFound initConfig={initConfig} />
+        <IncompatibleRepo initConfig={initConfig} />
       )}
 
       <br />
@@ -173,7 +170,7 @@ export default function RepoConfiguration() {
   );
 }
 
-function NotFound() {
+function IncompatibleRepo() {
   return (
     <div>
       <h3 className="mb-3">Incompatible repo!</h3>
@@ -200,7 +197,7 @@ export function TextInputWithLabel({
   help,
 }) {
   return (
-    <div className="w-50 w-100-sm mb-5">
+    <div className="mb-5">
       <div className="d-flex justify-content-space-between">
         {label && (
           <label className="fs-medium">

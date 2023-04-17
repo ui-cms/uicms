@@ -14,8 +14,7 @@
     background-color: $primaryLight;
     border-color: $primary;
   }
-  &:disabled,
-  &:read-only {
+  &:disabled{
     border-color: $light;
     color: $dark;
   }
@@ -63,4 +62,21 @@
 }
 
 .select {
+  opacity: 1;
+  border: 1px solid $regular;
+  background-color: $lighter;
+  font-size: $fontSize1;
+  color: $darker;
+  padding: 6px 8px;
+  border-radius: 5px;
+  outline: none;
+
+  &:focus {
+    background-color: $primaryLight;
+    border-color: $primary;
+  }
+  &:disabled {
+    border-color: $light;
+    color: $dark;
+  }
 }
