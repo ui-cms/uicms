@@ -88,7 +88,7 @@ export default function RepoConfiguration() {
       loading={loading}
       heading={{
         title: repo?.name,
-        subtitle: `Configuration (${editMode ? "editing" : "viewing"})`,
+        subtitle: editMode ? "Editing configuration" : "Configuration",
         buttons: configData ? (
           editMode ? (
             <>

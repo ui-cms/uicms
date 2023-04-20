@@ -78,7 +78,8 @@ export default function CollectionConfiguration() {
   }
 
   function cancel() {
-    setConfigData(collection);
+    // deep copy of collection needed or cancelling editMode and reseting changes made in propertiis won't be reverted
+    setConfigData(JSON.parse(JSON.stringify(collection)));
     setEditMode(false);
   }
 
@@ -92,8 +93,11 @@ export default function CollectionConfiguration() {
       loading={loading}
       heading={{
         title: isNew ? "New collection" : collection?.name,
-        subtitle:
-          !isNew && `Configuration (${editMode ? "editing" : "viewing"})`,
+        subtitle: isNew
+          ? "New collection"
+          : editMode
+          ? "Editing configuration"
+          : "Configuration",
         buttons: editMode ? (
           <>
             {!isNew && (
@@ -155,6 +159,7 @@ export default function CollectionConfiguration() {
             <ItemProperties
               properties={configData.item.properties}
               updateProperties={updateProperties}
+              editMode={editMode}
             />
           )}
         </fieldset>
@@ -163,8 +168,12 @@ export default function CollectionConfiguration() {
   );
 }
 
-function ItemProperties({ properties, updateProperties }) {
+function ItemProperties({ properties, updateProperties, editMode }) {
   const [editingId, setEditingId] = useState(null); // id of the property which is currently is in edit mode
+
+  useEffect(() => {
+    if (!editMode) setEditingId(null); // when editMode cancelled, cancel property editing as well
+  }, [editMode]);
 
   function updateProperty(property) {
     updateProperties(
@@ -177,7 +186,8 @@ function ItemProperties({ properties, updateProperties }) {
   }
 
   function addProperty() {
-    const property = { id: new Date().getTime() };
+    const property = { isNew: true, id: new Date().getTime().toString() }; // use isNew property to delete/cancel
+    setEditingId(property.id.toString());
     updateProperties([...properties, property]);
   }
 
@@ -223,13 +233,21 @@ function ItemProperties({ properties, updateProperties }) {
           removeProperty={removeProperty}
           editingId={editingId}
           setEditingId={setEditingId}
+          editMode={editMode}
         />
       ))}
 
-      <Button onClick={addProperty} type="primaryLight" className="mt-3">
-        <Icon path={mdiPlus} size={0.75} className="mr-1" />
-        New item property
-      </Button>
+      {editMode && (
+        <Button
+          onClick={addProperty}
+          type="primaryLight"
+          className="mt-3"
+          disabled={editingId}
+        >
+          <Icon path={mdiPlus} size={0.75} className="mr-1" />
+          New item property
+        </Button>
+      )}
     </details>
   );
 }
@@ -241,6 +259,7 @@ function Property({
   showLabels,
   editingId,
   setEditingId,
+  editMode,
 }) {
   const [prop, setProp] = useState({}); // local
 
@@ -263,7 +282,8 @@ function Property({
   }
 
   function cancel() {
-    setProp({ ...property });
+    if (prop.isNew) removeProperty(prop.id); // delete newly created property
+    else setProp({ ...property }); // cancel (reset changes) existing property
     setEditingId(null);
   }
 
@@ -278,7 +298,7 @@ function Property({
         editingId && !editing ? "opacity-50" : ""
       }`}
     >
-      <div>
+      <div className="mr-2">
         {showLabels && (
           <div className="d-flex justify-content-space-between">
             <label className="d-block fs-medium mb-1">
@@ -314,7 +334,7 @@ function Property({
           )}
         </Select>
       </div>
-      <div className="w-100 mx-2">
+      <div className="w-100">
         <TextInputWithLabel
           name="name"
           value={prop.name}
@@ -327,46 +347,53 @@ function Property({
         />
       </div>
 
-      <div className="d-flex align-items-flex-end">
-        {editing ? (
-          <>
-            <Button
-              onClick={apply}
-              title="Apply changes"
-              className="px-1 mr-2"
-              type="primary"
-              size="sm"
-              disabled={!hasValidChanges()}
-            >
-              <Icon path={mdiCheck} size={0.8} />
-            </Button>
-            <Button onClick={cancel} title="Cancel" className="px-1" size="sm">
-              <Icon path={mdiClose} size={0.8} />
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button
-              onClick={() => setEditingId(property.id)}
-              title="Edit"
-              className="px-1 mr-2"
-              size="sm"
-              disabled={editingId}
-            >
-              <Icon path={mdiPencilOutline} size={0.8} />
-            </Button>
-            <Button
-              onClick={() => removeProperty(property.id)}
-              title="Remove"
-              className="px-1"
-              size="sm"
-              disabled={editingId}
-            >
-              <Icon path={mdiDeleteOutline} size={0.8} />
-            </Button>
-          </>
-        )}
-      </div>
+      {editMode && (
+        <div className="d-flex align-items-center ml-2">
+          {editing ? (
+            <>
+              <Button
+                onClick={apply}
+                title="Apply changes"
+                className="px-1 mr-2"
+                type="primary"
+                size="sm"
+                disabled={!hasValidChanges()}
+              >
+                <Icon path={mdiCheck} size={0.8} />
+              </Button>
+              <Button
+                onClick={cancel}
+                title="Cancel"
+                className="px-1"
+                size="sm"
+              >
+                <Icon path={mdiClose} size={0.8} />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => setEditingId(prop.id)}
+                title="Edit"
+                className="px-1 mr-2"
+                size="sm"
+                disabled={editingId}
+              >
+                <Icon path={mdiPencilOutline} size={0.8} />
+              </Button>
+              <Button
+                onClick={() => removeProperty(prop.id)}
+                title="Remove"
+                className="px-1"
+                size="sm"
+                disabled={editingId}
+              >
+                <Icon path={mdiDeleteOutline} size={0.8} />
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
