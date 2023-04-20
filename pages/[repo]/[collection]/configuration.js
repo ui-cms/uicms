@@ -88,18 +88,25 @@ export default function CollectionConfiguration() {
           !isNew && `Configuration (${editMode ? "edit" : "view"} mode)`,
         extra: editMode ? (
           <>
-            {!isNew && <Button onClick={cancel}>Cancel</Button>}
+            {!isNew && (
+              <Button size="sm" onClick={cancel}>
+                Cancel
+              </Button>
+            )}
             <Button
               type="primary"
               className="ml-2"
               onClick={save}
               disabled={!hasChanges()}
+              size="sm"
             >
               Save
             </Button>
           </>
         ) : (
-          <Button onClick={() => setEditMode(true)}>Edit</Button>
+          <Button type="primary" size="sm" onClick={() => setEditMode(true)}>
+            Edit
+          </Button>
         ),
       }}
     >

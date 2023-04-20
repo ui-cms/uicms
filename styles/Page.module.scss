@@ -30,27 +30,49 @@
   }
 }
 
+$headingHeight: 2.4rem;
 .heading {
+  height: $headingHeight;
+  box-sizing: border-box;
+  background-color: $lighter;
+  border-bottom: 1px solid $regular;
   display: flex;
   margin-left: -$space4;
   margin-right: -$space4;
-  margin-bottom: $space2;
-  padding: $space2 $space4;
+  margin-bottom: $space4;
+  padding: 0 $space4;
   overflow: hidden;
   align-items: center;
+  position: sticky;
+  top: 0;
 
-  h2 {
-    flex-grow: 1;
-    color: $darker;
-    padding-bottom: $space1;
+  div {
+    display: flex;
+    align-items: center;
+    flex-grow: 2;
+    overflow: hidden;
+
+    h3 {
+      flex-grow: 1;
+      color: $darker;
+    }
+    small {
+      flex-grow: 1;
+      text-align: center;
+      color: $dark;
+      font-size: $fontSize095;
+    }
+
+    @include at-small-screen {
+      flex-direction: column;
+      align-items: flex-start;
+
+      small {
+        text-align: left;
+      }
+    }
   }
-  small {
-    flex-grow: 1;
-    text-align: center;
-    color: $dark;
-    font-size: $fontSize1;
-    padding-bottom: $space2;
-  }
+
   menu {
     flex-grow: 1;
     justify-content: flex-end;
@@ -58,8 +80,8 @@
   }
 
   @include at-small-screen {
-    border-bottom: 1px solid $light;
-    flex-direction: column;
-    align-items: flex-start;
+    $headingHeight: 3.1rem;
+
+    height: $headingHeight;
   }
 }

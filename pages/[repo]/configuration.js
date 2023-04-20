@@ -92,9 +92,12 @@ export default function RepoConfiguration() {
         extra: configData ? (
           editMode ? (
             <>
-              <Button onClick={cancel}>Cancel</Button>
+              <Button size="sm" onClick={cancel}>
+                Cancel
+              </Button>
               <Button
                 type="primary"
+                size="sm"
                 className="ml-2"
                 onClick={save}
                 disabled={!hasChanges()}
@@ -103,7 +106,9 @@ export default function RepoConfiguration() {
               </Button>
             </>
           ) : (
-            <Button onClick={() => setEditMode(true)}>Edit</Button>
+            <Button type="primary" size="sm" onClick={() => setEditMode(true)}>
+              Edit
+            </Button>
           )
         ) : (
           <Button type="primaryLight" onClick={initConfig}>

@@ -13,6 +13,7 @@
   $headerHeight: 2.5rem;
   .header {
     height: $headerHeight;
+    box-sizing: border-box;
     padding: 0 $space4;
     background-color: $light;
     border-bottom: 1px solid $regular;

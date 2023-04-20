@@ -7,11 +7,13 @@ export function Button({
   loading = false,
   disabled = false,
   type = "", // primary | primaryLight | danger | dangerLight
+  size = "", // sm
   ...rest
 }) {
   let _className = styles.button;
   if (loading) _className += " " + styles.loading;
   if (type) _className += " " + styles[type];
+  if (size) _className += " " + styles[size];
   if (className) _className += " " + className;
 
   return (

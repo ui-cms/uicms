@@ -54,8 +54,10 @@ export default function Page({
 function Heading({ title, subtitle, children }) {
   return (
     <nav className={styles.heading}>
-      <h2>{title}</h2>
-      <small>{subtitle}</small>
+      <div>
+        <h3 className="text-overflow">{title}</h3>
+        <small className="text-overflow">{subtitle}</small>
+      </div>
       <menu className={styles.extra}>{children}</menu>
     </nav>
   );
