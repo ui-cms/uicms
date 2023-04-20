@@ -142,28 +142,35 @@ export default function CollectionConfiguration() {
 
           <details open>
             <summary className="border-bottom pb-2 my-6">
-              Item properties
-              <Tooltip
-                content={
-                  <>
-                    Item properties are fields of a collection item. They have
-                    to have a name and type. A property&apos;s type defines what
-                    kind of data it will hold. Its name is for your reference.
-                    <br />
-                    <br />
-                    The (only) property with type <em>richText</em> is used to
-                    compose a collection item&apos;s body. Properties with other
-                    types are used as meta data.
-                    <br />
-                    <br />
-                    Some of the properties are built-in as default and can not
-                    be removed.
-                  </>
-                }
-                className="text-dark ml-3 position-absolute"
-              >
-                <Icon path={mdiHelpCircleOutline} size={0.7} />
-              </Tooltip>
+              <span className="d-inline-flex align-items-center">
+                Item properties
+                <Tooltip
+                  content={
+                    <>
+                      Item properties are fields of a collection item. They have
+                      to have a name and type. A property&apos;s type defines
+                      what kind of data it will hold. Its name is for your
+                      reference.
+                      <br />
+                      <br />
+                      The (only) property with type <em>richText</em> is used to
+                      compose a collection item&apos;s body. Properties with
+                      other types are used as meta data.
+                      <br />
+                      <br />
+                      Some of the properties are built-in as default and can not
+                      be removed.
+                    </>
+                  }
+                  className="text-dark ml-3"
+                >
+                  <Icon
+                    path={mdiHelpCircleOutline}
+                    size={0.7}
+                    style={{ paddingTop: "2px" }}
+                  />
+                </Tooltip>
+              </span>
             </summary>
 
             <ItemProperty />
