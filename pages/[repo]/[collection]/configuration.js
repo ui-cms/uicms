@@ -186,8 +186,8 @@ function ItemProperties({ properties, updateProperties, editMode }) {
   }
 
   function addProperty() {
-    const property = { isNew: true, id: new Date().getTime().toString() }; // use isNew property to delete/cancel
-    setEditingId(property.id.toString());
+    const property = { isNew: true, id: new Date().getTime() }; // use isNew property to delete (on cancel click)
+    setEditingId(property.id);
     updateProperties([...properties, property]);
   }
 
