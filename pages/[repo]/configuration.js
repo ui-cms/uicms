@@ -88,8 +88,8 @@ export default function RepoConfiguration() {
       loading={loading}
       heading={{
         title: repo?.name,
-        subtitle: `Configuration (${editMode ? "edit" : "view"} mode)`,
-        extra: configData ? (
+        subtitle: `Configuration (${editMode ? "editing" : "viewing"})`,
+        buttons: configData ? (
           editMode ? (
             <>
               <Button size="sm" onClick={cancel}>
@@ -127,6 +127,7 @@ export default function RepoConfiguration() {
             placeholder="Bob's personal blog"
             help="Just a name to identify for yourself."
             required={true}
+            className="mb-5"
           />
           <TextInputWithLabel
             name="websiteUrl"
@@ -134,6 +135,7 @@ export default function RepoConfiguration() {
             onChange={onChange}
             label="Website URL"
             placeholder="https://mycoolblog.com"
+            className="mb-5"
           />
           <TextInputWithLabel
             name="assetsDirectory"
@@ -143,6 +145,7 @@ export default function RepoConfiguration() {
             help="The git directory where you would like static asset files (like images) to be stored."
             placeholder="_contents/assets"
             required={true}
+            className="mb-5"
           />
           <TextInputWithLabel
             name="collectionsDirectory"
@@ -157,6 +160,7 @@ export default function RepoConfiguration() {
             }
             placeholder="_contents/collections"
             required={true}
+            className="mb-5"
           />
         </fieldset>
       ) : (
@@ -200,29 +204,32 @@ export function TextInputWithLabel({
   onChange,
   required,
   help,
+  className = "",
+  disabled = false,
 }) {
   return (
-    <div className="mb-5">
-      <div className="d-flex justify-content-space-between">
-        {label && (
-          <label className="fs-medium">
+    <div className={className}>
+      {label && (
+        <div className="d-flex justify-content-space-between">
+          <label className="fs-medium mb-1">
             {label}
             {required && <span className="text-danger ml-1">*</span>}
           </label>
-        )}
-        {help && (
-          <Tooltip content={help} className="text-dark">
-            <Icon path={mdiHelpCircleOutline} size={0.7} className="mr-1" />
-          </Tooltip>
-        )}
-      </div>
+          {help && (
+            <Tooltip content={help} className="text-dark">
+              <Icon path={mdiHelpCircleOutline} size={0.7} className="mr-1" />
+            </Tooltip>
+          )}
+        </div>
+      )}
       <TextInput
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="w-100 my-1"
+        className="w-100"
+        disabled={disabled}
       />
     </div>
   );

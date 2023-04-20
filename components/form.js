@@ -35,7 +35,15 @@ export function CheckBox({ children, name, value, onChange, className = "" }) {
   );
 }
 
-export function Select({ children, name, value, onChange, className = "" }) {
+export function Select({
+  children,
+  name,
+  value,
+  onChange,
+  className = "",
+  disabled = false,
+  ...rest
+}) {
   function change(e) {
     if (!e || !e.target) return null;
     const { name, value } = e.target;
@@ -49,6 +57,8 @@ export function Select({ children, name, value, onChange, className = "" }) {
       name={name}
       className={`${styles.select} ${className}`}
       autoComplete="off"
+      disabled={disabled}
+      {...rest}
     >
       {children}
     </select>

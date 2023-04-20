@@ -48,25 +48,22 @@ fieldset {
 summary:hover {
   cursor: pointer;
 }
-
-@include at-large-screen {
-  ::-webkit-scrollbar {
-    width: 0.4rem;
-  }
-  *:hover::-webkit-scrollbar {
-    width: 0.7rem;
-  }
-  ::-webkit-scrollbar-track {
-    background: $light;
-    border-left: 1px solid $regular;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: darken($regular, 10%);
-    border-radius: 1rem;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: darken($regular, 20%);
-  }
+::-webkit-scrollbar {
+  width: 0.4rem;
+}
+*:hover::-webkit-scrollbar {
+  width: 0.7rem;
+}
+::-webkit-scrollbar-track {
+  background: $light;
+  border-left: 1px solid $regular;
+}
+::-webkit-scrollbar-thumb {
+  background: darken($regular, 10%);
+  border-radius: 1rem;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: darken($regular, 20%);
 }
 
 /*
@@ -88,6 +85,9 @@ summary:hover {
 
 .align-items-center {
   align-items: center;
+}
+.align-items-flex-end {
+  align-items: flex-end;
 }
 .justify-content-space-between {
   justify-content: space-between;
@@ -157,6 +157,12 @@ summary:hover {
 .mr-1 {
   margin-right: $space1;
 }
+.mr-2 {
+  margin-right: $space2;
+}
+.mr-3 {
+  margin-right: $space3;
+}
 .mr-4 {
   margin-right: $space4;
 }
@@ -174,6 +180,9 @@ summary:hover {
 }
 .mt-2 {
   margin-top: $space2;
+}
+.mt-3 {
+  margin-top: $space3;
 }
 .mt-4 {
   margin-top: $space4;
@@ -202,6 +211,10 @@ summary:hover {
 .mx-1 {
   margin-right: $space1;
   margin-left: $space1;
+}
+.mx-2 {
+  margin-right: $space2;
+  margin-left: $space2;
 }
 .my-1 {
   margin-top: $space1;
@@ -245,9 +258,17 @@ summary:hover {
 .pb-2 {
   padding-bottom: $space2;
 }
+.px-0 {
+  padding-right: 0;
+  padding-left: 0;
+}
 .px-1 {
   padding-right: $space1;
   padding-left: $space1;
+}
+.px-2 {
+  padding-right: $space2;
+  padding-left: $space2;
 }
 
 .border {
