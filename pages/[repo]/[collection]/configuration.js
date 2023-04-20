@@ -71,29 +71,9 @@ export default function CollectionConfiguration() {
     }
   }
 
-  function updateProperty(property) {
+  function updateProperties(properties) {
     const _configData = { ...configData };
-    const properties = _configData.item.properties.map((p) =>
-      p.id === property.id ? property : p
-    );
     _configData.item = { ..._configData.item, properties };
-    setConfigData(_configData);
-  }
-
-  function removeProperty(id) {
-    const _configData = { ...configData };
-    const properties = _configData.item.properties.filter((p) => p.id !== id);
-    _configData.item = { ..._configData.item, properties };
-    setConfigData(_configData);
-  }
-
-  function addProperty() {
-    const property = { id: new Date().getTime() };
-    const _configData = { ...configData };
-    _configData.item = {
-      ..._configData.item,
-      properties: [..._configData.item.properties, property],
-    };
     setConfigData(_configData);
   }
 
@@ -171,68 +151,98 @@ export default function CollectionConfiguration() {
             className="mb-5"
           />
 
-          <details open>
-            <summary className="border-bottom pb-2 my-6">
-              <span className="d-inline-flex align-items-center">
-                Item properties
-                <Tooltip
-                  content={
-                    <>
-                      Item properties are fields of a collection item. They have
-                      to have a name and type. A property&apos;s type defines
-                      what kind of data it will hold. Its name is for your
-                      reference.
-                      <br />
-                      <br />
-                      The (only) property with type <em>richtext</em> is used to
-                      compose a collection item&apos;s body. Properties with
-                      other types are used as meta data.
-                      <br />
-                      <br />
-                      Some of the properties are built-in as default and can not
-                      be removed.
-                    </>
-                  }
-                  className="text-dark ml-3"
-                >
-                  <Icon
-                    path={mdiHelpCircleOutline}
-                    size={0.7}
-                    style={{ marginBottom: "-3px" }}
-                  />
-                </Tooltip>
-              </span>
-            </summary>
-
-            {configData.item.properties.map((property, index) => (
-              <ItemProperty
-                key={property.id}
-                showLabels={index === 0}
-                property={property}
-                updateProperty={updateProperty}
-                removeProperty={removeProperty}
-              />
-            ))}
-
-            <Button onClick={addProperty} type="primaryLight" className="mt-3">
-              <Icon path={mdiPlus} size={0.75} className="mr-1" />
-              New item property
-            </Button>
-          </details>
+          {configData.item && (
+            <ItemProperties
+              properties={configData.item.properties}
+              updateProperties={updateProperties}
+            />
+          )}
         </fieldset>
       )}
     </Page>
   );
 }
 
-function ItemProperty({
+function ItemProperties({ properties, updateProperties }) {
+  const [editingId, setEditingId] = useState(null); // id of the property which is currently is in edit mode
+
+  function updateProperty(property) {
+    updateProperties(
+      properties.map((p) => (p.id === property.id ? property : p))
+    );
+  }
+
+  function removeProperty(id) {
+    updateProperties(properties.filter((p) => p.id !== id));
+  }
+
+  function addProperty() {
+    const property = { id: new Date().getTime() };
+    updateProperties([...properties, property]);
+  }
+
+  return (
+    <details open>
+      <summary className="border-bottom pb-2 my-6">
+        <span className="d-inline-flex align-items-center">
+          Item properties
+          <Tooltip
+            content={
+              <>
+                Item properties are fields of a collection item. They have to
+                have a name and type. A property&apos;s type defines what kind
+                of data it will hold. Its name is for your reference.
+                <br />
+                <br />
+                The (only) property with type <em>richtext</em> is used to
+                compose a collection item&apos;s body. Properties with other
+                types are used as meta data.
+                <br />
+                <br />
+                Some of the properties are built-in as default and can not be
+                removed.
+              </>
+            }
+            className="text-dark ml-3"
+          >
+            <Icon
+              path={mdiHelpCircleOutline}
+              size={0.7}
+              style={{ marginBottom: "-3px" }}
+            />
+          </Tooltip>
+        </span>
+      </summary>
+
+      {properties.map((property, index) => (
+        <Property
+          key={property.id}
+          showLabels={index === 0}
+          property={property}
+          updateProperty={updateProperty}
+          removeProperty={removeProperty}
+          editingId={editingId}
+          setEditingId={setEditingId}
+        />
+      ))}
+
+      <Button onClick={addProperty} type="primaryLight" className="mt-3">
+        <Icon path={mdiPlus} size={0.75} className="mr-1" />
+        New item property
+      </Button>
+    </details>
+  );
+}
+
+function Property({
   property,
   updateProperty,
   removeProperty,
   showLabels,
+  editingId,
+  setEditingId,
 }) {
   const [prop, setProp] = useState({}); // local
-  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     if (property) setProp({ ...property });
@@ -249,20 +259,25 @@ function ItemProperty({
 
   function apply() {
     updateProperty({ ...prop });
-    setEditing(false);
+    setEditingId(null);
   }
 
   function cancel() {
     setProp({ ...property });
-    setEditing(false);
+    setEditingId(null);
   }
 
   function hasValidChanges() {
     return prop.name && prop.name.length > 2 && prop.type;
   }
 
+  const editing = editingId === prop.id; // editing this property
   return (
-    <div className="d-flex align-items-flex-end mb-2">
+    <div
+      className={`d-flex align-items-flex-end mb-2 ${
+        editingId && !editing ? "opacity-50" : ""
+      }`}
+    >
       <div>
         {showLabels && (
           <div className="d-flex justify-content-space-between">
@@ -311,6 +326,7 @@ function ItemProperty({
           disabled={!editing}
         />
       </div>
+
       <div className="d-flex align-items-flex-end">
         {editing ? (
           <>
@@ -331,10 +347,11 @@ function ItemProperty({
         ) : (
           <>
             <Button
-              onClick={() => setEditing(true)}
+              onClick={() => setEditingId(property.id)}
               title="Edit"
               className="px-1 mr-2"
               size="sm"
+              disabled={editingId}
             >
               <Icon path={mdiPencilOutline} size={0.8} />
             </Button>
@@ -343,6 +360,7 @@ function ItemProperty({
               title="Remove"
               className="px-1"
               size="sm"
+              disabled={editingId}
             >
               <Icon path={mdiDeleteOutline} size={0.8} />
             </Button>
