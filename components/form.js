@@ -1,9 +1,21 @@
 import styles from "@/styles/Form.module.scss";
 
-export function TextInput({ name, value, onChange, className = "", ...rest }) {
+export function TextInput({
+  name,
+  value,
+  onChange,
+  className = "",
+  max,
+  regex, // use regex to filter unwanted chars in value. If passing valid chars, make sure to negate regex with ^ symbol. E.g /[^a-zA-Z0-9]+/g will cause all non alphanumeric to be removed
+  ...rest
+}) {
   function change(e) {
     if (!e || !e.target) return null;
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
+    if (max && value.length > max) return;
+    if (regex) value = value.replace(regex, "");
+
     onChange({ name, value });
   }
 

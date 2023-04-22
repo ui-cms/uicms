@@ -17,6 +17,7 @@ import {
   mdiPlus,
 } from "@mdi/js";
 import Tooltip from "@/components/tooltip";
+import { areSame } from "@/helpers/utilities";
 
 export default function CollectionConfiguration() {
   const router = useRouter();
@@ -57,7 +58,12 @@ export default function CollectionConfiguration() {
   }, [collectionId, state.repos]); // only trigger when collection or repos changes
 
   const save = async () => {
-    confirm("Are you sure");
+    if (areSame(collection, configData, "No change has been made!")) {
+      return;
+    }
+    if (isValid()) {
+      confirm("Are you sure");
+    }
   };
 
   function onChange(e) {
@@ -78,13 +84,22 @@ export default function CollectionConfiguration() {
   }
 
   function cancel() {
-    // deep copy of collection needed or cancelling editMode and reseting changes made in propertiis won't be reverted
-    setConfigData(JSON.parse(JSON.stringify(collection)));
+    setConfigData(JSON.parse(JSON.stringify(collection))); // deep copy of collection needed or cancelling editMode and reseting changes made in propertiis won't be reverted
     setEditMode(false);
   }
 
-  function hasChanges() {
-    return JSON.stringify(collection) !== JSON.stringify(configData);
+  function isValid() {
+    const errors = [];
+    if (configData.name?.length < 3)
+      errors.push("Collection name is too short!");
+    if (configData.item.name?.length < 3)
+      errors.push("Item name is too short!");
+
+    if (errors.length > 0) {
+      alert(errors.join("\n"));
+      return false;
+    }
+    return true;
   }
 
   return (
@@ -105,13 +120,7 @@ export default function CollectionConfiguration() {
                 Cancel
               </Button>
             )}
-            <Button
-              type="primary"
-              className="ml-2"
-              onClick={save}
-              disabled={!hasChanges()}
-              size="sm"
-            >
+            <Button type="primary" className="ml-2" onClick={save} size="sm">
               Save
             </Button>
           </>
@@ -128,6 +137,7 @@ export default function CollectionConfiguration() {
             name="name"
             value={configData.name}
             onChange={onChange}
+            max={30}
             label="Collection name"
             placeholder="Blog"
             help="The name of the collection. Usually in plural."
@@ -138,9 +148,10 @@ export default function CollectionConfiguration() {
             name="path"
             value={configData.path}
             onChange={onChange}
+            regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
             label="Path"
             placeholder="blog"
-            help="Thic collection path will be contatenated to repo's collection directory and that is where items of this collection will be saved as files."
+            help="This collection path will be appended to repo's collections directory and that is where items of this collection will be saved as files. Path can consist of (English) letters, numbers, underscore and slash symbol."
             required={true}
             className="mb-5"
           />
@@ -148,6 +159,7 @@ export default function CollectionConfiguration() {
             name="item.name"
             value={configData.item.name}
             onChange={onChange}
+            max={30}
             label="Item name"
             placeholder="Article"
             help="The name of a single item of the collection."
@@ -176,9 +188,21 @@ function ItemProperties({ properties, updateProperties, editMode }) {
   }, [editMode]);
 
   function updateProperty(property) {
-    updateProperties(
-      properties.map((p) => (p.id === property.id ? property : p))
-    );
+    if (
+      properties.some(
+        (p) =>
+          p.name.toLowerCase() === property.name.toLowerCase() &&
+          p.id !== property.id // not itself
+      )
+    ) {
+      alert("There is another property with the same name!"); // property names must be unique
+      return false;
+    } else {
+      updateProperties(
+        properties.map((p) => (p.id === property.id ? property : p))
+      );
+      return true;
+    }
   }
 
   function removeProperty(id) {
@@ -268,17 +292,13 @@ function Property({
   }, [property]);
 
   function onChange({ name, value }) {
-    if (name === "name") {
-      value = value.replace(/[^a-zA-Z0-9_]+/g, ""); // only English letter, numbers and underscore allowed
-
-      if (value.length > 30) return; // max name length 30
-    }
     setProp({ ...prop, [name]: value });
   }
 
   function apply() {
-    updateProperty({ ...prop });
-    setEditingId(null);
+    if (updateProperty({ ...prop })) {
+      setEditingId(null);
+    }
   }
 
   function cancel() {
@@ -340,9 +360,11 @@ function Property({
           value={prop.name}
           onChange={onChange}
           label={showLabels && "Property name"}
+          max={30}
+          regex={/[^a-zA-Z0-9_]+/g} // only English letters, numbers, underscore allowed
           placeholder="Topics"
           required={true}
-          help="Property name can consist of letters, numbers and underscore sign. You can use property names to access meta data of an item."
+          help="Property name can consist of (English) letters, numbers and underscore symbol. You can use property names to access meta data of an item. Therefore they must be unique."
           disabled={!editing}
         />
       </div>

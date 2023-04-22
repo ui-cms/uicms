@@ -23,7 +23,6 @@ export const UICMS_CONFIGS = {
     { name: "Published", id: "published", type: "boolean", required: true },
     { name: "Date", id: "date", type: "date", required: true },
   ],
-  uniqueKeyLength: 8, // e.g collection ids
 };
 
 export const UICMS_CONFIG_TEMPLATE = {
@@ -34,14 +33,14 @@ export const UICMS_CONFIG_TEMPLATE = {
   collections: [],
 };
 
-export const UICMS_CONFIG_COLLECTION_TEMPLATE={
+export const UICMS_CONFIG_COLLECTION_TEMPLATE = {
   id: null,
-  name:"",
-  path:"",
-  item:{
+  name: "",
+  path: "",
+  item: {
     name: "",
-    properties:[]
-  }
-}
+    properties: [],
+  },
+};
 
 export const UICMS_TOPIC = "uicms"; // to be used as a topic in GitHub repos

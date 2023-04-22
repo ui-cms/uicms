@@ -6,7 +6,7 @@ import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
 import { UICMS_CONFIGS, UICMS_CONFIG_TEMPLATE } from "@/helpers/constants";
-import { displayError } from "@/helpers/utilities";
+import { areSame, displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
 import { mdiHelpCircleOutline } from "@mdi/js";
@@ -37,6 +37,10 @@ export default function RepoConfiguration() {
   }, [repoId, state.repos]); // only trigger when repoId or repos changes
 
   const save = async () => {
+    if (areSame(repo.config.data, configData, "No change has been made!")) {
+      return;
+    }
+
     if (confirm("Are you sure ? ")) {
       try {
         setLoading(true);
@@ -73,10 +77,6 @@ export default function RepoConfiguration() {
     setEditMode(false);
   }
 
-  function hasChanges() {
-    return JSON.stringify(repo.config.data) !== JSON.stringify(configData);
-  }
-
   function initConfig() {
     setConfigData({ ...UICMS_CONFIG_TEMPLATE });
     setEditMode(true);
@@ -95,13 +95,7 @@ export default function RepoConfiguration() {
               <Button size="sm" onClick={cancel}>
                 Cancel
               </Button>
-              <Button
-                type="primary"
-                size="sm"
-                className="ml-2"
-                onClick={save}
-                disabled={!hasChanges()}
-              >
+              <Button type="primary" size="sm" className="ml-2" onClick={save}>
                 Save
               </Button>
             </>
@@ -111,7 +105,7 @@ export default function RepoConfiguration() {
             </Button>
           )
         ) : (
-          <Button type="primaryLight" onClick={initConfig}>
+          <Button type="primary" size="sm" onClick={initConfig}>
             Configure
           </Button>
         ),
@@ -123,6 +117,7 @@ export default function RepoConfiguration() {
             name="websiteName"
             value={configData.websiteName}
             onChange={onChange}
+            max={30}
             label="Website name"
             placeholder="Bob's personal blog"
             help="Just a name to identify for yourself."
@@ -141,8 +136,9 @@ export default function RepoConfiguration() {
             name="assetsDirectory"
             value={configData.assetsDirectory}
             onChange={onChange}
+            regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
             label="Assets directory"
-            help="The git directory where you would like static asset files (like images) to be stored."
+            help="The git directory where you would like static asset files (like images) to be stored. Directory can consist of (English) letters, numbers, underscore and slash sign. "
             placeholder="_contents/assets"
             required={true}
             className="mb-5"
@@ -206,6 +202,7 @@ export function TextInputWithLabel({
   help,
   className = "",
   disabled = false,
+  ...rest
 }) {
   return (
     <div className={className}>
@@ -230,6 +227,7 @@ export function TextInputWithLabel({
         required={required}
         className="w-100"
         disabled={disabled}
+        {...rest}
       />
     </div>
   );
