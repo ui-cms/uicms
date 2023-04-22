@@ -10,6 +10,7 @@ export const UICMS_CONFIGS = {
   fileName: "uicms.config.json",
   defaultAssetsDirectory: "_contents/assets", // has to be a folder that will be present after build
   defaultCollectionsDirectory: "_contents/collections", // has to be a folder that will be present after build
+  topic: "uicms", // to be used as a topic in GitHub repos
   collectionItemPropertyTypes: {
     string: "string",
     richtext: "richtext",
@@ -24,23 +25,3 @@ export const UICMS_CONFIGS = {
     { name: "Date", id: "date", type: "date", required: true },
   ],
 };
-
-export const UICMS_CONFIG_TEMPLATE = {
-  websiteName: "",
-  websiteUrl: "",
-  assetsDirectory: UICMS_CONFIGS.defaultAssetsDirectory,
-  collectionsDirectory: UICMS_CONFIGS.defaultCollectionsDirectory,
-  collections: [],
-};
-
-export const UICMS_CONFIG_COLLECTION_TEMPLATE = {
-  id: null,
-  name: "",
-  path: "",
-  item: {
-    name: "",
-    properties: [],
-  },
-};
-
-export const UICMS_TOPIC = "uicms"; // to be used as a topic in GitHub repos

@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { displayError, orderBy } from "@/helpers/utilities";
-import { UICMS_TOPIC } from "@/helpers/constants";
 import { CheckBox, TextInput } from "../form";
 import Icon from "@mdi/react";
 import {
@@ -23,6 +22,7 @@ import { Button } from "../button";
 import DropDown from "../dropdown";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { UICMS_CONFIGS } from "@/helpers/constants";
 
 export function Repos({ selectedRepo, selectRepo, setLoading }) {
   const loaded = useRef(false);
@@ -234,5 +234,5 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
 }
 
 function hasUICMSTopic(repo) {
-  return repo && repo.topics.includes(UICMS_TOPIC);
+  return repo && repo.topics.includes(UICMS_CONFIGS.topic);
 }

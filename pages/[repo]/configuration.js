@@ -5,11 +5,12 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
-import { UICMS_CONFIGS, UICMS_CONFIG_TEMPLATE } from "@/helpers/constants";
+import { UICMS_CONFIGS } from "@/helpers/constants";
 import { areSame, displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
 import { mdiHelpCircleOutline } from "@mdi/js";
+import { UICMSConfig } from "@/helpers/models";
 
 export default function RepoConfiguration() {
   const router = useRouter();
@@ -78,7 +79,7 @@ export default function RepoConfiguration() {
   }
 
   function initConfig() {
-    setConfigData({ ...UICMS_CONFIG_TEMPLATE });
+    setConfigData(new UICMSConfig());
     setEditMode(true);
   }
 

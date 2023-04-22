@@ -18,6 +18,7 @@ import {
 } from "@mdi/js";
 import Tooltip from "@/components/tooltip";
 import { areSame } from "@/helpers/utilities";
+import { Collection, ItemProperty } from "@/helpers/models";
 
 export default function CollectionConfiguration() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function CollectionConfiguration() {
       if (_repo && !isNaN(collectionId)) {
         if (_repo.config.data) {
           const _collection = isNew
-            ? {}
+            ? new Collection()
             : _repo.config.data.collections.find((c) => c.id === collectionId);
           if (_collection) {
             setRepo(_repo);
@@ -125,7 +126,11 @@ export default function CollectionConfiguration() {
             </Button>
           </>
         ) : (
-          <Button type="primaryLight" size="sm" onClick={() => setEditMode(true)}>
+          <Button
+            type="primaryLight"
+            size="sm"
+            onClick={() => setEditMode(true)}
+          >
             Edit
           </Button>
         ),
@@ -210,7 +215,7 @@ function ItemProperties({ properties, updateProperties, editMode }) {
   }
 
   function addProperty() {
-    const property = { new: true, id: new Date().getTime() }; // use "new" property to delete (on cancel click)
+    const property = new ItemProperty();
     setEditingId(property.id);
     updateProperties([...properties, property]);
   }
@@ -302,7 +307,7 @@ function Property({
   }
 
   function cancel() {
-    if (prop.new) removeProperty(prop.id); // delete newly created property
+    if (prop.isNew) removeProperty(prop.id); // delete newly created property
     else setProp({ ...property }); // cancel (reset changes) existing property
     setEditingId(null);
   }
