@@ -125,7 +125,7 @@ export default function CollectionConfiguration() {
             </Button>
           </>
         ) : (
-          <Button type="primary" size="sm" onClick={() => setEditMode(true)}>
+          <Button type="primaryLight" size="sm" onClick={() => setEditMode(true)}>
             Edit
           </Button>
         ),
@@ -191,7 +191,7 @@ function ItemProperties({ properties, updateProperties, editMode }) {
     if (
       properties.some(
         (p) =>
-          p.name.toLowerCase() === property.name.toLowerCase() &&
+          p.name?.toLowerCase() === property.name.toLowerCase() &&
           p.id !== property.id // not itself
       )
     ) {

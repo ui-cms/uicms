@@ -41,7 +41,7 @@ export default function RepoConfiguration() {
       return;
     }
 
-    if (confirm("Are you sure ? ")) {
+    if (confirm("Are you sure ?")) {
       try {
         setLoading(true);
         await githubApi.rest.repos.createOrUpdateFileContents({
@@ -100,7 +100,7 @@ export default function RepoConfiguration() {
               </Button>
             </>
           ) : (
-            <Button type="primary" size="sm" onClick={() => setEditMode(true)}>
+            <Button type="primaryLight" size="sm" onClick={() => setEditMode(true)}>
               Edit
             </Button>
           )
