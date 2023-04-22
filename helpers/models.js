@@ -23,10 +23,10 @@ export class Collection {
 }
 
 export class ItemProperty {
+  id = null;
+  type = "";
+  name = "";
   isNew; // newly created (e.i unsaved/temp)
-  id;
-  type;
-  name;
 
   constructor() {
     this.isNew = true;
