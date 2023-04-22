@@ -61,8 +61,8 @@ export function hasDuplicates(arr, func = null) {
  * Will deep check if 2 given objects are same by converting them into strings. Additonally can alert a message on failure
  * @returns boolean
  */
-export function areSame(obj1, obj2, failMessage = null) {
-  const result = JSON.stringify(obj1) === JSON.stringify(obj2);
-  if (failMessage && !result) alert(failMessage);
-  return result;
+export function areSame(obj1, obj2, successMessage = null) {
+  const same = JSON.stringify(obj1) === JSON.stringify(obj2);
+  if (same && successMessage) alert(successMessage);
+  return same;
 }
