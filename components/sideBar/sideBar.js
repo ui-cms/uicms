@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 import { UICMS_CONFIGS } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
+import { RepoConfigFile } from "@/helpers/models";
 
 export default function SideBar({}) {
   const [activeTabIndex, setActiveTabIndex] = useState(null);
@@ -113,7 +114,7 @@ function MainWithTabs({
             repo.name,
             UICMS_CONFIGS.fileName
           );
-          repo.config = { sha: res.sha, data: JSON.parse(res.content) };
+          repo.config = new RepoConfigFile(JSON.parse(res.content), res.sha);
           dispatchAction.updateRepo(repo);
         } catch (e) {
           // when 404, no config file, incompatible repo
@@ -241,7 +242,7 @@ function Footer({ activeTabIndex, repoId, collectionId }) {
     const result = { text: "New repo", url: "/repo/new" };
     if (activeTabIndex === 1) {
       result.text = "New collection";
-      result.url = `/${repoId}/0/configuration`;  // 0 (as id) for new collection
+      result.url = `/${repoId}/0/configuration`; // 0 (as id) for new collection
     } else if (activeTabIndex === 2) {
       result.text = "New item";
       result.url = `/${repoId}/${collectionId}/item/new`;

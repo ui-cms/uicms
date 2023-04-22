@@ -1,6 +1,16 @@
 import { UICMS_CONFIGS } from "./constants";
 
-export class UICMSConfig {
+export class RepoConfigFile {
+  data = null;
+  sha = null; // SHA blob of config file. Use it to update file content/data.
+
+  constructor(data = null, sha = null) {
+    this.data = data;
+    this.sha = sha;
+  }
+}
+
+export class RepoConfigData {
   websiteName = "";
   websiteUrl = "";
   assetsDirectory = UICMS_CONFIGS.defaultAssetsDirectory;

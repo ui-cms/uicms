@@ -10,7 +10,7 @@ import { areSame, displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
 import { mdiHelpCircleOutline } from "@mdi/js";
-import { UICMSConfig } from "@/helpers/models";
+import { RepoConfigFile, RepoConfigData } from "@/helpers/models";
 
 export default function RepoConfiguration() {
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function RepoConfiguration() {
         });
         dispatchAction.updateRepo({
           ...repo,
-          config: { sha: null, data: null },
+          config: new RepoConfigFile(),
         }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
         setEditMode(false);
       } catch (e) {
@@ -79,7 +79,7 @@ export default function RepoConfiguration() {
   }
 
   function initConfig() {
-    setConfigData(new UICMSConfig());
+    setConfigData(new RepoConfigData());
     setEditMode(true);
   }
 

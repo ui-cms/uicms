@@ -1,3 +1,4 @@
+import { RepoConfigFile } from "@/helpers/models";
 import { initialState } from "./initialState";
 
 export default function reducer(state, { type, payload }) {
@@ -25,7 +26,7 @@ export default function reducer(state, { type, payload }) {
         html_url: r.html_url,
         homepage: r.homepage,
         pushed_at: r.pushed_at, // last update date (last commit)
-        config: { data: null, sha: null }, // SHA blob of config file. Use it to update file content.
+        config: new RepoConfigFile(),
       }));
       return { ...state, repos };
     }
