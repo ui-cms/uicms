@@ -13,7 +13,7 @@ import { mdiHelpCircleOutline } from "@mdi/js";
 
 export default function RepoConfiguration() {
   const router = useRouter();
-  const repoId = router.query.repo;
+  const repoId = Number(router.query.repo);
   const [repo, setRepo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -24,7 +24,7 @@ export default function RepoConfiguration() {
   // Load the repo from state management
   useEffect(() => {
     if (repoId && state.repos.length) {
-      const _repo = state.repos.find((r) => r.id === Number(repoId));
+      const _repo = state.repos.find((r) => r.id === repoId);
       if (_repo) {
         setRepo(_repo);
         setConfigData(_repo.config.data);

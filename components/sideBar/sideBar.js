@@ -62,8 +62,8 @@ function MainWithTabs({
 }) {
   const router = useRouter();
   const url = {
-    repoId: router.query.repo,
-    collectionId: router.query.collection,
+    repoId: Number(router.query.repo),
+    collectionId: Number(router.query.collection),
     itemSlug: router.query.item,
   };
   const [loading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ function MainWithTabs({
     if (repos.length) {
       const repoId = selectedRepo ? selectedRepo.id : url.repoId; // when landed from url, will use repoId from url initially as there won't be a selected repo
       if (repoId) {
-        const repo = repos.find((r) => r.id === Number(repoId));
+        const repo = repos.find((r) => r.id === repoId);
         if (repo) {
           let collection = null;
           const collectionId = selectedCollection
@@ -101,7 +101,7 @@ function MainWithTabs({
     if (
       selectedRepo &&
       url.repoId &&
-      selectedRepo.id === Number(url.repoId) &&
+      selectedRepo.id === url.repoId &&
       !selectedRepo.config.data
     ) {
       (async () => {
@@ -241,7 +241,7 @@ function Footer({ activeTabIndex, repoId, collectionId }) {
     const result = { text: "New repo", url: "/repo/new" };
     if (activeTabIndex === 1) {
       result.text = "New collection";
-      result.url = `/${repoId}/new/configuration`;
+      result.url = `/${repoId}/0/configuration`;  // 0 (as id) for new collection
     } else if (activeTabIndex === 2) {
       result.text = "New item";
       result.url = `/${repoId}/${collectionId}/item/new`;

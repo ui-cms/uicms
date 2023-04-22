@@ -21,9 +21,9 @@ import { areSame } from "@/helpers/utilities";
 
 export default function CollectionConfiguration() {
   const router = useRouter();
-  const repoId = router.query.repo;
-  const collectionId = router.query.collection;
-  const isNew = collectionId?.toLowerCase() === "new"; // when creating new collection. url path: /repoId/new/configuration
+  const repoId = Number(router.query.repo);
+  const collectionId = Number(router.query.collection);
+  const isNew = collectionId === 0; // when creating new collection. url path: /repoId/0/configuration
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(isNew);
   const [repo, setRepo] = useState(null);
@@ -35,8 +35,8 @@ export default function CollectionConfiguration() {
   // Load the repo that owns this collection from state management
   useEffect(() => {
     if (repoId && state.repos.length) {
-      const _repo = state.repos.find((r) => r.id === Number(repoId));
-      if (_repo && collectionId) {
+      const _repo = state.repos.find((r) => r.id === repoId);
+      if (_repo && !isNaN(collectionId)) {
         if (_repo.config.data) {
           const _collection = isNew
             ? {}
@@ -210,7 +210,7 @@ function ItemProperties({ properties, updateProperties, editMode }) {
   }
 
   function addProperty() {
-    const property = { isNew: true, id: new Date().getTime() }; // use isNew property to delete (on cancel click)
+    const property = { new: true, id: new Date().getTime() }; // use "new" property to delete (on cancel click)
     setEditingId(property.id);
     updateProperties([...properties, property]);
   }
@@ -302,7 +302,7 @@ function Property({
   }
 
   function cancel() {
-    if (prop.isNew) removeProperty(prop.id); // delete newly created property
+    if (prop.new) removeProperty(prop.id); // delete newly created property
     else setProp({ ...property }); // cancel (reset changes) existing property
     setEditingId(null);
   }
