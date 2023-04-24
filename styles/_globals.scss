@@ -48,22 +48,24 @@ fieldset {
 summary:hover {
   cursor: pointer;
 }
-::-webkit-scrollbar {
-  width: 0.4rem;
-}
-*:hover::-webkit-scrollbar {
-  width: 0.7rem;
-}
-::-webkit-scrollbar-track {
-  background: $light;
-  border-left: 1px solid $regular;
-}
-::-webkit-scrollbar-thumb {
-  background: darken($regular, 10%);
-  border-radius: 1rem;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: darken($regular, 20%);
+@include at-large-screen {
+  ::-webkit-scrollbar {
+    width: 0.4rem;
+  }
+  *:hover::-webkit-scrollbar {
+    width: 0.7rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: $light;
+    border-left: 1px solid $regular;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: darken($regular, 10%);
+    border-radius: 1rem;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: darken($regular, 20%);
+  }
 }
 
 /*
