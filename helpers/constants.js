@@ -19,9 +19,9 @@ export const UICMS_CONFIGS = {
     file: "file",
   },
   collectionItemDefaultProperties: [
-    { name: "Author", id: "author", type: "string", required: true },
-    { name: "Body", id: "body", type: "richtext", required: false },
+    { name: "author", id: "author", type: "string", required: true },
+    { name: "body", id: "body", type: "richtext", required: false },
     { name: "draft", id: "draft", type: "boolean", required: true },
-    { name: "Date", id: "date", type: "date", required: true },
+    { name: "date", id: "date", type: "date", required: true },
   ],
 };

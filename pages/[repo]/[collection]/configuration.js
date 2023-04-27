@@ -224,6 +224,15 @@ function ItemProperties({ properties, updateProperties, editMode }) {
     return true;
   }
 
+  // const allProperties = useMemo(()=>{
+  //   const result = [...UICMS_CONFIGS.collectionItemDefaultProperties];
+  //   if(properties?.length >0){
+  //     properties.forEach(p => {
+
+  //     });
+  //   }
+  // }, [])
+
   function removeProperty(id) {
     updateProperties(properties.filter((p) => p.id !== id));
   }
@@ -313,7 +322,7 @@ function Property({
   const editing = useMemo(() => editingId === prop.id, [editingId, prop.id]); // editing this property
 
   function onChange({ name, value }) {
-    setProp({ ...prop, [name]: value });
+    setProp({ ...prop, [name]: value.toLowerCase() });
   }
 
   function apply() {
@@ -381,10 +390,10 @@ function Property({
           onChange={onChange}
           label={showLabels && "Property name"}
           max={30}
-          regex={/[^a-zA-Z0-9_]+/g} // only English letters, numbers, underscore allowed
+          regex={/[^a-zA-Z0-9_]+/g} // only lowercase English letters, numbers, underscore allowed. Uppercase ones will be lowered
           placeholder="Topics"
           required={true}
-          help="Property name can consist of (English) letters, numbers and underscore symbol. You can use property names to access meta data of an item. Therefore they must be unique."
+          help="Property name can consist of lowercase (English) letters, numbers and underscore symbol. You can use property names to access meta data of an item. Therefore they must be unique."
           disabled={!editing}
         />
       </div>
