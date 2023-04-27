@@ -1,7 +1,7 @@
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/page";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import { TextInputWithLabel, useSaveRepoConfig } from "../configuration";
 import { Select } from "@/components/form";
@@ -198,18 +198,30 @@ function ItemProperties({ properties, updateProperties, editMode }) {
     if (
       properties.some(
         (p) =>
-          p.name?.toLowerCase() === property.name.toLowerCase() &&
-          p.id !== property.id // not itself
+          p.id !== property.id && // not itself
+          p.name?.toLowerCase() === property.name.toLowerCase()
       )
     ) {
       alert("There is another property with the same name!"); // property names must be unique
       return false;
-    } else {
-      updateProperties(
-        properties.map((p) => (p.id === property.id ? property : p))
-      );
-      return true;
     }
+
+    if (
+      property.type === UICMS_CONFIGS.collectionItemPropertyTypes.richtext &&
+      properties.some(
+        (p) =>
+          p.id !== property.id && // not itself
+          p.type === UICMS_CONFIGS.collectionItemPropertyTypes.richtext
+      )
+    ) {
+      alert('Only one property (named "body") can have "richtext" type!'); // property names must be unique
+      return false;
+    }
+
+    updateProperties(
+      properties.map((p) => (p.id === property.id ? property : p))
+    );
+    return true;
   }
 
   function removeProperty(id) {
@@ -298,6 +310,8 @@ function Property({
     if (property) setProp({ ...property });
   }, [property]);
 
+  const editing = useMemo(() => editingId === prop.id, [editingId, prop.id]); // editing this property
+
   function onChange({ name, value }) {
     setProp({ ...prop, [name]: value });
   }
@@ -318,7 +332,6 @@ function Property({
     return prop.name && prop.name.length > 2 && prop.type;
   }
 
-  const editing = editingId === prop.id; // editing this property
   return (
     <div
       className={`d-flex align-items-flex-end mb-2 ${
