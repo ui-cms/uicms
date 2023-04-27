@@ -34,17 +34,16 @@ export class Collection {
 
   constructor() {
     this.id = new Date().getTime();
+    this.item.properties = [...UICMS_CONFIGS.collectionItemDefaultProperties];
   }
 }
 
 export class ItemProperty {
   id = null;
   type = "";
-  name = "";
-  isNew = false; // newly created (e.i unsaved/temp)
+  name = ""; // must be unique (within collection)
 
   constructor() {
-    this.isNew = true;
     this.id = new Date().getTime();
   }
 }

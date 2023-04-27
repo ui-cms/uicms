@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/page";
 import useStateManagement from "@/services/stateManagement/stateManagement";
@@ -17,6 +17,10 @@ import {
 } from "@mdi/js";
 import Tooltip from "@/components/tooltip";
 import { Collection, ItemProperty } from "@/helpers/models";
+import { indexBy } from "@/helpers/utilities";
+
+const DEFAULT_PROPS_ARR = [...UICMS_CONFIGS.collectionItemDefaultProperties];
+const DEFAULT_PROPS_OBJ = indexBy(DEFAULT_PROPS_ARR, "id");
 
 export default function CollectionConfiguration() {
   const router = useRouter();
@@ -76,9 +80,13 @@ export default function CollectionConfiguration() {
 
     if (isValid()) {
       const configData = { ...repo.config.data };
-      configData.collections = configData.collections.map((c) =>
-        c.id === collectionId ? collection : c
-      );
+      if (isNew) {
+        configData.collections = [...configData.collections, collection];
+      } else {
+        configData.collections = configData.collections.map((c) =>
+          c.id === collectionId ? collection : c
+        );
+      }
       await saveRepoConfig(repo, configData);
     }
   };
@@ -104,6 +112,18 @@ export default function CollectionConfiguration() {
     setCollection(JSON.parse(JSON.stringify(collectionConfig))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
     setEditMode(false);
   }
+
+  const getAllProperties = useCallback(() => {
+    if (collection.item.properties?.length > 0) {
+      // index and merge
+      const resultObj = indexBy(
+        collection.item.properties,
+        "id",
+        DEFAULT_PROPS_OBJ
+      );
+      return Object.values(resultObj);
+    } else DEFAULT_PROPS_ARR;
+  }, [collection?.item.properties]);
 
   return (
     <Page
@@ -176,7 +196,7 @@ export default function CollectionConfiguration() {
 
           {collection.item && (
             <ItemProperties
-              properties={collection.item.properties}
+              properties={getAllProperties()}
               updateProperties={updateProperties}
               editMode={editMode}
             />
@@ -224,15 +244,6 @@ function ItemProperties({ properties, updateProperties, editMode }) {
     return true;
   }
 
-  // const allProperties = useMemo(()=>{
-  //   const result = [...UICMS_CONFIGS.collectionItemDefaultProperties];
-  //   if(properties?.length >0){
-  //     properties.forEach(p => {
-
-  //     });
-  //   }
-  // }, [])
-
   function removeProperty(id) {
     updateProperties(properties.filter((p) => p.id !== id));
   }
@@ -262,7 +273,7 @@ function ItemProperties({ properties, updateProperties, editMode }) {
                 <br />
                 <br />
                 Some of the properties are built-in as default and can not be
-                removed.
+                removed. You can only change their names.
               </>
             }
             className="text-dark ml-3"
@@ -315,25 +326,25 @@ function Property({
 }) {
   const [prop, setProp] = useState({}); // local
 
+  const editing = editingId === prop.id; // editing this property
+  const isDefaultProp = !!DEFAULT_PROPS_OBJ[prop.id]; // is built-in default prop
+
   useEffect(() => {
     if (property) setProp({ ...property });
   }, [property]);
-
-  const editing = useMemo(() => editingId === prop.id, [editingId, prop.id]); // editing this property
 
   function onChange({ name, value }) {
     setProp({ ...prop, [name]: value.toLowerCase() });
   }
 
   function apply() {
-    if (updateProperty({ ...prop })) {
-      setEditingId(null);
-    }
+    if (updateProperty({ ...prop })) setEditingId(null);
   }
 
   function cancel() {
-    if (prop.isNew) removeProperty(prop.id); // delete newly created property
-    else setProp({ ...property }); // cancel (reset changes) existing property
+    if (!property.type || !property.name) {
+      removeProperty(prop.id); // delete if didn't have details before (newly created one)
+    } else setProp({ ...property }); // cancel (reset changes) existing property
     setEditingId(null);
   }
 
@@ -371,7 +382,7 @@ function Property({
           value={prop.type}
           onChange={onChange}
           name="type"
-          disabled={!editing}
+          disabled={!editing || isDefaultProp} // default props' type can't be changed
         >
           <option value={null}></option>
           {Object.entries(UICMS_CONFIGS.collectionItemPropertyTypes).map(
@@ -437,7 +448,7 @@ function Property({
                 title="Remove"
                 className="px-1"
                 size="sm"
-                disabled={editingId}
+                disabled={editingId || isDefaultProp} // default props' can't be removed
               >
                 <Icon path={mdiDeleteOutline} size={0.8} />
               </Button>

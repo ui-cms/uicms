@@ -66,3 +66,11 @@ export function areSame(obj1, obj2, successMessage = null) {
   if (same && successMessage) alert(successMessage);
   return same;
 }
+
+/**
+ * Creates an indexed object from list of objects where key is the iteratee for element.
+ * @param {Object} baseObj if none given will create brand new object, otherwise will append to given base one
+ */
+export function indexBy(list, key, baseObj = {}) {
+  return list.reduce((acc, obj) => ({ ...acc, [obj[key]]: obj }), baseObj);
+}
