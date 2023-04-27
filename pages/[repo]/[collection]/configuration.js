@@ -59,12 +59,9 @@ export default function CollectionConfiguration() {
   }, [collectionId, state.repos]); // only trigger when collection or repos changes
 
   const save = async () => {
-    if (areSame(collection, configData, "No change has been made!")) {
-      return;
-    }
-    if (isValid()) {
-      confirm("Are you sure");
-    }
+    if (areSame(collection, configData, "No change has been made!")) return;
+    if (!isValid()) return;
+    if (!confirm("Are you sure ?")) return;
   };
 
   function onChange(e) {
@@ -85,14 +82,17 @@ export default function CollectionConfiguration() {
   }
 
   function cancel() {
-    setConfigData(JSON.parse(JSON.stringify(collection))); // deep copy of collection needed or cancelling editMode and reseting changes made in propertiis won't be reverted
+    setConfigData(JSON.parse(JSON.stringify(collection))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
     setEditMode(false);
   }
 
+  // max lengths are checked (prevented) in input level
   function isValid() {
     const errors = [];
     if (configData.name?.length < 3)
       errors.push("Collection name is too short!");
+    if (configData.path?.length < 1)
+      errors.push("Collection path is too short!"); // at least a single slash char
     if (configData.item.name?.length < 3)
       errors.push("Item name is too short!");
 

@@ -38,35 +38,47 @@ export default function RepoConfiguration() {
   }, [repoId, state.repos]); // only trigger when repoId or repos changes
 
   const save = async () => {
-    if (areSame(repo.config.data, configData, "No change has been made!")) {
+    if (areSame(repo.config.data, configData, "No change has been made!"))
       return;
-    }
+    if (!isValid()) return;
+    if (!confirm("Are you sure ?")) return;
 
-    if (confirm("Are you sure ?")) {
-      try {
-        setLoading(true);
-        await githubApi.rest.repos.createOrUpdateFileContents({
-          owner: repo.owner,
-          repo: repo.name,
-          path: UICMS_CONFIGS.fileName,
-          message: `uicms config file ${
-            repo.config.sha ? "updated" : "created"
-          }`,
-          content: window.btoa(JSON.stringify(configData)), // base64 encode
-          sha: repo.config.sha,
-        });
-        dispatchAction.updateRepo({
-          ...repo,
-          config: new RepoConfigFile(),
-        }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
-        setEditMode(false);
-      } catch (e) {
-        displayError("Error saving config file!", e);
-      } finally {
-        setLoading(false);
-      }
+    try {
+      setLoading(true);
+      await githubApi.rest.repos.createOrUpdateFileContents({
+        owner: repo.owner,
+        repo: repo.name,
+        path: UICMS_CONFIGS.fileName,
+        message: `uicms config file ${repo.config.sha ? "updated" : "created"}`,
+        content: window.btoa(JSON.stringify(configData)), // base64 encode
+        sha: repo.config.sha,
+      });
+      dispatchAction.updateRepo({
+        ...repo,
+        config: new RepoConfigFile(),
+      }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
+      setEditMode(false);
+    } catch (e) {
+      displayError("Error saving config file!", e);
+    } finally {
+      setLoading(false);
     }
   };
+
+  // max lengths are checked (prevented) in input level
+  function isValid() {
+    const errors = [];
+    if (configData.websiteName?.length < 3)
+      errors.push("Website name is too short!");
+    if (configData.collectionsDirectory?.length < 1)
+      errors.push("Collections directory is too short!"); // at least a single slash char
+
+    if (errors.length > 0) {
+      alert(errors.join("\n"));
+      return false;
+    }
+    return true;
+  }
 
   function onChange(e) {
     const { name, value } = e;
@@ -101,7 +113,11 @@ export default function RepoConfiguration() {
               </Button>
             </>
           ) : (
-            <Button type="primaryLight" size="sm" onClick={() => setEditMode(true)}>
+            <Button
+              type="primaryLight"
+              size="sm"
+              onClick={() => setEditMode(true)}
+            >
               Edit
             </Button>
           )
@@ -126,11 +142,20 @@ export default function RepoConfiguration() {
             className="mb-5"
           />
           <TextInputWithLabel
-            name="websiteUrl"
-            value={configData.websiteUrl}
+            name="collectionsDirectory"
+            value={configData.collectionsDirectory}
             onChange={onChange}
-            label="Website URL"
-            placeholder="https://mycoolblog.com"
+            regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
+            label="Collections directory"
+            help={
+              <span>
+                The git directory where you would like collection items (
+                <em>.mdx</em> files) to be stored. Directory can consist of
+                (English) letters, numbers, underscore and slash sign.
+              </span>
+            }
+            placeholder="_contents/collections"
+            required={true}
             className="mb-5"
           />
           <TextInputWithLabel
@@ -139,24 +164,16 @@ export default function RepoConfiguration() {
             onChange={onChange}
             regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
             label="Assets directory"
-            help="The git directory where you would like static asset files (like images) to be stored. Directory can consist of (English) letters, numbers, underscore and slash sign. "
+            help="The git directory where you would like static asset files (like images) to be stored. Directory can consist of (English) letters, numbers, underscore and slash sign."
             placeholder="_contents/assets"
-            required={true}
             className="mb-5"
           />
           <TextInputWithLabel
-            name="collectionsDirectory"
-            value={configData.collectionsDirectory}
+            name="websiteUrl"
+            value={configData.websiteUrl}
             onChange={onChange}
-            label="Collections directory"
-            help={
-              <span>
-                The git directory where you would like collection items (
-                <em>.md</em> files) to be stored.
-              </span>
-            }
-            placeholder="_contents/collections"
-            required={true}
+            label="Website URL"
+            placeholder="https://mycoolblog.com"
             className="mb-5"
           />
         </fieldset>
