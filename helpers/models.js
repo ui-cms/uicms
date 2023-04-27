@@ -13,9 +13,14 @@ export class RepoConfigFile {
 export class RepoConfigData {
   websiteName = "";
   websiteUrl = "";
-  assetsDirectory = UICMS_CONFIGS.defaultAssetsDirectory;
-  collectionsDirectory = UICMS_CONFIGS.defaultCollectionsDirectory;
+  assetsDirectory = "";
+  collectionsDirectory = "";
   collections = [];
+
+  constructor() {
+    this.assetsDirectory = UICMS_CONFIGS.defaultAssetsDirectory;
+    this.collectionsDirectory = UICMS_CONFIGS.defaultCollectionsDirectory;
+  }
 }
 
 export class Collection {
@@ -36,7 +41,7 @@ export class ItemProperty {
   id = null;
   type = "";
   name = "";
-  isNew; // newly created (e.i unsaved/temp)
+  isNew = false; // newly created (e.i unsaved/temp)
 
   constructor() {
     this.isNew = true;

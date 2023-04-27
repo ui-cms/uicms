@@ -38,10 +38,12 @@ export default function RepoConfiguration() {
   }, [repoId, state.repos]); // only trigger when repoId or repos changes
 
   const save = async () => {
-    if (areSame(repo.config.data, configData, "No change has been made!"))
+    if (
+      areSame(repo.config.data, configData, "No change has been made!") ||
+      !isValid() ||
+      !confirm("Are you sure ?")
+    )
       return;
-    if (!isValid()) return;
-    if (!confirm("Are you sure ?")) return;
 
     try {
       setLoading(true);

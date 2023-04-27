@@ -28,8 +28,8 @@ export default function CollectionConfiguration() {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(isNew);
   const [repo, setRepo] = useState(null);
-  const [collection, setCollection] = useState(null);
-  const [configData, setConfigData] = useState(null); // local one
+  const [collectionConfig, setCollectionConfig] = useState(null); // original
+  const [collection, setCollection] = useState(null); // local one (collectionConfig)
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
 
@@ -44,8 +44,8 @@ export default function CollectionConfiguration() {
             : _repo.config.data.collections.find((c) => c.id === collectionId);
           if (_collection) {
             setRepo(_repo);
+            setCollectionConfig(_collection);
             setCollection(_collection);
-            setConfigData(_collection);
             setLoading(false);
           } else {
             router.push("/404");
@@ -59,41 +59,44 @@ export default function CollectionConfiguration() {
   }, [collectionId, state.repos]); // only trigger when collection or repos changes
 
   const save = async () => {
-    if (areSame(collection, configData, "No change has been made!")) return;
-    if (!isValid()) return;
-    if (!confirm("Are you sure ?")) return;
+    if (
+      areSame(collectionConfig, collection, "No change has been made!") ||
+      !isValid() ||
+      !confirm("Are you sure ?")
+    )
+      return;
   };
 
   function onChange(e) {
     let { name, value } = e;
     if (name === "item.name") {
-      const _configData = { ...configData };
-      _configData.item = { ..._configData.item, name: value };
-      setConfigData(_configData);
+      const _collection = { ...collection };
+      _collection.item = { ..._collection.item, name: value };
+      setCollection(_collection);
     } else {
-      setConfigData({ ...configData, [name]: value });
+      setCollection({ ...collection, [name]: value });
     }
   }
 
   function updateProperties(properties) {
-    const _configData = { ...configData };
-    _configData.item = { ..._configData.item, properties };
-    setConfigData(_configData);
+    const _collection = { ...collection };
+    _collection.item = { ..._collection.item, properties };
+    setCollection(_collection);
   }
 
   function cancel() {
-    setConfigData(JSON.parse(JSON.stringify(collection))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
+    setCollection(JSON.parse(JSON.stringify(collectionConfig))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
     setEditMode(false);
   }
 
   // max lengths are checked (prevented) in input level
   function isValid() {
     const errors = [];
-    if (configData.name?.length < 3)
+    if (collection.name?.length < 3)
       errors.push("Collection name is too short!");
-    if (configData.path?.length < 1)
+    if (collection.path?.length < 1)
       errors.push("Collection path is too short!"); // at least a single slash char
-    if (configData.item.name?.length < 3)
+    if (collection.item.name?.length < 3)
       errors.push("Item name is too short!");
 
     if (errors.length > 0) {
@@ -136,11 +139,11 @@ export default function CollectionConfiguration() {
         ),
       }}
     >
-      {configData && (
+      {collection && (
         <fieldset disabled={!editMode} className="w-50 w-100-sm">
           <TextInputWithLabel
             name="name"
-            value={configData.name}
+            value={collection.name}
             onChange={onChange}
             max={30}
             label="Collection name"
@@ -151,7 +154,7 @@ export default function CollectionConfiguration() {
           />
           <TextInputWithLabel
             name="path"
-            value={configData.path}
+            value={collection.path}
             onChange={onChange}
             regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
             label="Path"
@@ -162,7 +165,7 @@ export default function CollectionConfiguration() {
           />
           <TextInputWithLabel
             name="item.name"
-            value={configData.item.name}
+            value={collection.item.name}
             onChange={onChange}
             max={30}
             label="Item name"
@@ -172,9 +175,9 @@ export default function CollectionConfiguration() {
             className="mb-5"
           />
 
-          {configData.item && (
+          {collection.item && (
             <ItemProperties
-              properties={configData.item.properties}
+              properties={collection.item.properties}
               updateProperties={updateProperties}
               editMode={editMode}
             />
