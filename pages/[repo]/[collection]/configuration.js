@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
 import Page from "@/components/page";
-import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
-import { TextInputWithLabel } from "../configuration";
+import { TextInputWithLabel, useSaveRepoConfig } from "../configuration";
 import { Select } from "@/components/form";
 import { UICMS_CONFIGS } from "@/helpers/constants";
 import Icon from "@mdi/react";
@@ -17,7 +16,6 @@ import {
   mdiPlus,
 } from "@mdi/js";
 import Tooltip from "@/components/tooltip";
-import { areSame } from "@/helpers/utilities";
 import { Collection, ItemProperty } from "@/helpers/models";
 
 export default function CollectionConfiguration() {
@@ -25,13 +23,13 @@ export default function CollectionConfiguration() {
   const repoId = Number(router.query.repo);
   const collectionId = Number(router.query.collection);
   const isNew = collectionId === 0; // when creating new collection. url path: /repoId/0/configuration
-  const [loading, setLoading] = useState(true);
-  const [editMode, setEditMode] = useState(isNew);
   const [repo, setRepo] = useState(null);
   const [collectionConfig, setCollectionConfig] = useState(null); // original
   const [collection, setCollection] = useState(null); // local one (collectionConfig)
-  const githubApi = useGitHubApi();
-  const { state, dispatchAction } = useStateManagement();
+  const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(isNew);
+  const { state } = useStateManagement();
+  const saveRepoConfig = useSaveRepoConfig(setLoading, setEditMode);
 
   // Load the repo that owns this collection from state management
   useEffect(() => {
@@ -59,12 +57,30 @@ export default function CollectionConfiguration() {
   }, [collectionId, state.repos]); // only trigger when collection or repos changes
 
   const save = async () => {
-    if (
-      areSame(collectionConfig, collection, "No change has been made!") ||
-      !isValid() ||
-      !confirm("Are you sure ?")
-    )
-      return;
+    // max lengths are checked (prevented) in input level
+    function isValid() {
+      const errors = [];
+      if (collection.name?.length < 3)
+        errors.push("Collection name is too short!");
+      if (collection.path?.length < 1)
+        errors.push("Collection path is too short!"); // at least a single slash char
+      if (collection.item.name?.length < 3)
+        errors.push("Item name is too short!");
+
+      if (errors.length > 0) {
+        alert(errors.join("\n"));
+        return false;
+      }
+      return true;
+    }
+
+    if (isValid()) {
+      const configData = { ...repo.config.data };
+      configData.collections = configData.collections.map((c) =>
+        c.id === collectionId ? collection : c
+      );
+      await saveRepoConfig(repo, configData);
+    }
   };
 
   function onChange(e) {
@@ -87,23 +103,6 @@ export default function CollectionConfiguration() {
   function cancel() {
     setCollection(JSON.parse(JSON.stringify(collectionConfig))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
     setEditMode(false);
-  }
-
-  // max lengths are checked (prevented) in input level
-  function isValid() {
-    const errors = [];
-    if (collection.name?.length < 3)
-      errors.push("Collection name is too short!");
-    if (collection.path?.length < 1)
-      errors.push("Collection path is too short!"); // at least a single slash char
-    if (collection.item.name?.length < 3)
-      errors.push("Item name is too short!");
-
-    if (errors.length > 0) {
-      alert(errors.join("\n"));
-      return false;
-    }
-    return true;
   }
 
   return (

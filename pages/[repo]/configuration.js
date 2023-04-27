@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Page from "@/components/page";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
@@ -16,11 +16,11 @@ export default function RepoConfiguration() {
   const router = useRouter();
   const repoId = Number(router.query.repo);
   const [repo, setRepo] = useState(null);
+  const [configData, setConfigData] = useState(null); // local one
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [configData, setConfigData] = useState(null); // local one
-  const githubApi = useGitHubApi();
-  const { state, dispatchAction } = useStateManagement();
+  const { state } = useStateManagement();
+  const saveRepoConfig = useSaveRepoConfig(setLoading, setEditMode);
 
   // Load the repo from state management
   useEffect(() => {
@@ -38,49 +38,25 @@ export default function RepoConfiguration() {
   }, [repoId, state.repos]); // only trigger when repoId or repos changes
 
   const save = async () => {
-    if (
-      areSame(repo.config.data, configData, "No change has been made!") ||
-      !isValid() ||
-      !confirm("Are you sure ?")
-    )
-      return;
+    // max lengths are checked (prevented) in input level
+    function isValid() {
+      const errors = [];
+      if (configData.websiteName?.length < 3)
+        errors.push("Website name is too short!");
+      if (configData.collectionsDirectory?.length < 1)
+        errors.push("Collections directory is too short!"); // at least a single slash char
 
-    try {
-      setLoading(true);
-      await githubApi.rest.repos.createOrUpdateFileContents({
-        owner: repo.owner,
-        repo: repo.name,
-        path: UICMS_CONFIGS.fileName,
-        message: `uicms config file ${repo.config.sha ? "updated" : "created"}`,
-        content: window.btoa(JSON.stringify(configData)), // base64 encode
-        sha: repo.config.sha,
-      });
-      dispatchAction.updateRepo({
-        ...repo,
-        config: new RepoConfigFile(),
-      }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
-      setEditMode(false);
-    } catch (e) {
-      displayError("Error saving config file!", e);
-    } finally {
-      setLoading(false);
+      if (errors.length > 0) {
+        alert(errors.join("\n"));
+        return false;
+      }
+      return true;
+    }
+
+    if (isValid()) {
+      await saveRepoConfig(repo, configData);
     }
   };
-
-  // max lengths are checked (prevented) in input level
-  function isValid() {
-    const errors = [];
-    if (configData.websiteName?.length < 3)
-      errors.push("Website name is too short!");
-    if (configData.collectionsDirectory?.length < 1)
-      errors.push("Collections directory is too short!"); // at least a single slash char
-
-    if (errors.length > 0) {
-      alert(errors.join("\n"));
-      return false;
-    }
-    return true;
-  }
 
   function onChange(e) {
     const { name, value } = e;
@@ -251,4 +227,44 @@ export function TextInputWithLabel({
       />
     </div>
   );
+}
+
+/**
+ * Saves contents of UICMS config file (json) for a given repo
+ */
+export function useSaveRepoConfig(setLoading, setEditMode) {
+  const githubApi = useGitHubApi();
+  const { dispatchAction } = useStateManagement();
+
+  const saveRepoConfig = useCallback(async (repo, configData) => {
+    if (
+      areSame(repo.config.data, configData, "No change has been made!") ||
+      !confirm("Are you sure ?")
+    )
+      return;
+
+    try {
+      setLoading(true);
+      await githubApi.rest.repos.createOrUpdateFileContents({
+        owner: repo.owner,
+        repo: repo.name,
+        path: UICMS_CONFIGS.fileName,
+        message: `uicms config file ${repo.config.sha ? "updated" : "created"}`,
+        content: window.btoa(JSON.stringify(configData)), // base64 encode
+        sha: repo.config.sha,
+      });
+      dispatchAction.updateRepo({
+        ...repo,
+        config: new RepoConfigFile(),
+      }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
+      setEditMode(false);
+    } catch (e) {
+      displayError("Error saving config file!", e);
+    } finally {
+      setLoading(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // no necessary dependency
+
+  return saveRepoConfig;
 }
