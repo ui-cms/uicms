@@ -87,7 +87,10 @@ export default function CollectionConfiguration() {
           c.id === collectionId ? collection : c
         );
       }
-      await saveRepoConfig(repo, configData);
+
+      if ((await saveRepoConfig(repo, configData)) && isNew) {
+        router.push(`/${repoId}/${collection.id}/configuration`);
+      }
     }
   };
 

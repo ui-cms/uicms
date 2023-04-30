@@ -235,11 +235,12 @@ export function useSaveRepoConfig(setLoading, setEditMode) {
   const { dispatchAction } = useStateManagement();
 
   const saveRepoConfig = useCallback(async (repo, configData) => {
+    let result = false;
     if (
       areSame(repo.config.data, configData, "No change has been made!") ||
       !confirm("Are you sure ?")
     )
-      return;
+      return result;
 
     try {
       setLoading(true);
@@ -256,11 +257,13 @@ export function useSaveRepoConfig(setLoading, setEditMode) {
         config: new RepoConfigFile(),
       }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
       setEditMode(false);
+      result = true;
     } catch (e) {
       displayError("Error saving config file!", e);
     } finally {
       setLoading(false);
     }
+    return result;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // no necessary dependency
 
