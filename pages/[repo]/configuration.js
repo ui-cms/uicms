@@ -43,8 +43,6 @@ export default function RepoConfiguration() {
       const errors = [];
       if (configData.websiteName?.length < 3)
         errors.push("Website name is too short!");
-      if (configData.collectionsDirectory?.length < 1)
-        errors.push("Collections directory is too short!"); // at least a single slash char
 
       if (errors.length > 0) {
         alert(errors.join("\n"));
@@ -127,13 +125,13 @@ export default function RepoConfiguration() {
             label="Collections directory"
             help={
               <span>
-                The git directory where you would like collection items (
-                <em>.mdx</em> files) to be stored. Directory can consist of
-                (English) letters, numbers, underscore and slash sign.
+                The directory where you would like collection items (
+                <em>.mdx</em> files) to be stored. If none given, root folder
+                will be used. Directory can consist of (English) letters,
+                numbers, underscore and slash sign.
               </span>
             }
             placeholder="_contents/collections"
-            required={true}
             className="mb-5"
           />
           <TextInputWithLabel
@@ -263,7 +261,7 @@ export function useSaveRepoConfig(setLoading, setEditMode) {
     } finally {
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // no necessary dependency
 
   return saveRepoConfig;
