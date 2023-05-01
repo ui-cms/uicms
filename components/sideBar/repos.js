@@ -24,7 +24,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { UICMS_CONFIGS } from "@/helpers/constants";
 
-export function Repos({ selectedRepo, selectRepo, setLoading }) {
+export function Repos({ selectedRepo, setLoading }) {
   const loaded = useRef(false);
   const [filters, setFilters] = useState({
     search: "",
@@ -69,7 +69,6 @@ export function Repos({ selectedRepo, selectRepo, setLoading }) {
         <RepoList
           repos={repos}
           filters={filters}
-          onSelect={selectRepo}
           selectedRepoId={selectedRepo?.id}
         />
       </>
@@ -158,9 +157,8 @@ function SearchArea({ filters, setFilters }) {
   );
 }
 
-function RepoList({ repos, filters, onSelect, selectedRepoId }) {
+function RepoList({ repos, filters, selectedRepoId }) {
   const router = useRouter();
-  const repoId = router.query.repo;
 
   const filteredRepos = useMemo(() => {
     let result = repos.filter(
@@ -180,11 +178,13 @@ function RepoList({ repos, filters, onSelect, selectedRepoId }) {
   }, [filters, repos]);
 
   function onClick(repo) {
-    const selected = repo.id === selectedRepoId;
-    onSelect(selected ? null : repo);
-    if (repoId) {
-      router.push("/start"); // reset url (of repoId)
-    }
+    router.push(
+      repo.id === selectedRepoId ? "/start" : `/${repo.id}`,
+      undefined,
+      {
+        shallow: true, // only change params in router, not load the page
+      }
+    ); // if selected already, unselect (return to start page), otherwise redirect to repo page
   }
 
   return filteredRepos.length === 0 ? (

@@ -72,62 +72,61 @@ function MainWithTabs({
   const { state, dispatchAction } = useStateManagement();
   const { repos } = state;
 
-  // Repos in state is updated, so update selected repo as well (as it might be updated in state management)
+  // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched (if it isn't present already). That is how fetching config is triggered.
+  // Because all pages like repo config, collection config, new collection, item has url that starts with repo id and they all need repo (config) to be loaded.
+  // When repos in state gets updated, selected repo as well should be updated (as it might be updated in state management).
   useEffect(() => {
-    if (repos.length) {
-      const repoId = selectedRepo ? selectedRepo.id : url.repoId; // when landed from url, will use repoId from url initially as there won't be a selected repo
-      if (repoId) {
-        const repo = repos.find((r) => r.id === repoId);
-        if (repo) {
-          let collection = null;
-          const collectionId = selectedCollection
-            ? selectedCollection.id
-            : url.collectionId; // when landed from url, will use collectionId from url initially to set selected collection
-          if (collectionId && repo.config.data) {
-            collection = repo.config.data.collections.find(
-              (c) => c.id === collectionId
-            );
-          }
-          setSelectedRepo(repo);
-          setSelectedCollection(collection); // if none, will clear selected collection
+    async function fetchConfig(repo) {
+      try {
+        const res = await githubApi.customRest.getFileContentAndSha(
+          repo.owner,
+          repo.name,
+          UICMS_CONFIGS.fileName
+        );
+        dispatchAction.updateRepo({
+          ...repo,
+          config: new RepoConfigFile(JSON.parse(res.content), res.sha),
+        });
+      } catch (e) {
+        // when 404, no config file, incompatible repo
+        if (e.status !== 404) {
+          displayError("Error fetching config file!", e);
         }
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repos]); // trigger only when repos in state gets updated
 
-  // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched. That is how fetching config is triggered.
-  // Because all pages like repo config, collection config, new collection, item has url that starts with repo id and they all need repo to be loaded.
-  useEffect(() => {
-    if (
-      selectedRepo &&
-      url.repoId &&
-      selectedRepo.id === url.repoId &&
-      !selectedRepo.config.data
-    ) {
-      (async () => {
-        const repo = { ...selectedRepo };
-        setLoading(true);
-        try {
-          const res = await githubApi.customRest.getFileContentAndSha(
-            repo.owner,
-            repo.name,
-            UICMS_CONFIGS.fileName
-          );
-          repo.config = new RepoConfigFile(JSON.parse(res.content), res.sha);
-          dispatchAction.updateRepo(repo);
-        } catch (e) {
-          // when 404, no config file, incompatible repo
-          if (e.status !== 404) {
-            displayError("Error fetching config file!", e);
-          }
-        } finally {
-          setLoading(false);
+    if (repos.length && url.repoId) {
+      const repo = repos.find((r) => r.id === url.repoId);
+      if (repo) {
+        setSelectedRepo(repo);
+        if (!repo.config.data) {
+          fetchConfig(repo);
         }
-      })();
+      } else {
+        router.push("/404");
+      }
+    } else if (selectedRepo) {
+      setSelectedRepo(null); // reset/unselect selected repo
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedRepo, url.repoId]); // trigger only when selected repo or repoId in url changes
+  }, [repos, url.repoId]); // trigger only when repos in state gets updated or repoId in url changes
+
+  // When selected repo's config changes or collectionId from url changes, selected collection should be changed too.
+  useEffect(() => {
+    if (selectedRepo?.config.data && url.collectionId) {
+      const collection = selectedRepo.config.data.collections.find(
+        (c) => c.id === url.collectionId
+      );
+      if (collection) {
+        setSelectedCollection(collection);
+      } else {
+        router.push("/404");
+      }
+    } else if (selectedCollection) {
+      setSelectedCollection(null); // reset/unselect selected collection
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRepo?.config.data, url.collectionId]); // trigger only when selected repo's config data gets updated or collectionId in url changes
 
   return (
     <Tabs
@@ -143,14 +142,7 @@ function MainWithTabs({
             </>
           ),
           content: (
-            <Repos
-              selectedRepo={selectedRepo}
-              selectRepo={(repo) => {
-                setSelectedRepo(repo);
-                setSelectedCollection(null);
-              }}
-              setLoading={setLoading}
-            />
+            <Repos selectedRepo={selectedRepo} setLoading={setLoading} />
           ),
         },
         {
@@ -160,14 +152,10 @@ function MainWithTabs({
               Collections
             </>
           ),
-          content: (
+          content: selectedRepo && (
             <Collections
               repo={selectedRepo}
               selectedCollection={selectedCollection}
-              selectCollection={(collection) => {
-                setSelectedCollection(collection);
-                // setSelectedItem(null);
-              }}
             />
           ),
           disabled: !selectedRepo,
@@ -181,7 +169,7 @@ function MainWithTabs({
               Items
             </>
           ),
-          content: <Items />,
+          content: selectedCollection && <Items />,
           disabled: !selectedCollection,
         },
       ]}
