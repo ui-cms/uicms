@@ -70,7 +70,7 @@ function MainWithTabs({
   const [loading, setLoading] = useState(false);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const { repos } = state;
+  const { repos, items } = state;
 
   // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched (if it isn't present already). That is how fetching config is triggered.
   // Because all pages like repo config, collection config, new collection, item has url that starts with repo id and they all need repo (config) to be loaded.
@@ -113,12 +113,39 @@ function MainWithTabs({
 
   // When selected repo's config changes or collectionId from url changes, selected collection should be changed too.
   useEffect(() => {
+    async function fetchItems(repo, collection) {
+      try {
+        const res = await githubApi.rest.repos.getContent({
+          owner: repo.owner,
+          repo: repo.name,
+          path: `${repo.config.data.collectionsDirectory}/${collection.path}`, // todo slash check
+        });
+
+        const itemSlugs = res.data.reduce((acc, item) => {
+          if (item.type === "dir") {
+            acc.push(item.name); // only directories (skip files)
+          }
+          return acc;
+        }, []);
+
+        dispatchAction.setItems(repo.id, collection.id, itemSlugs);
+      } catch (e) {
+        // when 404, dir/path not found
+        if (e.status !== 404) {
+          displayError("Error fetching items!", e);
+        }
+      }
+    }
+
     if (selectedRepo?.config.data && url.collectionId) {
       const collection = selectedRepo.config.data.collections.find(
         (c) => c.id === url.collectionId
       );
       if (collection) {
         setSelectedCollection(collection);
+        if (!items[selectedRepo.id]?.[collection.id]) {
+          fetchItems(selectedRepo, collection); // if items not fetched already
+        }
       } else {
         router.push("/404");
       }

@@ -77,13 +77,13 @@ function CollectionList({ repoId, data, selectedCollectionId }) {
   function onClick(collection) {
     router.push(
       collection.id === selectedCollectionId
-        ? "/start"
+        ? `/${repoId}`
         : `/${repoId}/${collection.id}`,
       undefined,
       {
         shallow: true, // only change params in router, not load the page
       }
-    ); // if selected already, unselect (return to start page), otherwise redirect to collection page
+    ); // if selected already, unselect, otherwise redirect to collection page
   }
 
   const sortedCollections = useMemo(() => {
