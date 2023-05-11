@@ -18,6 +18,12 @@ export default class Actions {
   updateRepo(repo) {
     this.dispatch({ type: "updateRepo", payload: repo });
   }
+  setSelectedRepo(repo) {
+    this.dispatch({ type: "setSelectedRepo", payload: repo });
+  }
+  setSelectedCollection(collection) {
+    this.dispatch({ type: "setSelectedCollection", payload: collection });
+  }
   setItems(repoId, collectionId, items) {
     this.dispatch({
       type: "setItems",

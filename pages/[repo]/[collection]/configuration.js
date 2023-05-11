@@ -24,41 +24,22 @@ const DEFAULT_PROPS_OBJ = indexBy(DEFAULT_PROPS_ARR, "id");
 
 export default function CollectionConfiguration() {
   const router = useRouter();
-  const repoId = Number(router.query.repo);
-  const collectionId = Number(router.query.collection);
-  const isNew = collectionId === 0; // when creating new collection. url path: /repoId/0/configuration
-  const [repo, setRepo] = useState(null);
-  const [collectionConfig, setCollectionConfig] = useState(null); // original
-  const [collection, setCollection] = useState(null); // local one (collectionConfig)
+  const isNew = Number(router.query.collection) === 0; // when creating new collection. url path: /repoId/0/configuration
   const [loading, setLoading] = useState(true);
+  const [collection, setCollection] = useState(null); // local one (collectionConfig)
   const [editMode, setEditMode] = useState(isNew);
   const { state } = useStateManagement();
+  const { selectedRepo, selectedCollection } = state;
   const saveRepoConfig = useSaveRepoConfig(setLoading, setEditMode);
 
   // Load the repo that owns this collection from state management
   useEffect(() => {
-    if (repoId && state.repos.length) {
-      const _repo = state.repos.find((r) => r.id === repoId);
-      if (_repo && !isNaN(collectionId)) {
-        if (_repo.config.data) {
-          const _collection = isNew
-            ? new Collection()
-            : _repo.config.data.collections.find((c) => c.id === collectionId);
-          if (_collection) {
-            setRepo(_repo);
-            setCollectionConfig(_collection);
-            setCollection(_collection);
-            setLoading(false);
-          } else {
-            router.push("/404");
-          }
-        }
-      } else {
-        router.push("/404");
-      }
+    const _collection = isNew ? new Collection() : selectedCollection;
+    if (_collection) {
+      setCollection({ ..._collection });
+      setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collectionId, state.repos]); // only trigger when collection or repos changes
+  }, [isNew, selectedCollection]); // only trigger when isNew or selected collection changes
 
   const save = async () => {
     // max lengths are checked (prevented) in input level
@@ -79,17 +60,17 @@ export default function CollectionConfiguration() {
     }
 
     if (isValid()) {
-      const configData = { ...repo.config.data };
+      const configData = { ...selectedRepo.config.data };
       if (isNew) {
         configData.collections = [...configData.collections, collection];
       } else {
         configData.collections = configData.collections.map((c) =>
-          c.id === collectionId ? collection : c
+          c.id === selectedCollection.id ? collection : c
         );
       }
 
-      if ((await saveRepoConfig(repo, configData)) && isNew) {
-        router.push(`/${repoId}/${collection.id}/configuration`);
+      if ((await saveRepoConfig(selectedRepo, configData)) && isNew) {
+        router.push(`/${selectedRepo.id}/${collection.id}/configuration`);
       }
     }
   };
@@ -112,7 +93,7 @@ export default function CollectionConfiguration() {
   }
 
   function cancel() {
-    setCollection(JSON.parse(JSON.stringify(collectionConfig))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
+    setCollection(JSON.parse(JSON.stringify(selectedCollection))); // deep copy of collection needed or cancelling editMode and reseting changes made in properties won't be reverted
     setEditMode(false);
   }
 
@@ -237,7 +218,7 @@ function ItemProperties({ properties, updateProperties, editMode }) {
           p.type === UICMS_CONFIGS.collectionItemPropertyTypes.richtext
       )
     ) {
-      alert('Only one property (named "body") can have "richtext" type!'); // property names must be unique
+      alert('Only one property can have "richtext" type!'); // only one richtext rpoperty (body) is allowed
       return false;
     }
 

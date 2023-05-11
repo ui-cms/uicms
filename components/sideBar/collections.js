@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import styles from "@/styles/SideBar.module.scss";
 import { Button } from "../button";
 import Link from "next/link";
@@ -12,19 +13,22 @@ import {
 } from "@mdi/js";
 import DropDown from "../dropdown";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
 import { orderBy } from "@/helpers/utilities";
+import useStateManagement from "@/services/stateManagement/stateManagement";
 
-export function Collections({ repo, selectedCollection }) {
+export function Collections() {
+  const { state } = useStateManagement();
+  const { selectedRepo, selectedCollection } = state;
+
   return (
     <>
       <SelectedCollectionDetails
-        repoId={repo?.id}
+        repoId={selectedRepo?.id}
         collection={selectedCollection}
       />
       <CollectionList
-        repoId={repo?.id}
-        data={repo?.config.data}
+        repoId={selectedRepo?.id}
+        data={selectedRepo?.config.data}
         selectedCollectionId={selectedCollection?.id}
       />
     </>

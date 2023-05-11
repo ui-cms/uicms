@@ -24,7 +24,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { UICMS_CONFIGS } from "@/helpers/constants";
 
-export function Repos({ selectedRepo, setLoading }) {
+export function Repos({ setLoading }) {
   const loaded = useRef(false);
   const [filters, setFilters] = useState({
     search: "",
@@ -33,7 +33,7 @@ export function Repos({ selectedRepo, setLoading }) {
   });
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const { repos, currentUser } = state;
+  const { repos, selectedRepo, currentUser } = state;
 
   useEffect(() => {
     if (currentUser && repos.length === 0 && !loaded.current) {
@@ -50,13 +50,8 @@ export function Repos({ selectedRepo, setLoading }) {
         }
       })();
     }
-  }, [
-    currentUser,
-    dispatchAction,
-    githubApi.customRest,
-    repos.length,
-    setLoading,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]); // trigger only when currentUser gets updated
 
   return (
     loaded && (

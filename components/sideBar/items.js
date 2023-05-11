@@ -22,29 +22,30 @@ import { Button } from "../button";
 import DropDown from "../dropdown";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { UICMS_CONFIGS } from "@/helpers/constants";
 
 export function Items() {
   const router = useRouter();
-  const url = {
-    repoId: Number(router.query.repo),
-    collectionId: Number(router.query.collection),
-    itemSlug: router.query.item,
-  };
-  const [selectedItem, setSelectedItem] = useState([]);
-  const [items, setItems] = useState([]);
+  const itemId = router.query.item;
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [itemsList, setItemsList] = useState([]);
   const [filters, setFilters] = useState({
     search: "",
   });
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
+  const { items, selectedRepo, selectedCollection } = state;
 
   useEffect(() => {
-    const _items = state.items[url.repoId]?.[url.collectionId];
+    const _items = items[selectedRepo.id]?.[selectedCollection.id];
     if (_items?.length) {
-      setItems(_items);
+      setItemsList(_items);
+      const selected = _items.find((i) => i.startsWith(itemId));
+      if (selected) {
+        setSelectedItem(selected);
+      }
     }
-  }, [state.items, url.collectionId, url.repoId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemId, items]); // only trigger when itemId in url or items list in state management changes
 
   return (
     <>
@@ -53,7 +54,7 @@ export function Items() {
         currentUserName={currentUser?.login}
       /> */}
       {/* <SearchArea filters={filters} setFilters={setFilters} /> */}
-      <ItemList items={items} filters={filters} selectedItem={selectedItem} />
+      <ItemList items={itemsList} filters={filters} selectedItem={selectedItem} />
     </>
   );
 }

@@ -28,49 +28,16 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import { RepoConfigFile } from "@/helpers/models";
 
 export default function SideBar({}) {
-  const [activeTabIndex, setActiveTabIndex] = useState(null);
-  const [selectedRepo, setSelectedRepo] = useState(null);
-  const [selectedCollection, setSelectedCollection] = useState(null);
-  const [open, setOpen] = useState(false); // used in mobile
-
-  return (
-    <aside className={styles.sidebar}>
-      <Header open={open} setOpen={setOpen} />
-      <section className={`${styles.main} ${open ? styles.open : ""}`}>
-        <MainWithTabs
-          setActiveTabIndex={setActiveTabIndex}
-          selectedRepo={selectedRepo}
-          setSelectedRepo={setSelectedRepo}
-          selectedCollection={selectedCollection}
-          setSelectedCollection={setSelectedCollection}
-        />
-        <Footer
-          activeTabIndex={activeTabIndex}
-          repoId={selectedRepo?.id}
-          collectionId={selectedCollection?.id}
-        />
-      </section>
-    </aside>
-  );
-}
-
-function MainWithTabs({
-  setActiveTabIndex,
-  selectedRepo,
-  setSelectedRepo,
-  selectedCollection,
-  setSelectedCollection,
-}) {
   const router = useRouter();
   const url = {
     repoId: Number(router.query.repo),
     collectionId: Number(router.query.collection),
-    itemSlug: router.query.item,
   };
-  const [loading, setLoading] = useState(false);
+  const [activeTabIndex, setActiveTabIndex] = useState(null);
+  const [open, setOpen] = useState(false); // used in mobile
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const { repos, items } = state;
+  const { repos, items, selectedRepo, selectedCollection } = state;
 
   // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched (if it isn't present already). That is how fetching config is triggered.
   // Because all pages like repo config, collection config, new collection, item has url that starts with repo id and they all need repo (config) to be loaded.
@@ -98,7 +65,7 @@ function MainWithTabs({
     if (repos.length && url.repoId) {
       const repo = repos.find((r) => r.id === url.repoId);
       if (repo) {
-        setSelectedRepo(repo);
+        dispatchAction.setSelectedRepo(repo);
         if (!repo.config.data) {
           fetchConfig(repo);
         }
@@ -106,7 +73,7 @@ function MainWithTabs({
         router.push("/404");
       }
     } else if (selectedRepo) {
-      setSelectedRepo(null); // reset/unselect selected repo
+      dispatchAction.setSelectedRepo(null); // reset/unselect selected repo
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repos, url.repoId]); // trigger only when repos in state gets updated or repoId in url changes
@@ -142,7 +109,7 @@ function MainWithTabs({
         (c) => c.id === url.collectionId
       );
       if (collection) {
-        setSelectedCollection(collection);
+        dispatchAction.setSelectedCollection(collection);
         if (!items[selectedRepo.id]?.[collection.id]) {
           fetchItems(selectedRepo, collection); // if items not fetched already
         }
@@ -150,10 +117,32 @@ function MainWithTabs({
         router.push("/404");
       }
     } else if (selectedCollection) {
-      setSelectedCollection(null); // reset/unselect selected collection
+      dispatchAction.setSelectedCollection(null); // reset/unselect selected collection
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRepo?.config.data, url.collectionId]); // trigger only when selected repo's config data gets updated or collectionId in url changes
+
+  return (
+    <aside className={styles.sidebar}>
+      <Header open={open} setOpen={setOpen} />
+      <section className={`${styles.main} ${open ? styles.open : ""}`}>
+        <MainWithTabs
+          setActiveTabIndex={setActiveTabIndex}
+          selectedRepo={selectedRepo}
+          selectedCollection={selectedCollection}
+        />
+        <Footer
+          activeTabIndex={activeTabIndex}
+          repoId={selectedRepo?.id}
+          collectionId={selectedCollection?.id}
+        />
+      </section>
+    </aside>
+  );
+}
+
+function MainWithTabs({ setActiveTabIndex, selectedRepo, selectedCollection }) {
+  const [loading, setLoading] = useState(false);
 
   return (
     <Tabs
@@ -168,9 +157,7 @@ function MainWithTabs({
               Repos
             </>
           ),
-          content: (
-            <Repos selectedRepo={selectedRepo} setLoading={setLoading} />
-          ),
+          content: <Repos setLoading={setLoading} />,
         },
         {
           title: (
@@ -179,15 +166,8 @@ function MainWithTabs({
               Collections
             </>
           ),
-          content: selectedRepo && (
-            <Collections
-              repo={selectedRepo}
-              selectedCollection={selectedCollection}
-            />
-          ),
+          content: selectedRepo && <Collections />,
           disabled: !selectedRepo,
-          onClick: () =>
-            !selectedRepo.config.data && router.push(`/${selectedRepo?.id}`), // have repoId in url so that it would trigger fetching of repos's config
         },
         {
           title: (
@@ -255,15 +235,15 @@ function Footer({ activeTabIndex, repoId, collectionId }) {
 
   const newBtn = useMemo(() => {
     const result = { text: "New repo", url: "/repo/new" };
-    if (activeTabIndex === 1) {
+    if (activeTabIndex === 1 && repoId) {
       result.text = "New collection";
       result.url = `/${repoId}/0/configuration`; // 0 (as id) for new collection
-    } else if (activeTabIndex === 2) {
+    } else if (activeTabIndex === 2 && collectionId) {
       result.text = "New item";
       result.url = `/${repoId}/${collectionId}/item/new`;
     }
     return result;
-  }, [activeTabIndex, collectionId, repoId]);
+  }, [activeTabIndex, repoId, collectionId]);
 
   return (
     <div className={styles.footer}>

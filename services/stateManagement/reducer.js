@@ -34,6 +34,12 @@ export default function reducer(state, { type, payload }) {
       const repos = state.repos.map((r) => (r.id === payload.id ? payload : r));
       return { ...state, repos };
     }
+    case "setSelectedRepo": {
+      return { ...state, selectedRepo: payload };
+    }
+    case "setSelectedCollection": {
+      return { ...state, selectedCollection: payload };
+    }
     case "setItems": {
       const items = { ...state.items };
       items[payload.repoId] = items[payload.repoId] ?? {}; // if repoId not present, the use start id with empty object

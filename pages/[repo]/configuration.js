@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import Page from "@/components/page";
 import { useCallback, useEffect, useState } from "react";
 import useGitHubApi from "@/hooks/useGitHubApi";
@@ -13,29 +12,20 @@ import { mdiHelpCircleOutline } from "@mdi/js";
 import { RepoConfigFile, RepoConfigData } from "@/helpers/models";
 
 export default function RepoConfiguration() {
-  const router = useRouter();
-  const repoId = Number(router.query.repo);
-  const [repo, setRepo] = useState(null);
-  const [configData, setConfigData] = useState(null); // local one
   const [loading, setLoading] = useState(true);
+  const [configData, setConfigData] = useState(null); // local one
   const [editMode, setEditMode] = useState(false);
   const { state } = useStateManagement();
+  const { selectedRepo } = state;
   const saveRepoConfig = useSaveRepoConfig(setLoading, setEditMode);
 
   // Load the repo from state management
   useEffect(() => {
-    if (repoId && state.repos.length) {
-      const _repo = state.repos.find((r) => r.id === repoId);
-      if (_repo) {
-        setRepo(_repo);
-        setConfigData(_repo.config.data);
-        setLoading(false);
-      } else {
-        router.push("/404");
-      }
+    if (selectedRepo) {
+      setConfigData({ ...selectedRepo.config.data });
+      setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoId, state.repos]); // only trigger when repoId or repos changes
+  }, [selectedRepo]); // only trigger when selected repo changes
 
   const save = async () => {
     // max lengths are checked (prevented) in input level
@@ -52,7 +42,7 @@ export default function RepoConfiguration() {
     }
 
     if (isValid()) {
-      await saveRepoConfig(repo, configData);
+      await saveRepoConfig(selectedRepo, configData);
     }
   };
 
@@ -62,7 +52,7 @@ export default function RepoConfiguration() {
   }
 
   function cancel() {
-    setConfigData(repo.config.data);
+    setConfigData({ ...selectedRepo.config.data });
     setEditMode(false);
   }
 
@@ -76,7 +66,7 @@ export default function RepoConfiguration() {
       title="Repo configuration"
       loading={loading}
       heading={{
-        title: repo?.name,
+        title: selectedRepo?.name,
         subtitle: editMode ? "Editing configuration" : "Configuration",
         buttons: configData ? (
           editMode ? (
@@ -159,10 +149,10 @@ export default function RepoConfiguration() {
 
       <br />
       <br />
-      {repo?.pushed_at && (
+      {selectedRepo?.pushed_at && (
         <small className="text-dark mb-2 d-block">
           The last push (update) to this repo was made on{" "}
-          {new Date(repo.pushed_at).toLocaleString()}.
+          {new Date(selectedRepo.pushed_at).toLocaleString()}.
         </small>
       )}
     </Page>
@@ -238,7 +228,9 @@ export function useSaveRepoConfig(setLoading, setEditMode) {
     let result = false;
     if (
       areSame(repo.config.data, configData, "No change has been made!") ||
-      !confirm("Are you sure ?")
+      !confirm(
+        "Are you sure ?\n\nBe warned that changes will not be applied to existing collections/items."
+      )
     )
       return result;
 
