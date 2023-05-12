@@ -44,7 +44,9 @@ export function Items() {
   return (
     <>
       <SelectedItemDetails item={selectedItem} />
-      <SearchArea filters={filters} setFilters={setFilters} />
+      {itemsList?.length > 5 && (
+        <SearchArea filters={filters} setFilters={setFilters} />
+      )}
       <ItemList
         items={itemsList}
         filters={filters}
