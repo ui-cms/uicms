@@ -140,7 +140,7 @@ function SearchArea({ filters, setFilters }) {
         value={filters.search}
         onChange={onChange}
         placeholder="Search"
-        className="bg-light"
+        className="bg-light mw-50"
       />
       <CheckBox name="public" value={filters.public} onChange={onChange}>
         Public

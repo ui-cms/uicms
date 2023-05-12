@@ -1,26 +1,17 @@
-import { useEffect, useState, useMemo, useRef } from "react";
-import useGitHubApi from "@/hooks/useGitHubApi";
+import { useEffect, useState, useMemo } from "react";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import { displayError, orderBy } from "@/helpers/utilities";
-import { CheckBox, TextInput } from "../form";
+import { TextInput } from "../form";
 import Icon from "@mdi/react";
 import {
-  mdiAt,
   mdiCheck,
-  mdiCogOutline,
+  mdiDeleteOutline,
   mdiDotsVertical,
-  mdiGit,
-  mdiGithub,
-  mdiLock,
-  mdiLockOpenOutline,
-  mdiStar,
-  mdiStarOutline,
-  mdiWeb,
+  mdiFileCheckOutline,
+  mdiFileOutline,
 } from "@mdi/js";
 import styles from "@/styles/SideBar.module.scss";
 import { Button } from "../button";
 import DropDown from "../dropdown";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 export function Items() {
@@ -31,17 +22,20 @@ export function Items() {
   const [filters, setFilters] = useState({
     search: "",
   });
-  const githubApi = useGitHubApi();
-  const { state, dispatchAction } = useStateManagement();
+  const { state } = useStateManagement();
   const { items, selectedRepo, selectedCollection } = state;
 
   useEffect(() => {
     const _items = items[selectedRepo.id]?.[selectedCollection.id];
     if (_items?.length) {
       setItemsList(_items);
-      const selected = _items.find((i) => i.startsWith(itemId));
-      if (selected) {
-        setSelectedItem(selected);
+      if (itemId) {
+        const selected = _items.find((i) => i.startsWith(itemId));
+        if (selected) {
+          setSelectedItem(parseItemSlugToObject(selected));
+        }
+      } else if (selectedItem) {
+        setSelectedItem(null); // reset/unselect selected item
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,31 +43,31 @@ export function Items() {
 
   return (
     <>
-      {/* <SelectedRepoDetails
-        repo={selectedRepo}
-        currentUserName={currentUser?.login}
-      /> */}
-      {/* <SearchArea filters={filters} setFilters={setFilters} /> */}
-      <ItemList items={itemsList} filters={filters} selectedItem={selectedItem} />
+      <SelectedItemDetails item={selectedItem} />
+      <SearchArea filters={filters} setFilters={setFilters} />
+      <ItemList
+        items={itemsList}
+        filters={filters}
+        selectedItemId={selectedItem?.id}
+        repoId={selectedRepo?.id}
+        collectionId={selectedCollection?.id}
+      />
     </>
   );
 }
 
-function SelectedRepoDetails({ repo, currentUserName }) {
-  const starred = hasUICMSTopic(repo);
+function SelectedItemDetails({ item }) {
   return (
-    repo && (
+    item && (
       <div className={styles.selectedArea}>
-        <h3 title={repo.full_name}>
-          {repo.owner !== currentUserName && (
-            <small className="text-dark">
-              <Icon path={mdiAt} size={0.65} className="mr-1" />
-              <span className="text-overflow">{repo.owner}</span>
-            </small>
-          )}
+        <h3>
           <p className="mb-1">
-            <Icon path={mdiGit} size={1} className="mr-1 text-dark" />
-            <span className="text-overflow">{repo.name}</span>
+            <Icon
+              path={mdiFileCheckOutline}
+              size={1}
+              className="mr-1 text-dark"
+            />
+            <span className="text-overflow">{item.title}</span>
           </p>
         </h3>
         <div className={styles.dropdown}>
@@ -86,27 +80,9 @@ function SelectedRepoDetails({ repo, currentUserName }) {
             }
           >
             <div className={styles.dropdownOptions}>
-              <Link href={`/${repo.id}/configuration`}>
-                <Icon path={mdiCogOutline} size={0.7} className="mr-1" />
-                Configuration
-              </Link>
-              <Link href={repo.html_url} target="_blank">
-                <Icon path={mdiGithub} size={0.7} className="mr-1" />
-                Source code
-              </Link>
-              {repo.homepage && (
-                <Link href={repo.homepage} target="_blank">
-                  <Icon path={mdiWeb} size={0.7} className="mr-1" />
-                  Homepage
-                </Link>
-              )}
               <a onClick={() => alert("todo")} href="#">
-                <Icon
-                  path={starred ? mdiStarOutline : mdiStar}
-                  size={0.7}
-                  className="mr-1"
-                />
-                {starred ? "Unstar" : "Star"}
+                <Icon path={mdiDeleteOutline} size={0.7} className="mr-1" />
+                Delete
               </a>
             </div>
           </DropDown>
@@ -128,35 +104,34 @@ function SearchArea({ filters, setFilters }) {
         value={filters.search}
         onChange={onChange}
         placeholder="Search"
-        className="bg-light"
+        className="bg-light w-100"
       />
     </form>
   );
 }
 
-function ItemList({ items, filters, selectedItem }) {
+function ItemList({ items, filters, selectedItemId, repoId, collectionId }) {
   const router = useRouter();
 
-  const filteredItems = useMemo(
+  const itemObjects = useMemo(
     () =>
       items
-        .sort()
-        .map((i) => i.substring(11, i.length).replaceAll("_", " ")) // first 11 chars are dates and underscore. That helps with uniqueness and sorting (by date)
         .filter(
           (i) =>
             !filters.search ||
             (filters.search.toLowerCase() &&
               i.toLowerCase().includes(filters.search))
-        ),
-
+        )
+        .reverse() // newest date first
+        .map((i) => parseItemSlugToObject(i)),
     [filters.search, items]
   );
 
   function onClick(item) {
     router.push(
-      item === selectedItem
-        ? `/${repoId}/${collection.id}`
-        : `/${repoId}/${collection.id}/${item}`,
+      item.id === selectedItemId
+        ? `/${repoId}/${collectionId}`
+        : `/${repoId}/${collectionId}/${item.id}`,
       undefined,
       {
         shallow: true, // only change params in router, not load the page
@@ -164,21 +139,21 @@ function ItemList({ items, filters, selectedItem }) {
     ); // if selected already, unselect, otherwise redirect to item page
   }
 
-  return filteredItems.length === 0 ? (
+  return itemObjects.length === 0 ? (
     <p>No items found</p>
   ) : (
     <ul className={styles.listArea}>
-      {filteredItems.map((r) => {
-        const selected = r === selectedItem;
+      {itemObjects.map((item) => {
+        const selected = item.id === selectedItemId;
         return (
-          <li key={r}>
+          <li key={item.id}>
             <a
-              onClick={() => onClick(r)}
+              onClick={() => onClick(item)}
               className={selected ? styles.active : ""}
               href="#"
             >
-              <Icon path={mdiLockOpenOutline} size={0.75} className="mr-1" />
-              <span className="text-overflow">{r}</span>
+              <Icon path={mdiFileOutline} size={0.75} className="mr-1" />
+              <span className="text-overflow">{item.title}</span>
               {selected && (
                 <Icon
                   path={mdiCheck}
@@ -193,4 +168,11 @@ function ItemList({ items, filters, selectedItem }) {
       })}
     </ul>
   );
+}
+
+function parseItemSlugToObject(item) {
+  return {
+    id: Number(item.substring(0, 10)), // First 10 chars are datetime (id) which helps with uniqueness and sorting (by date)
+    title: item.substring(11, item.length).replaceAll("_", " "), // Title comes after id and is separated by underscore. Includes more underscores which were used to replace spaces
+  };
 }
