@@ -18,16 +18,19 @@ export default class Actions {
   updateRepo(repo) {
     this.dispatch({ type: "updateRepo", payload: repo });
   }
+  setItems(repoId, collectionId, items) {
+    this.dispatch({
+      type: "setItems",
+      payload: { repoId, collectionId, items },
+    });
+  }
   setSelectedRepo(repo) {
     this.dispatch({ type: "setSelectedRepo", payload: repo });
   }
   setSelectedCollection(collection) {
     this.dispatch({ type: "setSelectedCollection", payload: collection });
   }
-  setItems(repoId, collectionId, items) {
-    this.dispatch({
-      type: "setItems",
-      payload: { repoId, collectionId, items },
-    });
+  setSelectedItem(item) {
+    this.dispatch({ type: "setSelectedItem", payload: item });
   }
 }

@@ -13,33 +13,21 @@ import styles from "@/styles/SideBar.module.scss";
 import { Button } from "../button";
 import DropDown from "../dropdown";
 import { useRouter } from "next/router";
+import { isNullOrEmpty } from "@/helpers/utilities";
 
 export function Items() {
-  const router = useRouter();
-  const itemId = router.query.item;
-  const [selectedItem, setSelectedItem] = useState(null);
   const [itemsList, setItemsList] = useState([]);
   const [filters, setFilters] = useState({
     search: "",
   });
   const { state } = useStateManagement();
-  const { items, selectedRepo, selectedCollection } = state;
+  const { items, selectedRepo, selectedCollection, selectedItem } = state;
 
   useEffect(() => {
     const _items = items[selectedRepo.id]?.[selectedCollection.id];
-    if (_items?.length) {
-      setItemsList(_items);
-      if (itemId) {
-        const selected = _items.find((i) => i.startsWith(itemId));
-        if (selected) {
-          setSelectedItem(parseItemSlugToObject(selected));
-        }
-      } else if (selectedItem) {
-        setSelectedItem(null); // reset/unselect selected item
-      }
-    }
+    setItemsList(isNullOrEmpty(_items) ? [] : _items);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemId, items]); // only trigger when itemId in url or items list in state management changes
+  }, [items]); // only trigger when items list in state management changes
 
   return (
     <>
@@ -50,7 +38,7 @@ export function Items() {
       <ItemList
         items={itemsList}
         filters={filters}
-        selectedItemId={selectedItem?.id}
+        selectedItem={selectedItem}
         repoId={selectedRepo?.id}
         collectionId={selectedCollection?.id}
       />
@@ -59,38 +47,38 @@ export function Items() {
 }
 
 function SelectedItemDetails({ item }) {
+  if (!item) return null;
+  const { title } = parseItemSlugToObject(item);
   return (
-    item && (
-      <div className={styles.selectedArea}>
-        <h3>
-          <p className="mb-1">
-            <Icon
-              path={mdiFileCheckOutline}
-              size={1}
-              className="mr-1 text-dark"
-            />
-            <span className="text-overflow">{item.title}</span>
-          </p>
-        </h3>
-        <div className={styles.dropdown}>
-          <DropDown
-            direction="right"
-            handle={
-              <Button onClick={() => {}} title="More options">
-                <Icon path={mdiDotsVertical} size={0.95} />
-              </Button>
-            }
-          >
-            <div className={styles.dropdownOptions}>
-              <a onClick={() => alert("todo")} href="#">
-                <Icon path={mdiDeleteOutline} size={0.7} className="mr-1" />
-                Delete
-              </a>
-            </div>
-          </DropDown>
-        </div>
+    <div className={styles.selectedArea}>
+      <h3>
+        <p className="mb-1">
+          <Icon
+            path={mdiFileCheckOutline}
+            size={1}
+            className="mr-1 text-dark"
+          />
+          <span className="text-overflow">{title}</span>
+        </p>
+      </h3>
+      <div className={styles.dropdown}>
+        <DropDown
+          direction="right"
+          handle={
+            <Button onClick={() => {}} title="More options">
+              <Icon path={mdiDotsVertical} size={0.95} />
+            </Button>
+          }
+        >
+          <div className={styles.dropdownOptions}>
+            <a onClick={() => alert("todo")} href="#">
+              <Icon path={mdiDeleteOutline} size={0.7} className="mr-1" />
+              Delete
+            </a>
+          </div>
+        </DropDown>
       </div>
-    )
+    </div>
   );
 }
 
@@ -112,7 +100,7 @@ function SearchArea({ filters, setFilters }) {
   );
 }
 
-function ItemList({ items, filters, selectedItemId, repoId, collectionId }) {
+function ItemList({ items, filters, selectedItem, repoId, collectionId }) {
   const router = useRouter();
 
   const itemObjects = useMemo(
@@ -129,11 +117,11 @@ function ItemList({ items, filters, selectedItemId, repoId, collectionId }) {
     [filters.search, items]
   );
 
-  function onClick(item) {
+  function onClick(itemId) {
     router.push(
-      item.id === selectedItemId
+      selectedItem?.startsWith(itemId)
         ? `/${repoId}/${collectionId}`
-        : `/${repoId}/${collectionId}/${item.id}`,
+        : `/${repoId}/${collectionId}/${itemId}`, // only have item id in url, slug is not needed
       undefined,
       {
         shallow: true, // only change params in router, not load the page
@@ -146,11 +134,11 @@ function ItemList({ items, filters, selectedItemId, repoId, collectionId }) {
   ) : (
     <ul className={styles.listArea}>
       {itemObjects.map((item) => {
-        const selected = item.id === selectedItemId;
+        const selected = selectedItem?.startsWith(item.id);
         return (
           <li key={item.id}>
             <a
-              onClick={() => onClick(item)}
+              onClick={() => onClick(item.id)}
               className={selected ? styles.active : ""}
               href="#"
             >

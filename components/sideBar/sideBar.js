@@ -23,7 +23,7 @@ import { Button } from "../button";
 import DropDown from "../dropdown";
 import { useRouter } from "next/router";
 import { UICMS_CONFIGS } from "@/helpers/constants";
-import { displayError } from "@/helpers/utilities";
+import { displayError, isNullOrEmpty } from "@/helpers/utilities";
 import useGitHubApi from "@/hooks/useGitHubApi";
 import { RepoConfigFile } from "@/helpers/models";
 
@@ -32,12 +32,14 @@ export default function SideBar({}) {
   const url = {
     repoId: Number(router.query.repo),
     collectionId: Number(router.query.collection),
+    itemId: Number(router.query.item),
   };
   const [activeTabIndex, setActiveTabIndex] = useState(null);
   const [open, setOpen] = useState(false); // used in mobile
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const { repos, items, selectedRepo, selectedCollection } = state;
+  const { repos, items, selectedRepo, selectedCollection, selectedItem } =
+    state;
 
   // Whenever there is a repoId present (changed) in url, selected repo's config must be fetched (if it isn't present already). That is how fetching config is triggered.
   // Because all pages like repo config, collection config, new collection, item has url that starts with repo id and they all need repo (config) to be loaded.
@@ -121,6 +123,24 @@ export default function SideBar({}) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRepo?.config.data, url.collectionId]); // trigger only when selected repo's config data gets updated or collectionId in url changes
+
+  // When items in state changes (i.e selected collection's items loaded) or itemId in url changes, then selected item should change too
+  useEffect(() => {
+    if (!isNullOrEmpty(items) && url.itemId) {
+      const collectionItems = items[selectedRepo.id]?.[selectedCollection.id];
+      if (collectionItems?.length) {
+        const item = collectionItems.find((i) => i.startsWith(url.itemId));
+        if (item) {
+          dispatchAction.setSelectedItem(item);
+        } else {
+          router.push("/404");
+        }
+      }
+    } else if (selectedItem) {
+      dispatchAction.setSelectedItem(null); // reset/unselect selected item
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, url.itemId]); // trigger only when items in state gets updated or itemId in url changes
 
   return (
     <aside className={styles.sidebar}>

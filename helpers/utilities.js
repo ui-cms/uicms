@@ -80,3 +80,16 @@ export function indexBy(list, key, baseObj = {}) {
     { ...baseObj }
   );
 }
+
+/**
+ * Check if given input is null, undefined, empty string, empty object or empty array
+ * @param {*} input
+ * @returns boolean
+ */
+export function isNullOrEmpty(input) {
+  if (input === null || input === undefined) return true;
+  if (input instanceof String) return input === "";
+  if (input instanceof Object) return Object.keys(input).length === 0;
+  if (input instanceof Array) return input.length === 0;
+  throw new Error("Unknown type");
+}
