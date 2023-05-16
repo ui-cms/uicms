@@ -4,38 +4,63 @@ import { useEffect, useState } from "react";
 import Page from "@/components/page";
 import Script from "next/script";
 import { useRouter } from "next/router";
+import { Button } from "@/components/button";
+import { TextInputWithLabel } from "pages/[repo]/configuration";
+import { UICMS_CONFIGS } from "@/helpers/constants";
 
 export default function Item() {
   const router = useRouter();
-  const isNew = Number(router.query.item) === 0; // when creating new item. url path: /repoId/collection/0
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const { selectedItem } = state;
-  const { itemData, setItemData } = useState(null);
-  const [editMode, setEditMode] = useState(false);
+  const [title, setTitle] = useState("");
 
-  useEffect(() => {
-    if (selectedItem) {
-      setLoading(false);
+  async function save() {
+    if (title.trim().length < 3) {
+      alert("Item title is too short!");
+      return false;
     }
-  }, []);
+
+    const id = new Date().getTime();
+    const slug = title
+      .trim()
+      .toLowerCase()
+      .replaceAll(" ", "_")
+      .replace(/[^a-z0-9_]+/g, "") //todo:non english/latin allowed
+      .substring(0, 29);
+
+    const folder = `${id}_${slug}`;
+    debugger;
+    // to amke slug, clean title, cut max 30 chars
+  }
+
+  function onChange({ name, value }) {
+    setTitle(value);
+  }
 
   return (
     <Page
-      title={isNew ? "New item" : "Item"}
+      title="New item"
       loading={loading}
       heading={{
-        title: isNew ? "New item" : "todo: itemData.title",
-        subtitle: editMode ? "Editing item" : "Preview",
-        buttons: null,
+        title: "New item",
+        buttons: (
+          <Button type="primary" size="sm" onClick={save}>
+            Next
+          </Button>
+        ),
       }}
     >
-      <h1>Editor will be here</h1>
-      <Script src="https://example.com/script.js" />
-
-      <pre>{selectedItem}</pre>
-      <br />
+      <fieldset className="w-50 w-100-sm">
+        <TextInputWithLabel
+          name="name"
+          value={title}
+          onChange={onChange}
+          label="Title"
+          placeholder="A cool item title"
+          required={true}
+        />
+      </fieldset>
     </Page>
   );
 }

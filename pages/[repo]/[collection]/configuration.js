@@ -41,15 +41,15 @@ export default function CollectionConfiguration() {
     }
   }, [isNew, selectedCollection]); // only trigger when isNew or selected collection changes
 
-  const save = async () => {
+  async function save() {
     // max lengths are checked (prevented) in input level
     function isValid() {
       const errors = [];
-      if (collection.name?.length < 3)
+      if (collection.name?.trim().length < 3)
         errors.push("Collection name is too short!");
-      if (collection.path?.length < 1)
+      if (collection.path?.trim().length < 1)
         errors.push("Collection path is too short!"); // at least a single slash char
-      if (collection.item.name?.length < 3)
+      if (collection.item.name?.trim().length < 3)
         errors.push("Item name is too short!");
 
       if (errors.length > 0) {
@@ -73,7 +73,7 @@ export default function CollectionConfiguration() {
         router.push(`/${selectedRepo.id}/${collection.id}/configuration`);
       }
     }
-  };
+  }
 
   function onChange(e) {
     let { name, value } = e;
@@ -253,7 +253,7 @@ function ItemProperties({ properties, updateProperties, editMode }) {
                 <br />
                 <br />
                 Some of the properties are built-in as default and can not be
-                removed. You can only change their names.
+                removed or changed.
               </>
             }
             className="text-dark ml-3"
@@ -329,7 +329,7 @@ function Property({
   }
 
   function hasValidChanges() {
-    return prop.name && prop.name.length > 2 && prop.type;
+    return prop.name && prop.name.trim().length > 2 && prop.type;
   }
 
   return (
@@ -348,8 +348,8 @@ function Property({
             <Tooltip
               content={
                 <>
-                  <em>richtext</em> type can only be used once to create one
-                  property only which will be called <em>body</em>.
+                  Only one <em>richtext</em> property is allowed which is
+                  built-in property with name <em>body</em>.
                 </>
               }
               className="text-dark"
@@ -362,12 +362,18 @@ function Property({
           value={prop.type}
           onChange={onChange}
           name="type"
-          disabled={!editing || isDefaultProp} // default props' type can't be changed
+          disabled={!editing}
         >
           <option value={null}></option>
           {Object.entries(UICMS_CONFIGS.collectionItemPropertyTypes).map(
             ([key, value]) => (
-              <option key={key} value={value}>
+              <option
+                key={key}
+                value={value}
+                disabled={
+                  value === UICMS_CONFIGS.collectionItemPropertyTypes.richtext
+                }
+              >
                 {key}
               </option>
             )
@@ -381,10 +387,10 @@ function Property({
           onChange={onChange}
           label={showLabels && "Property name"}
           max={30}
-          regex={/[^a-zA-Z0-9_]+/g} // only lowercase English letters, numbers, underscore allowed. Uppercase ones will be lowered
+          regex={/[^a-zA-Z0-9_]+/g} // only lowercase English letters, numbers, underscore allowed. Uppercase ones will be lowered (in onChange)
           placeholder="Topics"
           required={true}
-          help="Property name can consist of lowercase (English) letters, numbers and underscore symbol. You can use property names to access meta data of an item. Therefore they must be unique."
+          help="Property names can consist of lowercase (English) letters, numbers and underscore symbol. They act like keys, so you can use property names to access meta data of an item. Therefore they must also be unique."
           disabled={!editing}
         />
       </div>
@@ -413,26 +419,28 @@ function Property({
               </Button>
             </>
           ) : (
-            <>
-              <Button
-                onClick={() => setEditingId(prop.id)}
-                title="Edit"
-                className="px-1 mr-2"
-                size="sm"
-                disabled={editingId}
-              >
-                <Icon path={mdiPencilOutline} size={0.8} />
-              </Button>
-              <Button
-                onClick={() => removeProperty(prop.id)}
-                title="Remove"
-                className="px-1"
-                size="sm"
-                disabled={editingId || isDefaultProp} // default props' can't be removed
-              >
-                <Icon path={mdiDeleteOutline} size={0.8} />
-              </Button>
-            </>
+            !isDefaultProp && ( // default props' can't be removed or changed
+              <>
+                <Button
+                  onClick={() => setEditingId(prop.id)}
+                  title="Edit"
+                  className="px-1 mr-2"
+                  size="sm"
+                  disabled={editingId}
+                >
+                  <Icon path={mdiPencilOutline} size={0.8} />
+                </Button>
+                <Button
+                  onClick={() => removeProperty(prop.id)}
+                  title="Remove"
+                  className="px-1"
+                  size="sm"
+                  disabled={editingId}
+                >
+                  <Icon path={mdiDeleteOutline} size={0.8} />
+                </Button>
+              </>
+            )
           )}
         </div>
       )}

@@ -19,9 +19,10 @@ export const UICMS_CONFIGS = {
     file: "file",
   },
   collectionItemDefaultProperties: [
-    { name: "body", id: 1, type: "richtext" }, // can't instantiate with ItemProperty class due to circular reference
+    { name: "title", id: 1, type: "string" },
     { name: "author", id: 2, type: "string" },
     { name: "draft", id: 3, type: "boolean" },
     { name: "date", id: 4, type: "date" },
+    { name: "body", id: 5, type: "richtext" }, // can't instantiate with ItemProperty class due to circular reference
   ],
 };

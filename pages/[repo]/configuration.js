@@ -31,7 +31,7 @@ export default function RepoConfiguration() {
     // max lengths are checked (prevented) in input level
     function isValid() {
       const errors = [];
-      if (configData.websiteName?.length < 3)
+      if (configData.websiteName?.trim().length < 3)
         errors.push("Website name is too short!");
 
       if (errors.length > 0) {
@@ -186,6 +186,7 @@ export function TextInputWithLabel({
   help,
   className = "",
   disabled = false,
+  regex, // use regex to filter unwanted chars in value. If passing valid chars, make sure to negate regex with ^ symbol. E.g /[^a-zA-Z0-9]+/g will cause all non alphanumeric to be removed
   ...rest
 }) {
   return (

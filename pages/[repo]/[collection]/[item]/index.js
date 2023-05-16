@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 
 export default function Item() {
   const router = useRouter();
-  const isNew = Number(router.query.item) === 0; // when creating new item. url path: /repoId/collection/0
   const [loading, setLoading] = useState(true);
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
@@ -19,14 +18,14 @@ export default function Item() {
     if (selectedItem) {
       setLoading(false);
     }
-  }, []);
+  }, [selectedItem]);
 
   return (
     <Page
-      title={isNew ? "New item" : "Item"}
+      title="Item"
       loading={loading}
       heading={{
-        title: isNew ? "New item" : "todo: itemData.title",
+        title: itemData?.title,
         subtitle: editMode ? "Editing item" : "Preview",
         buttons: null,
       }}
