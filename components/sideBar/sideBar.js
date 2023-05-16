@@ -64,7 +64,7 @@ export default function SideBar({}) {
       }
     }
 
-    if (repos.length && url.repoId) {
+    if (!isNullOrEmpty(repos) && url.repoId) {
       const repo = repos.find((r) => r.id === url.repoId);
       if (repo) {
         dispatchAction.setSelectedRepo(repo);
@@ -128,7 +128,7 @@ export default function SideBar({}) {
   useEffect(() => {
     if (!isNullOrEmpty(items) && url.itemId) {
       const collectionItems = items[selectedRepo.id]?.[selectedCollection.id];
-      if (collectionItems?.length) {
+      if (!isNullOrEmpty(collectionItems)) {
         const item = collectionItems.find((i) => i.startsWith(url.itemId));
         if (item) {
           dispatchAction.setSelectedItem(item);

@@ -17,7 +17,7 @@ import {
 } from "@mdi/js";
 import Tooltip from "@/components/tooltip";
 import { Collection, ItemProperty } from "@/helpers/models";
-import { indexBy } from "@/helpers/utilities";
+import { indexBy, isNullOrEmpty } from "@/helpers/utilities";
 
 const DEFAULT_PROPS_ARR = [...UICMS_CONFIGS.collectionItemDefaultProperties];
 const DEFAULT_PROPS_OBJ = indexBy(DEFAULT_PROPS_ARR, "id");
@@ -98,7 +98,7 @@ export default function CollectionConfiguration() {
   }
 
   const getAllProperties = useCallback(() => {
-    if (collection.item.properties?.length > 0) {
+    if (!isNullOrEmpty(collection.item.properties)) {
       // index and merge
       const resultObj = indexBy(
         collection.item.properties,
@@ -115,11 +115,7 @@ export default function CollectionConfiguration() {
       loading={loading}
       heading={{
         title: isNew ? "New collection" : collection?.name,
-        subtitle: isNew
-          ? "New collection"
-          : editMode
-          ? "Editing configuration"
-          : "Configuration",
+        subtitle: editMode ? "Editing configuration" : "Configuration",
         buttons: editMode ? (
           <>
             {!isNew && (
