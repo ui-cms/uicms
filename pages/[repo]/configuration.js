@@ -4,7 +4,7 @@ import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 import { TextInput } from "@/components/form";
-import { UICMS_CONFIGS } from "@/helpers/constants";
+import { REGEXES, UICMS_CONFIGS } from "@/helpers/constants";
 import { areSame, displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
@@ -17,7 +17,7 @@ export default function RepoConfiguration() {
   const [editMode, setEditMode] = useState(false);
   const { state } = useStateManagement();
   const { selectedRepo } = state;
-  const saveRepoConfig = useSaveRepoConfig(setLoading, setEditMode);
+  const saveRepoConfig = useSaveRepoConfig(setLoading);
 
   // Load the repo from state management
   useEffect(() => {
@@ -42,7 +42,9 @@ export default function RepoConfiguration() {
     }
 
     if (isValid()) {
-      await saveRepoConfig(selectedRepo, configData);
+      if (await saveRepoConfig(selectedRepo, configData)) {
+        setEditMode(false);
+      }
     }
   };
 
@@ -111,7 +113,7 @@ export default function RepoConfiguration() {
             name="collectionsDirectory"
             value={configData.collectionsDirectory}
             onChange={onChange}
-            regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
+            regex={REGEXES.EnglishAlphanumeric_Underscore_Slash} // only English letters, numbers, underscore, slash allowed
             label="Collections directory"
             help={
               <span>
@@ -128,7 +130,7 @@ export default function RepoConfiguration() {
             name="assetsDirectory"
             value={configData.assetsDirectory}
             onChange={onChange}
-            regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
+            regex={REGEXES.EnglishAlphanumeric_Underscore_Slash} // only English letters, numbers, underscore, slash allowed
             label="Assets directory"
             help="The git directory where you would like static asset files (like images) to be stored. Directory can consist of (English) letters, numbers, underscore and slash sign."
             placeholder="_contents/assets"
@@ -221,7 +223,7 @@ export function TextInputWithLabel({
 /**
  * Saves contents of UICMS config file (json) for a given repo
  */
-export function useSaveRepoConfig(setLoading, setEditMode) {
+export function useSaveRepoConfig(setLoading) {
   const githubApi = useGitHubApi();
   const { dispatchAction } = useStateManagement();
 
@@ -245,11 +247,11 @@ export function useSaveRepoConfig(setLoading, setEditMode) {
         content: window.btoa(JSON.stringify(configData)), // base64 encode
         sha: repo.config.sha,
       });
+      // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
       dispatchAction.updateRepo({
         ...repo,
         config: new RepoConfigFile(),
-      }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
-      setEditMode(false);
+      });
       result = true;
     } catch (e) {
       displayError("Error saving config file!", e);

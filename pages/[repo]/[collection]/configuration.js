@@ -5,7 +5,7 @@ import useStateManagement from "@/services/stateManagement/stateManagement";
 import { Button } from "@/components/button";
 import { TextInputWithLabel, useSaveRepoConfig } from "../configuration";
 import { Select } from "@/components/form";
-import { UICMS_CONFIGS } from "@/helpers/constants";
+import { REGEXES, UICMS_CONFIGS } from "@/helpers/constants";
 import Icon from "@mdi/react";
 import {
   mdiCheck,
@@ -30,7 +30,7 @@ export default function CollectionConfiguration() {
   const [editMode, setEditMode] = useState(isNew);
   const { state } = useStateManagement();
   const { selectedRepo, selectedCollection } = state;
-  const saveRepoConfig = useSaveRepoConfig(setLoading, setEditMode);
+  const saveRepoConfig = useSaveRepoConfig(setLoading);
 
   // Load the repo that owns this collection from state management
   useEffect(() => {
@@ -155,7 +155,7 @@ export default function CollectionConfiguration() {
             name="path"
             value={collection.path}
             onChange={onChange}
-            regex={/[^a-zA-Z0-9_/]+/g} // only English letters, numbers, underscore, slash allowed
+            regex={REGEXES.EnglishAlphanumeric_Underscore_Slash} // only English letters, numbers, underscore, slash allowed
             label="Path"
             placeholder="blog"
             help="This collection path will be appended to repo's collections directory and that is where items of this collection will be saved as files. Path can consist of (English) letters, numbers, underscore and slash symbol."
@@ -387,7 +387,7 @@ function Property({
           onChange={onChange}
           label={showLabels && "Property name"}
           max={30}
-          regex={/[^a-zA-Z0-9_]+/g} // only lowercase English letters, numbers, underscore allowed. Uppercase ones will be lowered (in onChange)
+          regex={REGEXES.EnglishAlphanumericAndUnderscore} // only English letters, numbers, underscore allowed. Will be lowercased (in onChange)
           placeholder="Topics"
           required={true}
           help="Property names can consist of lowercase (English) letters, numbers and underscore symbol. They act like keys, so you can use property names to access meta data of an item. Therefore they must also be unique."

@@ -1,41 +1,59 @@
 import useGitHubApi from "@/hooks/useGitHubApi";
 import useStateManagement from "@/services/stateManagement/stateManagement";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Page from "@/components/page";
-import Script from "next/script";
 import { useRouter } from "next/router";
 import { Button } from "@/components/button";
 import { TextInputWithLabel } from "pages/[repo]/configuration";
-import { UICMS_CONFIGS } from "@/helpers/constants";
+import { REGEXES, UICMS_CONFIGS } from "@/helpers/constants";
+import { displayError } from "@/helpers/utilities";
 
 export default function Item() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
   const githubApi = useGitHubApi();
   const { state, dispatchAction } = useStateManagement();
-  const [title, setTitle] = useState("");
+  const { selectedRepo, selectedCollection, currentUser } = state;
+  const saveItem = useSaveItem(setLoading);
 
   async function save() {
     if (title.trim().length < 3) {
-      alert("Item title is too short!");
+      alert("Title is too short!");
       return false;
     }
 
-    const id = new Date().getTime();
+    const today = new Date();
+    const id = today.getTime();
     const slug = title
       .trim()
       .toLowerCase()
       .replaceAll(" ", "_")
-      .replace(/[^a-z0-9_]+/g, "") //todo:non english/latin allowed
-      .substring(0, 29);
+      .replace(REGEXES.GlobalAlphanumeric_Underscore, "") // alphanumeric (any language) and underscore
+      .substring(0, 29); // take no more than 30 chars
 
-    const folder = `${id}_${slug}`;
-    debugger;
-    // to amke slug, clean title, cut max 30 chars
-  }
+    const itemName = `${id}_${slug}`;
+    const filePath = `${selectedRepo.config.data.collectionsDirectory}/${selectedCollection.path}/${itemName}/_.json`;
 
-  function onChange({ name, value }) {
-    setTitle(value);
+    const itemData = {
+      title,
+      author: `${currentUser.name} (${currentUser.login})`,
+      draft: true,
+      date: `${today.getUTCFullYear()}-${today.getUTCMonth()}-${today.getUTCDate()} ${today.getUTCHours()}:${today.getUTCMinutes()}`,
+      body: null,
+    };
+
+    if (
+      await saveItem(
+        selectedRepo.owner,
+        selectedRepo.name,
+        filePath,
+        itemName,
+        itemData
+      )
+    ) {
+      router.push(`/${selectedRepo.id}/${selectedCollection.id}/${id}`);
+    }
   }
 
   return (
@@ -55,7 +73,7 @@ export default function Item() {
         <TextInputWithLabel
           name="name"
           value={title}
-          onChange={onChange}
+          onChange={({ value }) => setTitle(value)}
           label="Title"
           placeholder="A cool item title"
           required={true}
@@ -63,4 +81,47 @@ export default function Item() {
       </fieldset>
     </Page>
   );
+}
+
+/**
+ * Saves contents of item file
+ */
+export function useSaveItem(setLoading) {
+  const githubApi = useGitHubApi();
+
+  const saveItem = useCallback(
+    async (repoOwner, repoName, filePath, itemName, itemData, sha = null) => {
+      let result = false;
+      if (!confirm("Are you sure ?")) return result;
+
+      try {
+        setLoading(true);
+        await githubApi.rest.repos.createOrUpdateFileContents({
+          owner: repoOwner,
+          repo: repoName,
+          path: filePath,
+          message: `${itemName} ${sha ? "updated" : "created"}`,
+          content: window.btoa(JSON.stringify(itemData)), // base64 encode
+          sha: sha,
+        });
+
+        // refetch locally or refresh page
+
+        // dispatchAction.updateRepo({
+        //   ...repo,
+        //   config: new RepoConfigFile(),
+        // }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
+        result = true;
+      } catch (e) {
+        displayError("Error saving item!", e);
+      } finally {
+        setLoading(false);
+      }
+      return result;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [] // no necessary dependency
+  );
+
+  return saveItem;
 }

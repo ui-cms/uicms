@@ -7,8 +7,8 @@ export default function reducer(state, { type, payload }) {
       return { ...initialState };
     }
     case "setCurrentUser": {
-      const { login, html_url, avatar_url } = payload; // limit to only needed/used properties
-      return { ...state, currentUser: { login, html_url, avatar_url } };
+      const { login, html_url, avatar_url, name } = payload; // limit to only needed/used properties
+      return { ...state, currentUser: { login, html_url, avatar_url, name } };
     }
     case "setAuthToken": {
       return { ...state, authToken: payload };

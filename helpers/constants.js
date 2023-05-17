@@ -6,6 +6,13 @@ export const IRON_SESSION_OPTIONS = {
   },
 };
 
+// Note that ^ symbol negates
+export const REGEXES = {
+  GlobalAlphanumeric_Underscore: /[^\p{L}0-9_]+/ug, // Letters from any language, numbers, underscore
+  EnglishAlphanumeric_Underscore: /[^a-zA-Z0-9_]+/g, // English letters, numbers, underscore
+  EnglishAlphanumeric_Underscore_Slash: /[^a-zA-Z0-9_/]+/g, // English letters, numbers, underscore, slash
+};
+
 export const UICMS_CONFIGS = {
   fileName: "uicms.config.json",
   defaultAssetsDirectory: "_contents/assets", // has to be a folder that will be present after build
