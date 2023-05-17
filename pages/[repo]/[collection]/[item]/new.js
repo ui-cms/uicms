@@ -7,6 +7,7 @@ import { Button } from "@/components/button";
 import { TextInputWithLabel } from "pages/[repo]/configuration";
 import { REGEXES, UICMS_CONFIGS } from "@/helpers/constants";
 import { displayError } from "@/helpers/utilities";
+import { Base64 } from "js-base64";
 
 export default function Item() {
   const router = useRouter();
@@ -35,18 +36,18 @@ export default function Item() {
     const itemName = `${id}_${slug}`;
     const filePath = `${selectedRepo.config.data.collectionsDirectory}/${selectedCollection.path}/${itemName}/_.json`;
 
+    // see default props
     const itemData = {
       title,
       author: `${currentUser.name} (${currentUser.login})`,
       draft: true,
       date: `${today.getUTCFullYear()}-${today.getUTCMonth()}-${today.getUTCDate()} ${today.getUTCHours()}:${today.getUTCMinutes()}`,
-      body: null,
     };
 
     if (
       await saveItem(
-        selectedRepo.owner,
-        selectedRepo.name,
+        selectedRepo,
+        selectedCollection.id,
         filePath,
         itemName,
         itemData
@@ -88,29 +89,27 @@ export default function Item() {
  */
 export function useSaveItem(setLoading) {
   const githubApi = useGitHubApi();
+  const { state, dispatchAction } = useStateManagement();
 
   const saveItem = useCallback(
-    async (repoOwner, repoName, filePath, itemName, itemData, sha = null) => {
+    async (repo, collectionId, filePath, itemName, itemData, sha = null) => {
       let result = false;
       if (!confirm("Are you sure ?")) return result;
 
       try {
         setLoading(true);
         await githubApi.rest.repos.createOrUpdateFileContents({
-          owner: repoOwner,
-          repo: repoName,
+          owner: repo.owner,
+          repo: repo.name,
           path: filePath,
           message: `${itemName} ${sha ? "updated" : "created"}`,
-          content: window.btoa(JSON.stringify(itemData)), // base64 encode
+          content: Base64.encode(JSON.stringify(itemData)), // built-in js ecoding function (window.btoa) won't work with non-latin chars
           sha: sha,
         });
 
-        // refetch locally or refresh page
+        const _items = [...state.items[repo.id][collectionId], itemName];
+        dispatchAction.setItems(repo.id, collectionId, _items); // insert into items list
 
-        // dispatchAction.updateRepo({
-        //   ...repo,
-        //   config: new RepoConfigFile(),
-        // }); // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
         result = true;
       } catch (e) {
         displayError("Error saving item!", e);
@@ -120,7 +119,7 @@ export function useSaveItem(setLoading) {
       return result;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [] // no necessary dependency
+    [state.items] // no necessary dependency
   );
 
   return saveItem;

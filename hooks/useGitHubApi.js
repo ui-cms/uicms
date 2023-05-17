@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Octokit } from "octokit";
+import { Base64 } from "js-base64";
 import useStateManagement from "@/services/stateManagement/stateManagement";
 
 export default function useGitHubApi() {
@@ -42,7 +43,7 @@ class CustomRest {
 
     // file size is less than 1mb, decode encoded content
     if (res.data.content && res.data.encoding === "base64") {
-      result.content = window.atob(res.data.content);
+      result.content = Base64.decode(res.data.content); // built-in js decoding function (window.atob) won't work with non-latin chars
     } else {
       // file size is more than 1mb, fetch raw content
       const res2 = await this.octokit.rest.repos.getContent({

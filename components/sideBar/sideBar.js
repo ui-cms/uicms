@@ -90,14 +90,14 @@ export default function SideBar({}) {
           path: `${repo.config.data.collectionsDirectory}/${collection.path}`, // todo slash check
         });
 
-        const itemSlugs = res.data.reduce((acc, item) => {
+        const itemNames = res.data.reduce((acc, item) => {
           if (item.type === "dir") {
             acc.push(item.name); // only directories (skip files)
           }
           return acc;
         }, []);
 
-        dispatchAction.setItems(repo.id, collection.id, itemSlugs);
+        dispatchAction.setItems(repo.id, collection.id, itemNames);
       } catch (e) {
         // when 404, dir/path not found
         if (e.status !== 404) {

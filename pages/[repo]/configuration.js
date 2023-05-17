@@ -10,6 +10,7 @@ import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
 import { mdiHelpCircleOutline } from "@mdi/js";
 import { RepoConfigFile, RepoConfigData } from "@/helpers/models";
+import { Base64 } from "js-base64";
 
 export default function RepoConfiguration() {
   const [loading, setLoading] = useState(true);
@@ -244,14 +245,16 @@ export function useSaveRepoConfig(setLoading) {
         repo: repo.name,
         path: UICMS_CONFIGS.fileName,
         message: `uicms config file ${repo.config.sha ? "updated" : "created"}`,
-        content: window.btoa(JSON.stringify(configData)), // base64 encode
+        content: Base64.encode(JSON.stringify(configData)),  // built-in js ecoding function (window.btoa) won't work with non-latin chars
         sha: repo.config.sha,
       });
+
       // reset config, so that it will be fetched again in sidebar as sha has been changed (needs to be updated)
       dispatchAction.updateRepo({
         ...repo,
         config: new RepoConfigFile(),
       });
+      
       result = true;
     } catch (e) {
       displayError("Error saving config file!", e);

@@ -5,7 +5,7 @@ export const initialState = {
   authToken: null,
   currentUser: null,
   repos: [],
-  items: {}, // item slugs per repo/collection. E.g: { repoId1: { collectionId1: [itemSlug1, itemSlug2] } }
+  items: {}, // item names (id + slug) per repo/collection. E.g: { repoId1: { collectionId1: [item1, item2] } }
   selectedRepo: null,
   selectedCollection: null,
   selectedItem: null,

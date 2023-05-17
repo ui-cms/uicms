@@ -48,7 +48,7 @@ export function Items() {
 
 function SelectedItemDetails({ item }) {
   if (!item) return null;
-  const { title } = parseItemSlugToObject(item);
+  const { title } = parseItemNameToObject(item);
   return (
     <div className={styles.selectedArea}>
       <h3>
@@ -106,14 +106,14 @@ function ItemList({ items, filters, selectedItem, repoId, collectionId }) {
   const itemObjects = useMemo(
     () =>
       items
+        .reverse() // newest date first
+        .map((i) => parseItemNameToObject(i))
         .filter(
-          (i) =>
+          ({ title }) =>
             !filters.search ||
             (filters.search.toLowerCase() &&
-              i.toLowerCase().includes(filters.search))
-        )
-        .reverse() // newest date first
-        .map((i) => parseItemSlugToObject(i)),
+              title.toLowerCase().includes(filters.search))
+        ),
     [filters.search, items]
   );
 
@@ -160,9 +160,9 @@ function ItemList({ items, filters, selectedItem, repoId, collectionId }) {
   );
 }
 
-function parseItemSlugToObject(item) {
+function parseItemNameToObject(item) {
   return {
-    id: Number(item.substring(0, 10)), // First 10 chars are datetime (id) which helps with uniqueness and sorting (by date)
-    title: item.substring(11, item.length).replaceAll("_", " "), // Title comes after id and is separated by underscore. Includes more underscores which were used to replace spaces
+    id: Number(item.substring(0, 12)), // First 10 chars are datetime (id) which helps with uniqueness and sorting (by date)
+    title: item.substring(13, item.length).replaceAll("_", " "), // Title comes after id and is separated by underscore. Includes more underscores which were used to replace spaces
   };
 }

@@ -18,7 +18,7 @@ export default class Actions {
   updateRepo(repo) {
     this.dispatch({ type: "updateRepo", payload: repo });
   }
-  setItems(repoId, collectionId, items) {
+  setItems(repoId, collectionId, items) {   // items = itemNames which are array of strings (id+slug)
     this.dispatch({
       type: "setItems",
       payload: { repoId, collectionId, items },
