@@ -99,10 +99,7 @@ export default function SideBar({}) {
 
         dispatchAction.setItems(repo.id, collection.id, itemNames);
       } catch (e) {
-        // when 404, dir/path not found
-        if (e.status !== 404) {
-          displayError("Error fetching items!", e);
-        }
+        displayError("Error fetching items!", e);
       }
     }
 
