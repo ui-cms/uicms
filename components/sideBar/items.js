@@ -106,6 +106,7 @@ function ItemList({ items, filters, selectedItem, repoId, collectionId }) {
   const itemObjects = useMemo(
     () =>
       items
+        .sort()
         .reverse() // newest date first
         .map((i) => parseItemNameToObject(i))
         .filter(
@@ -161,8 +162,9 @@ function ItemList({ items, filters, selectedItem, repoId, collectionId }) {
 }
 
 function parseItemNameToObject(item) {
+  const index = item.indexOf("_"); // index of first underscore sign that separates id from slug
   return {
-    id: Number(item.substring(0, 12)), // First 10 chars are datetime (id) which helps with uniqueness and sorting (by date)
-    title: item.substring(13, item.length).replaceAll("_", " "), // Title comes after id and is separated by underscore. Includes more underscores which were used to replace spaces
+    id: Number(item.substring(0, index)), // First chars up until underscore are datetime (id) which helps with uniqueness and sorting (by date)
+    title: item.substring(index + 1, item.length).replaceAll("_", " "), // Title comes after id. Includes more underscores which were used to replace spaces
   };
 }

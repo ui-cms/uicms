@@ -23,7 +23,9 @@ export default function RepoConfiguration() {
   // Load the repo from state management
   useEffect(() => {
     if (selectedRepo) {
-      setConfigData({ ...selectedRepo.config.data });
+      if (selectedRepo.config.data) {
+        setConfigData({ ...selectedRepo.config.data });
+      } else setConfigData(null);
       setLoading(false);
     }
   }, [selectedRepo]); // only trigger when selected repo changes
@@ -245,7 +247,7 @@ export function useSaveRepoConfig(setLoading) {
         repo: repo.name,
         path: UICMS_CONFIGS.fileName,
         message: `uicms config file ${repo.config.sha ? "updated" : "created"}`,
-        content: Base64.encode(JSON.stringify(configData)),  // built-in js ecoding function (window.btoa) won't work with non-latin chars
+        content: Base64.encode(JSON.stringify(configData)), // built-in js ecoding function (window.btoa) won't work with non-latin chars
         sha: repo.config.sha,
       });
 
@@ -254,7 +256,7 @@ export function useSaveRepoConfig(setLoading) {
         ...repo,
         config: new RepoConfigFile(),
       });
-      
+
       result = true;
     } catch (e) {
       displayError("Error saving config file!", e);
