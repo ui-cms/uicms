@@ -125,7 +125,7 @@ function ItemList({ items, filters, selectedItem, repoId, collectionId }) {
         : `/${repoId}/${collectionId}/${itemId}`, // only have item id in url, slug is not needed
       undefined,
       {
-        shallow: true, // only change params in router, not load the page
+        shallow: false, // not shallow
       }
     ); // if selected already, unselect, otherwise redirect to item page
   }

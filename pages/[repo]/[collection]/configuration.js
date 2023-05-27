@@ -22,6 +22,18 @@ import { indexBy, isNullOrEmpty } from "@/helpers/utilities";
 const DEFAULT_PROPS_ARR = [...UICMS_CONFIGS.collectionItemDefaultProperties];
 const DEFAULT_PROPS_OBJ = indexBy(DEFAULT_PROPS_ARR, "id");
 
+export function isDefaultProperty(propertyId) {
+  return !!DEFAULT_PROPS_OBJ[propertyId]; // is built-in default prop
+}
+
+export function getCollectionItemProperties(itemProperties) {
+  if (!isNullOrEmpty(itemProperties)) {
+    // index and merge
+    const resultObj = indexBy(itemProperties, "id", DEFAULT_PROPS_OBJ);
+    return Object.values(resultObj);
+  } else return DEFAULT_PROPS_ARR;
+}
+
 export default function CollectionConfiguration() {
   const router = useRouter();
   const isNew = Number(router.query.collection) === 0; // when creating new collection. url path: /repoId/0/configuration
@@ -97,17 +109,10 @@ export default function CollectionConfiguration() {
     setEditMode(false);
   }
 
-  const getAllProperties = useCallback(() => {
-    if (!isNullOrEmpty(collection.item.properties)) {
-      // index and merge
-      const resultObj = indexBy(
-        collection.item.properties,
-        "id",
-        DEFAULT_PROPS_OBJ
-      );
-      return Object.values(resultObj);
-    } else DEFAULT_PROPS_ARR;
-  }, [collection?.item.properties]);
+  const getAllProperties = useCallback(
+    () => getCollectionItemProperties(collection?.item.properties),
+    [collection?.item.properties]
+  );
 
   return (
     <Page
@@ -307,7 +312,6 @@ function Property({
   const [prop, setProp] = useState({}); // local
 
   const editing = editingId === prop.id; // editing this property
-  const isDefaultProp = !!DEFAULT_PROPS_OBJ[prop.id]; // is built-in default prop
 
   useEffect(() => {
     if (property) setProp({ ...property });
@@ -419,7 +423,7 @@ function Property({
               </Button>
             </>
           ) : (
-            !isDefaultProp && ( // default props' can't be removed or changed
+            !isDefaultProperty(prop.id) && ( // default props' can't be removed or changed
               <>
                 <Button
                   onClick={() => setEditingId(prop.id)}

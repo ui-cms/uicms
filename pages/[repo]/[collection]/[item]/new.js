@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { Button } from "@/components/button";
 import { TextInputWithLabel } from "pages/[repo]/configuration";
 import { REGEXES, UICMS_CONFIGS } from "@/helpers/constants";
-import { displayError } from "@/helpers/utilities";
+import { displayError, isNullOrEmpty } from "@/helpers/utilities";
 import { Base64 } from "js-base64";
 
 export default function Item() {
@@ -70,7 +70,7 @@ export default function Item() {
         ),
       }}
     >
-      <fieldset className="w-50 w-100-sm">
+      <fieldset className="w-100">
         <TextInputWithLabel
           name="name"
           value={title}
@@ -107,7 +107,9 @@ export function useSaveItem(setLoading) {
           sha: sha,
         });
 
-        const _items = [...state.items[repo.id][collectionId], itemName];
+        const _items = isNullOrEmpty(state.items[repo.id]?.[collectionId])
+          ? [itemName]  // first ever item
+          : [...state.items[repo.id][collectionId], itemName];
         dispatchAction.setItems(repo.id, collectionId, _items); // insert into items list
 
         result = true;
