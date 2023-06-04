@@ -72,12 +72,12 @@ export default function Item() {
     >
       <fieldset className="w-100">
         <TextInputWithLabel
-          name="name"
           value={title}
           onChange={({ value }) => setTitle(value)}
           label="Title"
           placeholder="A cool item title"
           required={true}
+          max={50}
         />
       </fieldset>
     </Page>

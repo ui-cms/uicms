@@ -26,14 +26,6 @@ export function isDefaultProperty(propertyId) {
   return !!DEFAULT_PROPS_OBJ[propertyId]; // is built-in default prop
 }
 
-export function getCollectionItemProperties(itemProperties) {
-  if (!isNullOrEmpty(itemProperties)) {
-    // index and merge
-    const resultObj = indexBy(itemProperties, "id", DEFAULT_PROPS_OBJ);
-    return Object.values(resultObj);
-  } else return DEFAULT_PROPS_ARR;
-}
-
 export default function CollectionConfiguration() {
   const router = useRouter();
   const isNew = Number(router.query.collection) === 0; // when creating new collection. url path: /repoId/0/configuration
@@ -109,10 +101,17 @@ export default function CollectionConfiguration() {
     setEditMode(false);
   }
 
-  const getAllProperties = useCallback(
-    () => getCollectionItemProperties(collection?.item.properties),
-    [collection?.item.properties]
-  );
+  const getAllProperties = useCallback(() => {
+    if (!isNullOrEmpty(collection?.item.properties)) {
+      // index and merge
+      const resultObj = indexBy(
+        collection?.item.properties,
+        "id",
+        DEFAULT_PROPS_OBJ
+      );
+      return Object.values(resultObj);
+    } else return DEFAULT_PROPS_ARR;
+  }, [collection?.item.properties]);
 
   return (
     <Page
@@ -252,13 +251,16 @@ function ItemProperties({ properties, updateProperties, editMode }) {
                 of data it will hold. Its name is for your reference.
                 <br />
                 <br />
-                The (only) property with type <em>richtext</em> is used to
-                compose a collection item&apos;s body. Properties with other
-                types are used as meta data.
-                <br />
-                <br />
                 Some of the properties are built-in as default and can not be
                 removed or changed.
+                <br />
+                <br />
+                The (only and default) property with type <em>richtext</em> is
+                used to compose a collection item&apos;s body. Properties with
+                other types are used as meta data.
+                <br />
+                <em>Date</em> property will store the date and time (in UTC)
+                that the item was created on.
               </>
             }
             className="text-dark ml-3"
