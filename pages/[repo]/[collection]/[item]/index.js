@@ -8,9 +8,6 @@ import { displayError } from "@/helpers/utilities";
 import Tooltip from "@/components/tooltip";
 import Icon from "@mdi/react";
 import { mdiHelpCircleOutline } from "@mdi/js";
-import {
-  isDefaultProperty,
-} from "../configuration";
 import { TextInputWithLabel } from "pages/[repo]/configuration";
 import { Button } from "@/components/button";
 import { UICMS_CONFIGS } from "@/helpers/constants";
@@ -83,6 +80,11 @@ export default function Item() {
     [selectedCollection?.item.properties]
   );
 
+  function onChange({ name, value }) {
+    const _content = { ...item.content, [name]: value };
+    setItem({ ...item, content: _content });
+  }
+
   function cancel() {
     setEditMode(false);
   }
@@ -147,7 +149,7 @@ export default function Item() {
         <TextInputWithLabel
           name="title"
           value={item?.content.title}
-          // onChange={onChange}
+          onChange={onChange}
           max={50}
           label="Title"
           placeholder={`${selectedCollection?.item.name} title goes here`}
@@ -163,7 +165,12 @@ export default function Item() {
         </div>
       </div>
 
-      <Properties properties={getCustomProperties()} item={item} />
+      <Properties
+        properties={getCustomProperties()}
+        itemContent={item?.content}
+        editMode={editMode}
+        onChange={onChange}
+      />
       {/* <h1>Editor will be here</h1>
       <Script src="https://example.com/script.js" /> */}
 
@@ -173,7 +180,7 @@ export default function Item() {
   );
 }
 
-function Properties({ properties, item }) {
+function Properties({ properties, itemContent, editMode, onChange }) {
   return (
     <details className={styles.properties}>
       <summary className="border-bottom pb-2 mb-4">
@@ -201,19 +208,17 @@ function Properties({ properties, item }) {
 
       <fieldset>
         {properties.map((prop) => {
-          const isDefaultProp = isDefaultProperty(prop.id);
           return (
             <TextInputWithLabel
               key={prop.id}
               name={prop.name}
-              value={item.content[prop.name]}
-              // onChange={onChange}
+              value={itemContent[prop.name]}
+              onChange={onChange}
               max={30}
               label={prop.name}
               placeholder={prop.type}
               className="w-25 mb-5"
-              disabled={isDefaultProp}
-              required={isDefaultProp}
+              disabled={!editMode}
             />
           );
         })}

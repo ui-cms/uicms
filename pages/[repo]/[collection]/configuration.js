@@ -22,10 +22,6 @@ import { indexBy, isNullOrEmpty } from "@/helpers/utilities";
 const DEFAULT_PROPS_ARR = [...UICMS_CONFIGS.collectionItemDefaultProperties];
 const DEFAULT_PROPS_OBJ = indexBy(DEFAULT_PROPS_ARR, "id");
 
-export function isDefaultProperty(propertyId) {
-  return !!DEFAULT_PROPS_OBJ[propertyId]; // is built-in default prop
-}
-
 export default function CollectionConfiguration() {
   const router = useRouter();
   const isNew = Number(router.query.collection) === 0; // when creating new collection. url path: /repoId/0/configuration
@@ -336,6 +332,10 @@ function Property({
 
   function hasValidChanges() {
     return prop.name && prop.name.trim().length > 2 && prop.type;
+  }
+
+  function isDefaultProperty(propertyId) {
+    return !!DEFAULT_PROPS_OBJ[propertyId]; // is built-in default prop
   }
 
   return (
