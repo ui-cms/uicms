@@ -121,22 +121,12 @@ export default function RepoConfiguration() {
             help={
               <span>
                 The directory where you would like collection items (
-                <em>.mdx</em> files) to be stored. If none given, root folder
+                <em>.json</em> files) to be stored. If none given, root folder
                 will be used. Directory can consist of (English) letters,
                 numbers, underscore and slash sign.
               </span>
             }
-            placeholder="_contents/collections"
-            className="mb-5"
-          />
-          <TextInputWithLabel
-            name="assetsDirectory"
-            value={configData.assetsDirectory}
-            onChange={onChange}
-            regex={REGEXES.EnglishAlphanumeric_Underscore_Slash} // only English letters, numbers, underscore, slash allowed
-            label="Assets directory"
-            help="The git directory where you would like static asset files (like images) to be stored. Directory can consist of (English) letters, numbers, underscore and slash sign."
-            placeholder="_contents/assets"
+            placeholder="_collections"
             className="mb-5"
           />
           <TextInputWithLabel

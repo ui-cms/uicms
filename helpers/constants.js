@@ -15,8 +15,7 @@ export const REGEXES = {
 
 export const UICMS_CONFIGS = {
   fileName: "uicms.config.json",
-  defaultAssetsDirectory: "_contents/assets", // has to be a folder that will be present after build
-  defaultCollectionsDirectory: "_contents/collections", // has to be a folder that will be present after build
+  defaultCollectionsDirectory: "_collections", // has to be a folder that will be present after build
   topic: "uicms", // to be used as a topic in GitHub repos
   collectionItemPropertyTypes: {
     string: "string",

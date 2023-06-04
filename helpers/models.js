@@ -13,12 +13,10 @@ export class RepoConfigFile {
 export class RepoConfigData {
   websiteName = "";
   websiteUrl = "";
-  assetsDirectory = "";
   collectionsDirectory = "";
   collections = [];
 
   constructor() {
-    this.assetsDirectory = UICMS_CONFIGS.defaultAssetsDirectory;
     this.collectionsDirectory = UICMS_CONFIGS.defaultCollectionsDirectory;
   }
 }
